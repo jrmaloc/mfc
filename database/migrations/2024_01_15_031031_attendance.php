@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('activity_id')->nullable()->constrained('activities')->cascadeOnDelete();
-            $table->json('attendee_ids')->nullable();
+            $table->json('attendee_ids')->default('[]')->nullable();
 
             $table->timestamps();
         });
