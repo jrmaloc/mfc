@@ -4,27 +4,6 @@
 @endsection
 
 @section('content')
-    {{-- <x-modal id="regModal">
-        <x-slot name="title">
-            Registration Form
-        </x-slot>
-        <x-slot name="body">
-            <x-form.input-group>
-                <x-form.input-field class="col-xl" name="name" icon="mdi mdi-account" value="{{ $user->name }}"
-                    error="name">
-                    Full Name
-                </x-form.input-field>
-                <x-form.input-field class="col-xl" name="name" icon="mdi mdi-account" value="{{ $user->name }}"
-                    error="name">
-
-                </x-form.input-field>
-            </x-form.input-group>
-        </x-slot>
-        <x-slot name="submit">
-            Register
-        </x-slot>
-    </x-modal> --}}
-
     <x-layout>
         <div class="flex justify-end mb-2 mt-3"> <a href="{{ route('calendar.list') }}" class="my-4 btn btn-dark">See
                 Calendar of Events
@@ -123,38 +102,39 @@
                     @endif
                 </div>
             </form>
-
-            {{-- @if (auth()->check() &&
-    (auth()->user()->hasRole('Area Servant') ||
-        auth()->user()->hasRole('Chapter Servant') ||
-        auth()->user()->hasRole('Unit Servant') ||
-        auth()->user()->hasRole('Household Servant') ||
-        auth()->user()->hasRole('Member')))
-                <div class="card-footer">
-                    <div class="flex justify-end gap-2">
-                        <form action="{{ route('calendar.registration', ['id' => $id]) }}" method="POST">
-                            @csrf
-                            <button type="submit" id="regBtn" data-id="{{ $id }}"
-                                class="btn btn-success">Register</button>
-                        </form>
-                    </div>
-                </div>
-            @endif --}}
     </x-layout>
+
+    <style>
+        div.swal2-container.swal2-top-right.swal2-backdrop-show {
+            z-index: 9999 !important;
+        }
+    </style>
+
+    @if (session('success'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            var Toast = Swal.mixin({
+                toast: true,
+                icon:'success',
+                title: 'General Title',
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            Toast.fire({
+                icon:'success',
+                title: '{{ session('success') }}',
+            });
+        </script>
+    @endif
 @endsection
 
 @push('scripts')
     <script>
         $(document).ready(function() {
-            // $('#regBtn').on('click', function(e) {
-            //     let id = $(this).data("id");
-            //     let route = $(this).data("route");
-
-            //     // Redirect to the specified route
-            //     window.location.href = route;
-            // });
-
-
             $('.remove-btn').on('click', function(e) {
                 var id = $(this).data('id');
 

@@ -141,7 +141,7 @@ class CalendarController extends Controller
         $events = [];
 
         foreach ($activities as $activity) {
-            $targetAudience = json_decode($activity->role_ids, true); // Assuming 'allowed_roles' is the JSON column
+            $targetAudience = json_decode($activity->role_ids, true);
             if (in_array($role, $targetAudience)) {
 
 
@@ -238,7 +238,6 @@ class CalendarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd();
         $activity = Activity::find($id);
 
         if (!$activity) {
@@ -255,7 +254,7 @@ class CalendarController extends Controller
             'reg_fee' => $request->reg_fee,
         ]);
 
-        return back()->with('message', 'Event Updated')->with('status', 'success');
+        return redirect()->route('calendar.show', ['id' => $id])->with('success', 'Activity Updated Successfully');
     }
 
     public function dragEvent(Request $request, $id)

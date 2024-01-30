@@ -72,102 +72,6 @@
 @endsection
 
 @section('content')
-    <!-- Registration Modal -->
-    {{-- <div class="modal fade" id="registrationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content px-4 py-2">
-                <div class="modal-header">
-                    <h2 class="flex justify-center">
-                        Register Here!
-                    </h2>
-                </div>
-                <div class="modal-body">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="text" class="form-control" id="name" name="name"
-                            placeholder="Enter your name" value="{{ $user->name ?: old('name') }}" autofocus
-                            autocomplete="name" />
-                        <label for="name" required>Name</label>
-                        @error('name')
-                            <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="text" class="form-control" id="email" name="email"
-                            value="{{ $user->email ?: old('email') }}" placeholder=" Enter your email"
-                            autocomplete="email" />
-                        <label for="email" required>Email</label>
-                        @error('email')
-                            <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="phone" class="form-control" id="number" name="number"
-                            value="{{ $user->contact_number ?: old('contact_number') }}"
-                            placeholder=" Enter your contact number" />
-                        <label for="number">Contact Number</label>
-                        @error('number')
-                            <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
-                        @enderror
-                    </div>
-
-                    <div class="row row-cols-4 row-cols-lg-2 gy-4 mb-3">
-                        <div class="col">
-                            <label for="area">Area<i class="text-danger">*</i></label>
-                            <select id="area" name="area" class="form-select">
-                                <option value="" disabled selected class="capitalize">Select Area</option>
-                                <option value="North" {{ $user->area == 'North' ? 'selected' : '' }}>North</option>
-                                <option value="Central" {{ $user->area == 'Central' ? 'selected' : '' }}>Central
-                                </option>
-                                <option value="East" {{ $user->area == 'East' ? 'selected' : '' }}>East</option>
-                                <option value="South" {{ $user->area == 'South' ? 'selected' : '' }}>South</option>
-                            </select>
-                            @error('area')
-                                <span class="text-xs text-danger lowercase">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="col">
-                            <label for="chapter">Chapter<i class="text-danger">*</i></label>
-                            <select id="chapter" name="chapter" class="form-select">
-                                <option value="" disabled selected>Select Chapter</option>
-                                <option value="Chapter 1" {{ $user->chapter == 'Chapter 1' ? 'selected' : '' }}>Chapter
-                                    1
-                                </option>
-                                <option value="Chapter 2" {{ $user->chapter == 'Chapter 2' ? 'selected' : '' }}>Chapter
-                                    2
-                                </option>
-                                <option value="Chapter 3" {{ $user->chapter == 'Chapter 3' ? 'selected' : '' }}>Chapter
-                                    3
-                                </option>
-                            </select>
-                            @error('chapter')
-                                <span class="text-xs text-danger lowercase">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input type="text" class="form-control" id="amount" name="amount" placeholder="₱0000"
-                            value="{{ old('amount') }}" readonly />
-                        <label for="amount">Registration Fee</label>
-                        @error('amount')
-                            <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
-                        @enderror
-                    </div>
-
-                    <div class="mt-12 flex justify-end gap-2">
-                        <a href="javascript:void(0)" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</a>
-                        <a href="javascript:void(0)" id="submitBtn" class="btn btn-success">Register!</a>
-                    </div>
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     <!-- Create Modal -->
 
@@ -383,16 +287,6 @@
                                     'reg_fee': response.reg_fee,
                                     'start': response.start_date,
                                     'end': response.end_date,
-                                });
-
-                                var Toast = Swal.mixin({
-                                    toast: true,
-                                    title: 'General Title',
-                                    animation: true,
-                                    position: 'top-right',
-                                    showConfirmButton: false,
-                                    timer: 1000,
-                                    timerProgressBar: true,
                                 });
 
                                 Toast.fire({

@@ -125,7 +125,7 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ route('announcements.store') }}" method="POST">
+                <form id="createForm" action="{{ route('announcements.store') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
@@ -149,7 +149,7 @@
 
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 my-4 pb-4">
                         <button type="reset" class="btn btn-outline-info">Reset</button>
-                        <button type="submit" class="btn btn-success">Create Announcement</button>
+                        <button type="button" id="create_btn" class="btn btn-success createBtn">Create Announcement</button>
                     </div>
                 </form>
             </div>
@@ -233,30 +233,11 @@
     </div>
 
     @if (session('success'))
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             var Toast = Swal.mixin({
                 toast: true,
-                icon: 'success',
-                title: 'General Title',
-                animation: true,
-                position: 'top-right',
-                showConfirmButton: false,
-                timer: 3000,
-                ogressBar: true,
-            });
-
-            Toast.fire({
-                animation: true,
-                title: "{{ session('success') }}",
-            });
-        </script>
-    @elseif (session('error'))
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-        <script>
-            var Toast = Swal.mixin({
-                toast: true,
-                icon: 'success',
+                icon:'success',
                 title: 'General Title',
                 animation: true,
                 position: 'top-right',
@@ -266,13 +247,12 @@
             });
 
             Toast.fire({
-                icon: 'error',
-                title: "{{ session('error') }}",
+                icon:'success',
+                title: '{{ session('success') }}',
             });
-
-            console.log("{{ session('error') }}");
         </script>
     @endif
+
 @endsection
 
 @push('scripts')
@@ -367,7 +347,6 @@
 
             $('#editForm').attr('action', `/announcements/${id}`);
             $.ajax({
-
                 url: "/announcements/" + id + "/edit", // Replace with your route for fetching announcement by ID
                 type: "GET",
                 success: function(response) {
@@ -380,6 +359,45 @@
                 }
             });
         }
+
+        var Toast = Swal.mixin({
+            toast: true,
+            title: 'General Title',
+            animation: true,
+            position: 'top-right',
+            showConfirmButton: false,
+        });
+
+        $(document).ready(function() {
+            $('#create_btn').click(function() {
+                $.ajax({
+                    url: "{{ route('announcements.store') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        "title": $('#title').val(),
+                        "description": $('#details').val(),
+                    },
+                    success: function(data) {
+                        hide();
+                        Toast.fire({
+                            icon: "success",
+                            timer: 3000,
+                            title: "Event Created Successfully. Reloading...",
+                        });
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
 
         function loadTable() {
             let columns = [{
