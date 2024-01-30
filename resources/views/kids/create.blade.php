@@ -33,7 +33,7 @@
 @endif
 
 <x-reg-form back="kids.index" action="kids.store" avatar="$kids->avatar">
-    Kids Registration Form Kids Registration Form Kids Registration Form Kids Registration Form
+    Kids Registration Form
 </x-reg-form>
 @endsection
 
