@@ -57,7 +57,7 @@
                         @csrf
                         <div class="form-floating form-floating-outline mb-3">
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name"
-                                value="{{ $user->name ?: old('name') }}" autofocus />
+                                value="{{ $user->name ?: old('name') }}" autofocus autocomplete="name" />
                             <label for="name" required>Name</label>
                             @error('name')
                             <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-floating form-floating-outline mb-3">
                             <input type="text" class="form-control" id="email" name="email"
-                                value="{{ $user->email ?: old('email') }}" placeholder=" Enter your email" />
+                                value="{{ $user->email ?: old('email') }}" placeholder=" Enter your email" autocomplete="email"/>
                             <label for="email" required>Email</label>
                             @error('email')
                             <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
@@ -85,7 +85,7 @@
                         <div class="form-floating form-floating-outline mb-3">
                             <input type="text" class="form-control" id="amount" name="amount" placeholder="₱0000"
                                 value="{{old('amount')}}" />
-                            <label for=" amount" required>Amount</label>
+                            <label for="amount" required>Amount</label>
                             @error('amount')
                             <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
                             @enderror

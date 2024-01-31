@@ -192,7 +192,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mb-4">
                                 <input id="showdescription" name="description" class="form-control"
-                                    placeholder="Details of your Announcement" readonly style="border: none;"></input>
+                                    placeholder="Details of your Announcement" readonly style="border: none;">
                                 <label for="showdescription">Details</label>
                             </div>
                         </div>
@@ -459,8 +459,6 @@
 
             $(document).on("click", ".remove-btn", function(e) {
                 let id = $(this).attr("id");
-
-                console.log(id);
 
                 Swal.fire({
                     title: 'Are you sure?',

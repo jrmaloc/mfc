@@ -219,6 +219,11 @@ class CalendarController extends Controller
     public function show(Request $request, string $id)
     {
         $activity = Activity::findOrFail($id);
+
+        if($request->ajax()) {
+            return response()->json(['redirect' => route('calendar.show', ['id' => $id])]);
+        };
+
         return view('activities.show', [
             'id' => $id,
             'activity' => $activity,

@@ -29,8 +29,9 @@
 
     </script>
     @endif
-    
+
     <x-show-form back="kids.index" edit="kids.edit" :parameters="['kid' => $kid]" :model="$kid"></x-show-form>
+
 @endsection
 
 @push('scripts')

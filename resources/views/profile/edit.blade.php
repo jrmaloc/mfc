@@ -71,10 +71,10 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="flex justify-end">
-            <a href="{{ route('profile.show', ['id' => $user->id]) }}" class="my-4 btn btn-dark">
+            {{-- <a href="{{ route('profile.show', ['id' => $user->id]) }}" class="my-4 btn btn-dark">
                 Go Back
                 <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i>
-            </a>
+            </a> --}}
         </div>
         <div class="card mb-4">
             <h4 class="card-header">Profile Edit</h4> <!-- Account -->

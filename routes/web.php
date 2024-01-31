@@ -71,6 +71,7 @@ Route::post('password', [PasswordController::class, 'update'])->middleware('gues
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/{id}', [DashboardController::class, 'bio'])->name('dashboard.bio');
 
     Route::resource('/announcements', AnnouncementsController::class);
 

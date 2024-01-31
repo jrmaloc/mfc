@@ -34,11 +34,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
         rel="stylesheet" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
@@ -69,8 +64,6 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
-
 
 
     <!-- Helpers -->
@@ -694,7 +687,7 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item {{ preg_match('/profile/', Request::path()) ? 'active' : null }}"
-                                            href="{{ route('profile.show', ['id' => $user->id]) }}">
+                                            href="{{ route('profile.edit', ['id' => $user->id]) }}">
                                             <i class="mdi mdi-account-outline me-1 mdi-24px text-success"></i>
                                             <span class="align-middle ml-2">My Profile</span>
                                         </a>

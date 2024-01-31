@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Activity;
 use App\Models\Tithe;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -23,18 +23,52 @@ class DashboardController extends Controller
 
     public function index()
     {
+        $oneHourAgo = now()->subHour();
+        $activeUsers = User::where('status', 'Active')->count();
         $userCount = User::count(); // Total users
         $adminCount = User::role('Admin', 'web')->count(); // Count of users with the admin role
         $tithes = Tithe::count(); // Total
-        $events = Activity::count();
-        // $householdCount = User::role('household')->count(); //
-        // Retrieve the authenticated user
+        $events = Activity::where('start_date', '>=', now())->count();
+        $upcomingEvents = Activity::where('start_date', '>=', now())->where('end_date', '<=', now()->addWeeks(2))->get();
         $user = Auth::user();
+        $bio = $user->bio;
         $userID = $user->id;
-        return view('dashboard', compact('userCount', 'events', 'tithes'), [
+        $newUsersCount = User::where('created_at', '>=', $oneHourAgo)->count();
+
+        $id = $user->role_id;
+
+        $role = Role::findOrFail($id);
+
+        return view('dashboard', compact(
+            'userCount',
+            'events',
+            'upcomingEvents',
+            'tithes',
+            'newUsersCount',
+            'role',
+            'activeUsers',
+            'bio'
+        ), [
             'user' => $user,
             'id' => $userID,
         ]);
+    }
+
+    public function bio(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+
+        $bio = $user->update([
+            'bio' => $request->bio,
+        ]);
+
+        $newBio = $user->bio;
+
+        if ($bio) {
+            return response()->json(['bio' => $newBio, 'success' => 'Bio Updated Successfully'], 200);
+        } else {
+            return response()->json(['error' => 'Bio did not saved'], 404);
+        }
     }
 
     public function markNotification(Request $request)

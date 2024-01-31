@@ -44,7 +44,7 @@
                                 class="form-control" placeholder="John Doe" autofocus autocomplete="name" />
                         </div>
                         @error('name')
-                            <span class="text-xs lowercase text-danger lowercase">Please input a proper Name</span>
+                            <span class="text-xs text-danger lowercase">Please input a proper Name</span>
                         @enderror
                     </div>
 
@@ -57,7 +57,7 @@
                                 aria-describedby="basic-addon41" autocomplete="email" />
                         </div>
                         @error('email')
-                            <span class="text-xs lowercase text-danger lowercase">Please input a proper Email</span>
+                            <span class="text-xs text-danger lowercase">Please input a proper Email</span>
                         @enderror
                     </div>
 
@@ -70,7 +70,7 @@
                                 aria-describedby="basic-addon41" autocomplete="username" />
                         </div>
                         @error('username')
-                            <span class="text-xs lowercase text-danger lowercase">please provide a username</span>
+                            <span class="text-xs text-danger lowercase">please provide a username</span>
                         @enderror
                     </div>
 
@@ -83,7 +83,7 @@
                                 aria-describedby="basic-addon41" />
                         </div>
                         @error('contact_number')
-                            <span class="text-xs lowercase text-danger lowercase">how can we contact you?</span>
+                            <span class="text-xs text-danger lowercase">how can we contact you?</span>
                         @enderror
                     </div>
                 </div>
