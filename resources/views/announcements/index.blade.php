@@ -62,6 +62,16 @@
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
         }
+
+        .textarea-input {
+            display: block;
+            width: 100%;
+            height: 200%;
+            padding: 8px;
+            box-sizing: border-box;
+            resize: both;
+            /* Allow vertical resizing */
+        }
     </style>
 @endsection
 
@@ -130,7 +140,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mt-3">
-                                <input name="title" type="text" class="form-control" id="title"
+                                <input name="title" type="text" class="form-control addInput" id="title"
                                     placeholder="Title of your Announcement">
                                 <label for="title">Title</label>
                             </div>
@@ -139,7 +149,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mb-4">
-                                <textarea id="details" name="description" class="form-control" placeholder="Details of your Announcement"
+                                <textarea id="details" name="description" class="form-control addTextArea" placeholder="Details of your Announcement"
                                     style="height: 300px"></textarea>
                                 <label for="details">Details</label>
                             </div>
@@ -149,7 +159,8 @@
 
                     <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 my-4 pb-4">
                         <button type="reset" class="btn btn-outline-info">Reset</button>
-                        <button type="button" id="create_btn" class="btn btn-success createBtn">Create Announcement</button>
+                        <button type="button" id="create_btn" class="btn btn-success createBtn">Create
+                            Announcement</button>
                     </div>
                 </form>
             </div>
@@ -207,7 +218,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mt-3">
-                                <input name="title" type="text" class="form-control" id="edittitle"
+                                <input name="title" type="text" class="form-control" value="" id="edittitle"
                                     placeholder="Title of your Announcement">
                                 <label for="edittitle">Title</label>
                             </div>
@@ -233,11 +244,11 @@
     </div>
 
     @if (session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             var Toast = Swal.mixin({
                 toast: true,
-                icon:'success',
+                icon: 'success',
                 title: 'General Title',
                 animation: true,
                 position: 'top-right',
@@ -247,25 +258,25 @@
             });
 
             Toast.fire({
-                icon:'success',
+                icon: 'success',
                 title: '{{ session('success') }}',
             });
         </script>
     @endif
-
 @endsection
 
 @push('scripts')
     <script>
+
         function clearInputFields() {
-            var inputFields = document.querySelectorAll('input');
+            var inputFields = document.querySelector('.addInput');
             inputFields.forEach(function(input) {
                 input.value = '';
             });
         }
 
         function clearTextAreaFields() {
-            var textAreas = document.querySelectorAll('textarea');
+            var textAreas = document.querySelectorAll('.addTextArea');
             textAreas.forEach(function(textarea) {
                 textarea.value = '';
             });
@@ -351,8 +362,9 @@
                 type: "GET",
                 success: function(response) {
                     // Update the form fields with fetched data
-                    document.getElementById('edittitle').value = response.title;
-                    document.getElementById('editdescription').value = response.description;
+                    $('#edittitle').attr('value', response.title);
+                    var textarea = document.getElementById('editdescription');
+                    textarea.defaultValue = response.description;
                 },
                 error: function(error) {
                     console.error('Error fetching data:', error);

@@ -30,6 +30,7 @@ class AnnouncementsController extends Controller
                 ->rawColumns(['roles', 'actions'])
                 ->make(true);
         }
+
         return view('announcements.index');
     }
 

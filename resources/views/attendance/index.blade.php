@@ -105,7 +105,13 @@
                                             <option value="" disabled selected>Choose one</option>
 
                                             @foreach ($options as $info)
-                                                <option value="{{ $info->id }}">{{ $info->user->name }}</option>
+                                                @if (auth()->check() &&
+                                                        (auth()->user()->hasRole('Super Admin') ||
+                                                            auth()->user()->hasRole('Admin')))
+                                                    <option value="{{ $info->id }}">{{ $info->name }}</option>
+                                                @else
+                                                    <option value="{{ $info->id }}">{{ $info->user->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                         <label for="floatingSelect">Name</label>
