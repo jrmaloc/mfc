@@ -1,6 +1,7 @@
 @extends('layout.layout')
 
 @section('head')
+    <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap-datepicker.css') }}">
 @endsection
 
 @section('content')
@@ -50,8 +51,8 @@
                         <div class="input-group input-group-merge mb-3">
                             <span class="input-group-text">₱</span>
                             <div class="form-floating form-floating-outline">
-                                <input type="number" class="form-control" id="showReg_fee" name="reg_fee"  style="border-left: none;"
-                                    placeholder="₱0000" value="{{ $activity->reg_fee }}"
+                                <input type="number" class="form-control" id="showReg_fee" name="reg_fee"
+                                    style="border-left: none;" placeholder="₱0000" value="{{ $activity->reg_fee }}"
                                     @if (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
@@ -66,11 +67,10 @@
                         </div>
                     </div>
 
-
                     <div class="row">
                         <div class="col mb-2">
                             <div class="form-floating form-floating-outline">
-                                <input type="datetime-local" id="showStart_date" class="form-control" name="start_date"
+                                <input type="text" id="showStart_date" class="datepicker form-control" name="start_date"
                                     value="{{ $activity->start_date }}" @if (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
@@ -82,7 +82,7 @@
                         </div>
                         <div class="col mb-2">
                             <div class="form-floating form-floating-outline">
-                                <input type="datetime-local" id="showEnd_date" class="form-control" name="end_date"
+                                <input type="text" id="showEnd_date" class="datepicker form-control" name="end_date"
                                     value="{{ $activity->end_date }}" @if (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
@@ -139,6 +139,26 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            var showStartDatePicker = $('#showStart_date').flatpickr({
+                enableTime: true,
+                dateFormat: "Y-m-d H:i:S",
+                minDate: 'today',
+                autoclose: true,
+            });
+
+            var test = showStartDatePicker.selectedDates[0];
+
+            var showEndDatePicker = $('#showEnd_date').flatpickr({
+                enableTime: true,
+                minDate: test,
+                dateFormat: "Y-m-d H:i:S",
+            });
+
+            showStartDatePicker.config.onChange.push(function(selectedDates, dateStr, instance) {
+                showEndDatePicker.set('minDate', selectedDates[0] || '');
+            });
+
+
             $('.remove-btn').on('click', function(e) {
                 var id = $(this).data('id');
 

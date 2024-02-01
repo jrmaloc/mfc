@@ -128,13 +128,13 @@
                         <div class="row">
                             <div class="col mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="datetime-local" id="start_date" class="form-control" />
+                                    <input type="text" id="start_date" class="form-control" />
                                     <label for="start_date">Start Date</label>
                                 </div>
                             </div>
                             <div class="col mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="datetime-local" id="end_date" class="form-control" />
+                                    <input type="text" id="end_date" class="form-control" />
                                     <label for="end_date">End Date</label>
                                 </div>
                             </div>
@@ -187,6 +187,24 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
+            var startDate = $('#start_date').flatpickr({
+                enableTime: true,
+                dateFormat: "Y-m-d H:i:S",
+                minDate: 'today',
+                autoclose: true,
+            });
+
+            var test = startDate.selectedDates[0];
+
+            var endDate = $('#end_date').flatpickr({
+                enableTime: true,
+                minDate: test,
+                dateFormat: "Y-m-d H:i:S",
+            });
+
+            startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
+                endDate.set('minDate', selectedDates[0] || '');
+            });
 
             $.ajaxSetup({
                 headers: {
