@@ -58,10 +58,20 @@ class AnnouncementsController extends Controller
         return redirect(route('announcements.index'))->with('success', 'Announcement created successfully');
     }
 
-    public function show($id)
+    public function show(Request $request, string $id)
     {
-        $announcement = Announcement::find($id);
-        return response()->json($announcement);
+        $announcement = Announcement::findOrFail($id);
+
+        $redirect = route('announcements.show', ['announcement' => $id]);
+
+        if($request->ajax()) {
+            return response()->json(['redirect' => $redirect]);
+        };
+
+        return view('announcements.show', [
+            'announcement' => $id,
+            'data' => $announcement,
+        ]);
     }
 
     public function edit($id)

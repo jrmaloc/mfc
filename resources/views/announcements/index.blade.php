@@ -166,41 +166,6 @@
             </div>
         </div>
 
-        <!-- Show -->
-        <div id="show" class="card">
-            <div class="flex justify-between align-items-center px-12 py-6">
-                <h3 class="fw-bold pt-4">
-                    Announcement Details
-                </h3>
-                <a href="javascript:void(0);" onclick="hide()" class="btn"><i class=" fa fa-xmark"
-                        style="font-size: 23px;"></i></a>
-            </div>
-
-            <div class="card-body">
-                <form action="" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
-                            <div class="form-floating form-floating-outline mt-3">
-                                <input name="title" type="text" class="form-control" id="showtitle" readonly
-                                    placeholder="Title of your Announcement" style="border: none;">
-                                <label for="showtitle">Title</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
-                            <div class="form-floating form-floating-outline mb-4">
-                                <input id="showdescription" name="description" class="form-control"
-                                    placeholder="Details of your Announcement" readonly style="border: none;">
-                                <label for="showdescription">Details</label>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <!-- Edit -->
         <div id="edit" class="card">
             <div class="flex justify-between align-items-center px-12 py-6">
@@ -270,16 +235,12 @@
 
         function clearInputFields() {
             var inputFields = document.querySelector('.addInput');
-            inputFields.forEach(function(input) {
-                input.value = '';
-            });
+            inputFields.value = '';
         }
 
         function clearTextAreaFields() {
             var textAreas = document.querySelectorAll('.addTextArea');
-            textAreas.forEach(function(textarea) {
-                textarea.value = '';
-            });
+            textAreas.value = '';
         }
 
         function add() {
@@ -298,9 +259,6 @@
             const show = document.getElementById('show');
             const edit = document.getElementById('edit');
             const addForm = document.getElementById('addForm');
-            if (show.classList.contains('active') && !show.contains(event.target)) {
-                hide();
-            }
             if (edit.classList.contains('active') && !edit.contains(event.target)) {
                 hide();
             }
@@ -313,34 +271,22 @@
 
         function hide() {
             const addForm = document.getElementById('addForm');
-            const show = document.getElementById('show');
             const edit = document.getElementById('edit');
             const overlay = document.querySelector('.overlay');
-            show.classList.remove('active');
             edit.classList.remove('active');
             addForm.classList.remove('active');
             overlay.style.display = 'none'; // Hide the overlay
             addForm.style.zIndex = '1500'; // Set a default z-index for the form
             edit.style.zIndex = '1500'; // Set a default z-index for the
-            show.style.zIndex = '1500'; // Show the overlay
             document.body.classList.remove('no-scroll');
         }
 
         function show(id) {
-            const show = document.getElementById('show');
-            const overlay = document.querySelector('.overlay');
-            show.classList.add('active');
-            overlay.style.display = 'block'; // Show the overlay
-            show.style.zIndex = '1500'; // Set a high z-index for the form
-            document.body.style.overflowY = 'hidden';
-
             $.ajax({
                 url: "/announcements/" + id, // Replace with your route for fetching announcement by ID
                 type: "GET",
                 success: function(response) {
-                    // Update the form fields with fetched data
-                    document.getElementById('showtitle').value = response.title;
-                    document.getElementById('showdescription').value = response.description;
+                    window.location.href = response.redirect;
                 },
                 error: function(error) {
                     console.error('Error fetching data:', error);

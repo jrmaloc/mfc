@@ -32,7 +32,7 @@
         }
 
         .bg-gradient-primary {
-            background-image: linear-gradient(310deg, #5e72e4 0%, #825ee4 100%);
+            background-image: linear-gradient(310deg, #0025f9 0%, #d87df5 100%);
         }
 
         .bg-gradient-danger {
@@ -200,9 +200,8 @@
                 </div>
 
                 <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card z-index-2 w-8/12" style="height: 650px;">
-                        <div class="card-header bg-green-300">
-                        </div>
+                    <div class="card z-index-2 w-8/12">
+                        <div class="card-header bg-green-300"></div>
                         <div class="card-body">
                             <div class="flex justify-center">
                                 <div class="border" style="width:98%;"></div>
@@ -235,7 +234,7 @@
                                 </div>
                             </div>
 
-                            <div class="row row-cols-lg-1 mb-8 gy-4">
+                            <div class="row row-cols-lg-1 mb-8 pb-4 gy-4">
                                 <div class="col">
                                     <div class="input-group input-group-merge">
                                         <span class="input-group-text" style="border: none;"><i
@@ -396,9 +395,10 @@
 
         var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
 
-        gradientStroke1.addColorStop(1, "rgba(94, 114, 228, 0.2)");
-        gradientStroke1.addColorStop(0.2, "rgba(94, 114, 228, 0.0)");
-        gradientStroke1.addColorStop(0, "rgba(94, 114, 228, 0)");
+        gradientStroke1.addColorStop(1, "rgba(0,166,61,0.4)");
+        gradientStroke1.addColorStop(0, "rgba(134,240,173,0.0)");
+        gradientStroke1.addColorStop(0, "rgba(134,240,173,0)");
+
         new Chart(ctx1, {
             type: "line",
             data: {
@@ -421,7 +421,7 @@
                     tension: 0.4,
                     borderWidth: 0,
                     pointRadius: 0,
-                    borderColor: "#5e72e4",
+                    borderColor: "#1b8262ff",
                     backgroundColor: gradientStroke1,
                     borderWidth: 3,
                     fill: true,
@@ -453,7 +453,7 @@
                         ticks: {
                             display: true,
                             padding: 10,
-                            color: "#fbfbfb",
+                            color: "#ccc",
                             font: {
                                 size: 11,
                                 family: "Open Sans",
