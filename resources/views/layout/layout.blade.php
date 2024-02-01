@@ -542,47 +542,28 @@
                                         </div>
                                     </li>
 
-                                    @forelse ( $unreadNotifications as $notification )
+                                    @forelse ($unreadNotifications as $notification)
                                         <li class="dropdown-notifications-list scrollable-container"
                                             id="notification">
                                             <ul class="list-group list-group-flush" style="width: 500px; ">
                                                 <li
                                                     class="notify list-group-item list-group-item-action dropdown-notifications-item">
                                                     <div class="d-flex align-items-center gap-2">
-                                                        @if (auth()->check() &&
-                                                                (auth()->user()->hasRole('Super Admin') ||
-                                                                    auth()->user()->hasRole('Admin')))
-                                                            <a href="{{ $notification->data['url'] }}"
-                                                                data-id="{{ $notification->id }}"
-                                                                class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
-                                                                <h6 class="mb-1 text-truncate">
-                                                                    @if ($notification->type === 'App\Notifications\TitheNotification')
-                                                                        <strong><span>₱ </span></strong>
-                                                                    @endif
-                                                                    <strong>{{ $notification->data['name'] }}</strong>
-                                                                    <p class="mt-2">
-                                                                        {{ $notification->data['message'] }}</p>
-                                                                </h6>
-                                                                <!-- You can access other notification data similarly -->
-                                                                <small
-                                                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
-                                                            </a>
-                                                        @else
-                                                            <a href="/profile" data-id="{{ $notification->id }}"
-                                                                class="d-flex flex-column user_notification flex-grow-1 overflow-hidden w-px-250">
-                                                                <h6 class="mb-1 text-truncate">
-                                                                    @if ($notification->type === 'App\Notifications\TitheNotification')
-                                                                        <strong><span>₱ </span></strong>
-                                                                    @endif
-                                                                    <strong>{{ $notification->data['name'] }}</strong>
-                                                                    <p class="mt-2">
-                                                                        {{ $notification->data['message'] }}</p>
-                                                                </h6>
-                                                                <!-- You can access other notification data similarly -->
-                                                                <small
-                                                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
-                                                            </a>
-                                                        @endif
+                                                        <a href="{{ $notification->data['url'] }}"
+                                                            data-id="{{ $notification->id }}"
+                                                            class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
+                                                            <h6 class="mb-1 text-truncate">
+                                                                @if ($notification->type === 'App\Notifications\TitheNotification')
+                                                                    <strong><span>₱ </span></strong>
+                                                                @endif
+                                                                <strong>{{ $notification->data['name'] }}</strong>
+                                                                <p class="mt-2">
+                                                                    {{ $notification->data['message'] }}</p>
+                                                            </h6>
+                                                            <!-- You can access other notification data similarly -->
+                                                            <small
+                                                                class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
+                                                        </a>
                                                     </div>
                                                 </li>
                                                 @if ($loop->last)
