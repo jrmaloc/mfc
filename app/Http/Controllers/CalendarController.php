@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Registration;
 use App\Models\User;
+use App\Notifications\EventNotification;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class CalendarController extends Controller
@@ -192,13 +195,13 @@ class CalendarController extends Controller
 
         $activity = Activity::create(array_merge($role_ids, $data));
 
-        // $roles = Role::all();
+        $roles = Role::all();
 
-        // $admins = User::whereHas('roles', function ($query) use ($roles) {
-        //     $query->whereIn('id', $roles->pluck('id'));
-        // })->get();
+        $admins = User::whereHas('roles', function ($query) use ($roles) {
+            $query->whereIn('id', $roles->pluck('id'));
+        })->get();
 
-        // Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
+        Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
 
         return response()->json($activity);
     }
@@ -241,16 +244,22 @@ class CalendarController extends Controller
             ], 404);
         }
 
-        $start = $request->start_date;
-        $end = $request->end_date;
-
-        $activity->update([
-            'description' => $request->description,
-            'location' => $request->location,
-            'start_date' => $start,
-            'end_date' => $end,
-            'reg_fee' => $request->reg_fee,
+        $data = $request->validate([
+            'description' => 'required',
+            'location' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
         ]);
+
+        $activity->update($data);
+
+        $roles = Role::all();
+
+        $admins = User::whereHas('roles', function ($query) use ($roles) {
+            $query->whereIn('id', $roles->pluck('id'));
+        })->get();
+
+        Notification::send($admins, new EventNotification($activity, 'An Event has been updated!'));
 
         return redirect()->route('calendar.show', ['id' => $id])->with('success', 'Activity Updated Successfully');
     }

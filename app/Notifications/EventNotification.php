@@ -53,9 +53,9 @@ class EventNotification extends Notification
             'message' => $this->message,
             'name' => $this->event->title,
             'event_id' => $this->event->id,
-            'redirect_url' => '/calendar'
+            'url' => '/calendar/show/' . $this->event->id,
         ];
     }
 
-    
+
 }

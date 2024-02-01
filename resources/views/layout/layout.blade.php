@@ -769,7 +769,6 @@
                             success: function(response) {
                                 var updatedContent = $(response).find('#container').html();
                                 $('#container').html(updatedContent);
-                                console.log('wewewew');
                             },
                             error: function(xhr, status, error) {
                                 console.error('Error:', error);

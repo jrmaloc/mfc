@@ -201,7 +201,7 @@
                 headerToolbar: {
                     left: 'prev,today,next', // will normally be on the left. if RTL, will be on the right
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,dayGridDay,listWeek,multiMonthYear',
+                    right: 'dayGridMonth,dayGridDay,listWeek,multiMonthYear',
                 },
 
                 editable: true,
