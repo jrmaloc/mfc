@@ -25,6 +25,7 @@ class Activity extends Model
         'description',
         'reg_fee',
         'user_ids',
+        'role_ids',
     ];
 
     use HasFactory, HasRelationships, HasRoles;

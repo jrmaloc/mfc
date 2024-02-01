@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\Registration;
 use App\Models\User;
-use App\Notifications\EventNotification;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
-use Spatie\Permission\Models\Role;
+use Yajra\DataTables\DataTables;
 
 class CalendarController extends Controller
 {
@@ -57,10 +54,6 @@ class CalendarController extends Controller
 
         return redirect()->to($redirectUrl);
 
-
-
-
-
         // $name = $request->name;
         // $attendee = User::where('name', $name)->first();
 
@@ -91,6 +84,7 @@ class CalendarController extends Controller
 
     public function attendees(Request $request, string $id)
     {
+        $activity = Activity::findOrFail($id);
         $attendees = Registration::where('activity_id', $id)->get();
         $user_ids = [];
 
@@ -110,9 +104,6 @@ class CalendarController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-
-        return response()->json(['attendees' => $attendees]);
-        // return view('activities.activities', ['attendees' => $attendees]);
     }
 
     public function redirect()
@@ -143,7 +134,6 @@ class CalendarController extends Controller
         foreach ($activities as $activity) {
             $targetAudience = json_decode($activity->role_ids, true);
             if (in_array($role, $targetAudience)) {
-
 
                 // Format start and end dates to ISO 8601 format
                 $startISO8601 = date('Y-m-d\TH:i:s', strtotime($activity->start_date));
@@ -176,7 +166,6 @@ class CalendarController extends Controller
         return view('activities.calendar')->with('events', $events);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -196,17 +185,18 @@ class CalendarController extends Controller
             'location' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
-            'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/'
+            'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/',
         ]);
 
-        $activity = Activity::create($data);
+        $role_ids = ['role_ids' => '[1, 2, 3, 4, 5, 6, 7]'];
+
+        $activity = Activity::create(array_merge($role_ids, $data));
 
         // $roles = Role::all();
 
         // $admins = User::whereHas('roles', function ($query) use ($roles) {
         //     $query->whereIn('id', $roles->pluck('id'));
         // })->get();
-
 
         // Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
 
@@ -220,7 +210,7 @@ class CalendarController extends Controller
     {
         $activity = Activity::findOrFail($id);
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return response()->json(['redirect' => route('calendar.show', ['id' => $id])]);
         };
 
@@ -247,15 +237,18 @@ class CalendarController extends Controller
 
         if (!$activity) {
             return response()->json([
-                'error' => 'Unable to find activity'
+                'error' => 'Unable to find activity',
             ], 404);
         }
+
+        $start = $request->start_date;
+        $end = $request->end_date;
 
         $activity->update([
             'description' => $request->description,
             'location' => $request->location,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'start_date' => $start,
+            'end_date' => $end,
             'reg_fee' => $request->reg_fee,
         ]);
 
@@ -268,13 +261,13 @@ class CalendarController extends Controller
 
         if (!$activity) {
             return response()->json([
-                'error' => 'Unable to find activity'
+                'error' => 'Unable to find activity',
             ], 404);
         }
 
         $activity->update([
             'start_date' => Carbon::parse($request->input('start_date')),
-            'end_date' => Carbon::parse($request->input('end_date'))
+            'end_date' => Carbon::parse($request->input('end_date')),
         ]);
         return response()->json(['messaege' => 'Event Changed Successfully!']);
     }
@@ -292,7 +285,7 @@ class CalendarController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Event Deleted Successfully',
-                'redirect' => route('calendar.list')
+                'redirect' => route('calendar.list'),
             ]);
         }
     }

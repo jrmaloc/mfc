@@ -208,9 +208,7 @@
                     method: 'GET',
                     success: function(response) {
                         if (response && response.data) {
-                            populateAttendeesTable(response
-                                .data
-                            ); // Assuming 'data' is the property containing the attendee information
+                            populateAttendeesTable(response.data); // Assuming 'data' is the property containing the attendee information
                         } else {
                             console.error('Unexpected response format:', response);
                         }
@@ -221,9 +219,10 @@
                 });
             });
 
+
+
             // Function to populate DataTable with attendee data
             function populateAttendeesTable(data) {
-                console.log(data);
                 const dataTableData = data.map(item => {
                     return {
                         name: item.user.name,
@@ -245,15 +244,18 @@
                     data: dataTableData,
                     columns: [{
                             data: 'number',
-                            name: 'No.'
+                            name: 'No.',
+                            width: '5%',
                         },
                         {
                             data: 'name',
-                            name: 'name'
+                            name: 'name',
+                            width: '25%'
                         },
                         {
                             data: 'email',
-                            name: 'email'
+                            name: 'email',
+                            width: '25%'
                         },
                         {
                             data: 'contact_number',
@@ -263,17 +265,17 @@
                         {
                             data: 'area',
                             name: 'area',
-                            width: '10%',
+                            width: '20%',
                         },
                         {
                             data: 'chapter',
                             name: 'chapter',
-                            width: '10%',
+                            width: '20%',
                         },
                         {
                             data: 'paid',
                             name: 'status',
-                            width: '10%',
+                            width: '20%',
                             render: function(data, type, row) {
                                 let badgeHTML = '';
 
@@ -292,11 +294,6 @@
                         }
                         // Define other columns as needed
                     ],
-                    columnDefs: [{
-                        targets: [0, 1], // Index of the column you want to disable sorting for
-                        width: '30%',
-
-                    }],
                     order: [
                         [0, 'desc'] // Sort by the first column (index 0) in descending order
                     ]
@@ -307,8 +304,6 @@
 
         $(document).on("click", ".remove-btn", function(e) {
             let id = $(this).attr("id");
-
-            console.log(id);
 
             Swal.fire({
                 title: 'Are you sure?',

@@ -47,15 +47,19 @@
                     </div>
 
                     <div class="col mb-4 mt-2">
-                        <div class="form-floating form-floating-outline mb-3">
-                            <input type="text" class="form-control" id="showReg_fee" name="reg_fee" placeholder="₱0000"
-                                value="{{ $activity->reg_fee }}" @if (auth()->check() &&
-                                        (auth()->user()->hasRole('Area Servant') ||
-                                            auth()->user()->hasRole('Chapter Servant') ||
-                                            auth()->user()->hasRole('Unit Servant') ||
-                                            auth()->user()->hasRole('Household Servant') ||
-                                            auth()->user()->hasRole('Member'))) readonly @endif />
-                            <label for="showReg_fee">Registration Fee</label>
+                        <div class="input-group input-group-merge mb-3">
+                            <span class="input-group-text">₱</span>
+                            <div class="form-floating form-floating-outline">
+                                <input type="number" class="form-control" id="showReg_fee" name="reg_fee"  style="border-left: none;"
+                                    placeholder="₱0000" value="{{ $activity->reg_fee }}"
+                                    @if (auth()->check() &&
+                                            (auth()->user()->hasRole('Area Servant') ||
+                                                auth()->user()->hasRole('Chapter Servant') ||
+                                                auth()->user()->hasRole('Unit Servant') ||
+                                                auth()->user()->hasRole('Household Servant') ||
+                                                auth()->user()->hasRole('Member'))) readonly @endif />
+                                <label for="showReg_fee">Registration Fee</label>
+                            </div>
                             @error('amount')
                                 <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
                             @enderror
@@ -111,11 +115,11 @@
     </style>
 
     @if (session('success'))
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             var Toast = Swal.mixin({
                 toast: true,
-                icon:'success',
+                icon: 'success',
                 title: 'General Title',
                 animation: true,
                 position: 'top-right',
@@ -125,7 +129,7 @@
             });
 
             Toast.fire({
-                icon:'success',
+                icon: 'success',
                 title: '{{ session('success') }}',
             });
         </script>
