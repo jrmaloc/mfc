@@ -9,6 +9,7 @@ use App\Notifications\EventNotification;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
@@ -291,6 +292,9 @@ class CalendarController extends Controller
         $remove = $activity->delete();
 
         if ($remove) {
+
+            DatabaseNotification::where('data->event_id', $id)->delete();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Event Deleted Successfully',
