@@ -41,14 +41,14 @@
 
     <x-layout>
         <div class="card h-100">
-            <div class="card-header mt-4 uppercase">
+            <div class="card-header mt-4 ml-4 uppercase">
                 <h2>
                     {{ $data->title }}
                 </h2>
             </div>
             <div class="card-body" style="padding: 0 75px;">
-                <div class="row mt-4 border h-75">
-                    <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+                <div class="row mt-4 border rounded-xl h-75">
+                    <div class="col-xs-12 col-sm-12 col-md-12 my-3 ml-2">
                         <p>
                             <strong>
                                 Details
@@ -56,7 +56,7 @@
                         </p>
 
 
-                        <div class="">
+                        <div class="ml-8">
                             <p>
                                 {{ $data->description }}
                             </p>

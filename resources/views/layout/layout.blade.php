@@ -422,36 +422,10 @@
                             </ul>
                         </li>
 
-                        <!-- Profile -->
-                        <li class="menu-item {{ preg_match('/profile/', Request::path()) ? 'active' : null }}">
-                            <a href="{{ route('profile.edit', ['id' => $user->id]) }}" class=" menu-link">
-                                <i class="menu-icon tf-icon mdi mdi-account-cog-outline"></i>
-                                <div data-i18n="Icons">Profile Settings</div>
-                            </a>
-                        </li>
-
                         <!-- Notifications -->
                         @php
                             $unreadNotificationsCount = \App\Models\User::find(Auth::id())->unreadNotifications->count();
                         @endphp
-
-                        <li class="menu-item {{ preg_match('/notifications/', Request::path()) ? 'active' : null }}">
-                            <a href="{{ route('notifications') }}" class="menu-link">
-                                <i class="menu-icon tf-icon mdi mdi-bell-outline"></i>
-                                <div data-i18n="Icons">Notifications</div>
-
-                                @if ($unreadNotificationsCount >= 1 && $unreadNotificationsCount <= 99)
-                                    <div class="badge bg-danger rounded-pill ms-auto mr-12">
-                                        {{ $unreadNotificationsCount }}
-                                    </div>
-                                @elseif ($unreadNotificationsCount > 100)
-                                    <div class="badge bg-danger rounded-pill ms-auto mr-12">
-                                        99+
-                                    </div>
-                                @endif
-                            </a>
-                        </li>
-
 
                         <!-- Attendance -->
 

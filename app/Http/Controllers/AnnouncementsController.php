@@ -50,10 +50,10 @@ class AnnouncementsController extends Controller
         $announcement = Announcement::create($data);
 
         $admins = User::whereHas('roles', function ($query) {
-            $query->whereIn('id', [1, 2, 3, 4, 5]); // Use whereIn for multiple IDs
+            $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7]); // Use whereIn for multiple IDs
         })->get();
 
-        // Notification::send($admins, new AnnouncementNotification($announcement, 'There is a new announcement! Check it now.'));
+        Notification::send($admins, new AnnouncementNotification($announcement, 'There is a new announcement! Check it now.'));
 
         return redirect(route('announcements.index'))->with('success', 'Announcement created successfully');
     }
@@ -87,7 +87,14 @@ class AnnouncementsController extends Controller
             'description' => 'required',
         ]);
 
-        Announcement::findOrFail($id)->update($data);
+        $announcement = Announcement::findOrFail($id);
+        $announcement->update($data);
+
+        $admins = User::whereHas('roles', function ($query) {
+            $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7]); // Use whereIn for multiple IDs
+        })->get();
+
+        Notification::send($admins, new AnnouncementNotification($announcement, 'An announcement has been updated! Check it now.'));
 
         return redirect(route('announcements.index'))->with('success', 'Announcement edited successfully');
     }

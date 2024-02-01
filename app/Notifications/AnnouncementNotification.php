@@ -53,7 +53,7 @@ class AnnouncementNotification extends Notification
         return [
             'message' => $this->message,
             'name' => $this->announcement->title,
-            'redirect_url' => '/announcements'
+            'url' => '/announcements/' . $this->announcement->id,
         ];
     }
 }
