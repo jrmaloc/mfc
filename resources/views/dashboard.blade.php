@@ -263,18 +263,18 @@
                                 </div>
 
                                 <div class="col mt-4 py-2 card bg-green-300">
-                                    <strong class="">
+                                    <strong class="text-slate-800">
                                         Upcoming Events
                                     </strong>
                                     @foreach ($upcomingEvents as $upcomingEvent)
                                         <div class="mt-1 ml-4 px-4 py-1 flex justify-between">
-                                            <li>
+                                            <li class="text-slate-600">
                                                 {{ $eventTitle = $upcomingEvent->title }}
                                             </li>
 
                                             <span>
                                                 <button id="seeMore_{{ $upcomingEvent->id }}" class="btn-link">
-                                                    <i class="fa fa-ellipsis"></i>
+                                                    <i class="fa fa-ellipsis text-slate-500"></i>
                                                 </button>
                                             </span>
                                         </div>
@@ -425,7 +425,7 @@
                     backgroundColor: gradientStroke1,
                     borderWidth: 3,
                     fill: true,
-                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500, 420, 480, 600],
+                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500, 420, 480, 500],
                     maxBarThickness: 6,
                 }, ],
             },

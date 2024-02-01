@@ -71,33 +71,33 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="flex justify-end">
-            {{-- <a href="{{ route('profile.show', ['id' => $user->id]) }}" class="my-4 btn btn-dark">
-                Go Back
-                <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i>
-            </a> --}}
         </div>
-        <div class="card mb-4">
-            <h4 class="card-header">Profile Edit</h4> <!-- Account -->
+        <div class="card mt-20">
+            <h4 class="card-header">Profile Edit</h4>
+            <!-- Account -->
             <div class="card-body">
-                <div class="d-flex align-items-start align-items-sm-center gap-4">
-                    <img src="{{ URL::asset('assets/img/avatars/1.png') }}" alt="user-avatar"
-                        class="d-block w-px-120 h-px-120 rounded" />
-                    <div class="button-wrapper">
-                        <label for="upload" class=" btn btn-success me-2 mb-3" tabindex="0">
-                            <span class="d-none d-sm-block">Upload new photo</span>
-                            <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
-                            <input type="file" id="upload" class="account-file-input" hidden
-                                accept="image/png, image/jpeg" />
-                        </label>
-                        <div class="text-muted small">Allowed JPG, GIF or PNG. Max size of 800K</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body pt-2 mt-1">
-                <form method="POST" action="{{ route('profile.update', ['user' => $user]) }}">
+                <form method="POST" action="{{ route('profile.update', ['user' => $user]) }}"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                        @if (isset($user->avatar))
+                            <img src="{{ asset($user->avatar) }}" class="d-block w-px-120 h-px-120 rounded"
+                                id="uploadedAvatar" />
+                        @else
+                            <img src="{{ URL::asset('assets/img/avatars/1.png') }}" alt="user-avatar"
+                                class="d-block w-px-120 h-px-120 rounded" id="uploadedAvatar" />
+                        @endif
+                        <div class="button-wrapper">
+                            <label for="upload" class=" btn btn-success me-2 mb-3" tabindex="0">
+                                <span class="d-none d-sm-block">Upload new photo</span>
+                                <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
+                                <input type="file" id="upload" name="avatar" class="account-file-input" hidden
+                                    accept="image/png, image/jpeg" />
+                            </label>
+                            <div class="text-muted small">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                        </div>
+                    </div>
                     <div class="menu-header small text-uppercase mb-2">
                         <span class="menu-header-text">Account Information</span>
                     </div>
@@ -317,6 +317,17 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            $('#upload').change(function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#uploadedAvatar').attr('src', event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
             const errorInputs = document.querySelectorAll('span.text-danger');
 

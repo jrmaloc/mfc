@@ -58,9 +58,10 @@ class ProfileController extends Controller
             'contact_number' => 'required|regex:/^[0-9\s-]+$/',
             'email' => 'required|email',
             'current_password' => 'required|string|min:8',
+            'avatar' => 'nullable',
         ], [
             'contact_number.regex' => 'contact number must consist of numbers only',
-            'current_password.required' => 'please confirm your password.'
+            'current_password.required' => 'please confirm your password.',
         ]);
 
         if (!Hash::check($data['current_password'], $user->password)) {
@@ -80,14 +81,25 @@ class ProfileController extends Controller
 
         $user->update($data);
         $user->section_id = $section;
-        $user->save();
 
-        if ($user->member) {
-            $user->member->update($data);
+        $oldAvatarPath = $user->avatar; // Get the old avatar path before updating
 
-        } elseif ($user->household_servant) {
-            $user->household_servant->update($data);
+        if ($request->hasFile('avatar')) {
+            // Handle the new avatar upload as you've implemented
+            $avatar = $request->file('avatar');
+            $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
+            $avatar->move(public_path('avatars'), $filename);
+
+            // Update the user's avatar with the new file path
+            $user->avatar = $filename;
+
+            // Delete the old avatar file if it exists
+            if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
+                unlink(public_path($oldAvatarPath));
+            }
         }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'Profile Updated');
     }
@@ -127,7 +139,7 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse //Logout
+    public function destroy(Request $request): RedirectResponse//Logout
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],

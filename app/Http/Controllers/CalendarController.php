@@ -248,6 +248,7 @@ class CalendarController extends Controller
         $data = $request->validate([
             'description' => 'required',
             'location' => 'required',
+            'reg_fee' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
         ]);
