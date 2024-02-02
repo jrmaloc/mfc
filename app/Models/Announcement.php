@@ -13,8 +13,7 @@ class Announcement extends Model
     protected $fillable = [
         'title',
         'description',
-        'creator',
-        'audience',
-        'timestamp',
+        'user_id',
+        'user_ids',
     ];
 }

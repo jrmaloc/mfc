@@ -321,6 +321,15 @@
                             </li>
                         @endcan
 
+                        <!--Notice Board -->
+
+                        <li class="menu-item {{ preg_match('/announcements/', Request::path()) ? 'active' : null }}">
+                            <a href="/announcements" class="menu-link">
+                                <i class="menu-icon tf-icon mdi mdi-clipboard-outline"></i>
+                                <div data-i18n="Icons">Announcements</div>
+                            </a>
+                        </li>
+
 
                         @canany(['view-area', 'view-member', 'view-household'])
                             <li class="menu-header small text-uppercase">
@@ -361,15 +370,6 @@
                             </li>
 
                         @endcanany
-
-                        <!--Notice Board -->
-
-                        <li class="menu-item {{ preg_match('/announcements/', Request::path()) ? 'active' : null }}">
-                            <a href="/announcements" class="menu-link">
-                                <i class="menu-icon tf-icon mdi mdi-clipboard-outline"></i>
-                                <div data-i18n="Icons">Announcements</div>
-                            </a>
-                        </li>
 
                         <!-- Activities -->
                         <li

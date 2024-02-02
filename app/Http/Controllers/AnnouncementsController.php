@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\User;
 use App\Notifications\AnnouncementNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Yajra\DataTables\DataTables;
 
@@ -13,8 +14,12 @@ class AnnouncementsController extends Controller
 {
     public function index(Request $request)
     {
+        $user = Auth::user();
+        $id = $user->role_id;
+        $role_id = json_encode($id);
+
         if ($request->ajax()) {
-            $data = Announcement::all();
+            $data = Announcement::whereJsonContains('user_ids', $role_id)->get();
 
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
@@ -41,13 +46,25 @@ class AnnouncementsController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $id = $user->id;
         $data = $request->validate([
             'description' => 'required',
             'title' => 'required',
+            'user_ids' => 'required',
             'created_at' => 'format:date',
         ]);
 
-        $announcement = Announcement::create($data);
+        $originalUserIds = $data['user_ids'];
+        $additionalValues = ['1', '2'];
+        $modifiedUserIds = array_merge($originalUserIds, $additionalValues);
+
+        $modifiedUserIdsJson = json_encode($modifiedUserIds);
+
+        $announcement = Announcement::create(array_merge($data, [
+            'user_id' => $id,
+            'user_ids' => $modifiedUserIdsJson,
+        ]));
 
         $admins = User::whereHas('roles', function ($query) {
             $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7]); // Use whereIn for multiple IDs
@@ -64,7 +81,7 @@ class AnnouncementsController extends Controller
 
         $redirect = route('announcements.show', ['announcement' => $id]);
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return response()->json(['redirect' => $redirect]);
         };
 
@@ -82,6 +99,24 @@ class AnnouncementsController extends Controller
 
     public function update(Request $request, $id)
     {
+        if ($request->ajax()) {
+            $data = $request->validate([
+                'title' => 'required',
+                'description' => 'required',
+            ]);
+
+            $announcement = Announcement::findOrFail($id);
+            $announcement->update($data);
+
+            if ($announcement){
+                return response()->json([
+                    'data' => $data,
+                    'succeed' => true,
+                    'message' => 'Announcement updated successfully',
+                ]);
+            };
+        };
+
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -107,7 +142,7 @@ class AnnouncementsController extends Controller
         if ($remove) {
             return response([
                 'status' => true,
-                'message' => 'Announcement deleted successfully'
+                'message' => 'Announcement deleted successfully',
             ]);
         } else {
             dd("error");

@@ -72,6 +72,51 @@
             resize: both;
             /* Allow vertical resizing */
         }
+
+        input[type=checkbox] {
+            display: none;
+        }
+
+        .activity-checkbox+label {
+            font-size: 1.2rem;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: .1rem solid var(--blue);
+            border-radius: 50%;
+            background: var(--darkblue);
+            transition: .1s all;
+            cursor: pointer;
+            z-index: 999 !important;
+        }
+
+        .admin {
+            pointer-events: none !important;
+        }
+
+        .activity-checkbox+label:hover {
+            transform: scale(.95);
+        }
+
+        .activity-checkbox+label:after {
+            content: "⚪";
+        }
+
+        .activity-checkbox:checked+label {
+            background: var(--blue);
+            transform: scale(1.1);
+        }
+
+        .activity-checkbox:checked+label:hover {
+            background: var(--blue);
+            transform: scale(1.05);
+        }
+
+        .activity-checkbox:checked+label:after {
+            content: "✔️";
+        }
     </style>
 @endsection
 
@@ -146,12 +191,51 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mb-4">
                                 <textarea id="details" name="description" class="form-control addTextArea" placeholder="Details of your Announcement"
                                     style="height: 300px"></textarea>
                                 <label for="details">Details</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
+                            <p>
+                                <span>Send To:</span>
+                            </p>
+                            <div class="flex">
+                                <input type="checkbox" class="activity-checkbox" value="3" id="areaCheckbox"
+                                    name="areaCheckbox">
+                                <label for="areaCheckbox"></label>
+                                <p class="mb-0 flex align-items-center">Area Servants</p>
+                            </div>
+                            <div class="flex">
+                                <input type="checkbox" class="activity-checkbox" value="4" id="chapterCheckbox"
+                                    name="chapterCheckbox">
+                                <label for="chapterCheckbox"></label>
+                                <p class="mb-0 flex align-items-center">Chapter Servants</p>
+                            </div>
+                            <div class="flex">
+                                <input type="checkbox" class="activity-checkbox" value="5" id="unitCheckbox"
+                                    name="unitCheckbox">
+                                <label for="unitCheckbox"></label>
+                                <p class="mb-0 flex align-items-center">Unit Servants</p>
+                            </div>
+                            <div class="flex">
+                                <input type="checkbox" class="activity-checkbox" value="6" id="householdCheckbox"
+                                    name="householdCheckbox">
+                                <label for="householdCheckbox"></label>
+                                <p class="mb-0 flex align-items-center">Household Servants</p>
+                            </div>
+                            <div class="flex">
+                                <input type="checkbox" class="activity-checkbox" value="7" id="memberCheckbox"
+                                    name="memberCheckbox">
+                                <label for="memberCheckbox"></label>
+                                <p class="mb-0 flex align-items-center">Members</p>
                             </div>
                         </div>
                     </div>
@@ -232,7 +316,6 @@
 
 @push('scripts')
     <script>
-
         function clearInputFields() {
             var inputFields = document.querySelector('.addInput');
             inputFields.value = '';
@@ -328,6 +411,11 @@
 
         $(document).ready(function() {
             $('#create_btn').click(function() {
+
+                var selectedValues = $('.activity-checkbox:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
                 $.ajax({
                     url: "{{ route('announcements.store') }}",
                     type: 'POST',
@@ -338,6 +426,7 @@
                     data: {
                         "title": $('#title').val(),
                         "description": $('#details').val(),
+                        "user_ids": selectedValues,
                     },
                     success: function(data) {
                         hide();
