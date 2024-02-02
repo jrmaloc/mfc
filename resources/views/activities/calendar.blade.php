@@ -72,7 +72,6 @@
 @endsection
 
 @section('content')
-
     <!-- Create Modal -->
 
     @if (auth()->check() &&
@@ -171,6 +170,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        .disabled-date {
+            background-color: #f2f2f2;
+            /* Change this to the color you want for disabled dates */
+            pointer-events: none;
+            /* Prevent clicks on disabled dates */
+        }
+    </style>
 @endsection
 
 @push('scripts')

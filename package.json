@@ -17,11 +17,13 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@floating-ui/core": "^1.6.0",
+        "@floating-ui/dom": "^1.6.1",
         "@fullcalendar/core": "^6.1.10",
         "@fullcalendar/multimonth": "^6.1.10",
         "bootstrap-datepicker": "^1.10.0",
         "bulma-calendar": "^6.1.19",
-        "eonasdan-bootstrap-datetimepicker": "^4.17.49",
+        "eonasdan-bootstrap-datetimepicker": "^4.15.35",
         "fullcalendar": "^6.1.10",
         "fullcalendar-scheduler": "^6.1.10",
         "moment": "^2.30.1",

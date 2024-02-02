@@ -14,7 +14,7 @@
         }
 
         label {
-            margin-bottom: 20px !important;
+            margin: 10px 0 !important;
         }
 
         input[type=checkbox] {
@@ -152,6 +152,7 @@
 
 @push('scripts')
     <script>
+
         function loadTable() {
 
 

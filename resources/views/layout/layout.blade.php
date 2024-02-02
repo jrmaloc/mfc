@@ -275,6 +275,16 @@
         .select-is-invalid {
             border-color: var(--bs-form-invalid-border-color) !important;
         }
+
+        .ps {
+            position: relative;
+        }
+
+        .ps {
+            overflow: hidden !important;
+            overflow-anchor: none;
+            touch-action: auto;
+        }
     </style>
 
     @yield('head')
@@ -530,86 +540,80 @@
                                         <span class="notification-badge"></span>
                                     @endif
                                 </a>
-
-                                <ul class="dropdown-menu scrollable-container dropdown-menu-end py-0"
-                                    style="border-radius: 10px 0px 10px 0px; min-height: 200px;">
-                                    <li class="dropdown-menu-header border-bottom" id="markAllAsRead">
-                                        <div
-                                            class="dropdown-header d-flex align-items-center py-3 flex justify-around">
-                                            <h6 class="fw-normal mb-0 me-auto">Notifications</h6>
-                                            @if ($unreadNotificationsCount)
-                                                <a href="javascript:void(0);" id="mark-all"
-                                                    class="text-slate-400 hover:underline hover:text-slate-500">
-                                                    Mark all as read
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </li>
-
-                                    @forelse ($unreadNotifications as $notification)
-                                        <li class="dropdown-notifications-list scrollable-container"
-                                            id="notification">
-                                            <ul class="list-group list-group-flush" style="width: 500px; ">
-                                                <li
-                                                    class="notify list-group-item list-group-item-action dropdown-notifications-item">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <a href="{{ $notification->data['url'] }}"
-                                                            data-id="{{ $notification->id }}"
-                                                            class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
-                                                            <h6 class="mb-1 text-truncate">
-                                                                @if ($notification->type === 'App\Notifications\TitheNotification')
-                                                                    <strong><span>₱ </span></strong>
-                                                                @endif
-                                                                <strong>{{ $notification->data['name'] }}</strong>
-                                                                <p class="mt-2">
-                                                                    {{ $notification->data['message'] }}</p>
-                                                            </h6>
-                                                            <!-- You can access other notification data similarly -->
-                                                            <small
-                                                                class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
-                                                        </a>
-                                                    </div>
-                                                </li>
-                                                @if ($loop->last)
-                                                    <li class="dropdown-menu-footer border-top p-3">
-                                                        <a href="{{ route('notifications') }}"
-                                                            class="btn btn-primary d-flex justify-content-center waves-effect waves-light"
-                                                            id="refresh-notifications">
-                                                            See all notifications
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </li>
-                                    @empty
-                                        <li class="dropdown-notifications-list scrollable-container">
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
-                                                    style="pointer-events: none;">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div
-                                                            class=" overflow-hidden w-px-250 flex flex-col align-items-center text-center">
-                                                            <i
-                                                                class="fa-solid fa-bell-slash fa-3x text-slate-300 my-3"></i>
-                                                            <span class="text-sm font-bold my-1">No new notifications
-                                                                yet.</span>
-                                                            <span class="text-sm font-normal">When you get new
-                                                                notifications, they'll show up here</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="dropdown-menu-footer border-top p-3">
-                                                    <a href="javascript:void(0);"
-                                                        class="btn btn-primary d-flex justify-content-center waves-effect waves-light"
-                                                        id="refresh-btn">
-                                                        Refresh
+                                    {{-- Notifications --}}
+                                    <ul class="dropdown-menu dropdown-menu-end"
+                                        style="border-radius: 10px 0px 10px 0px; max-height: 500px; overflow: auto">
+                                        <li class="dropdown-menu-header border-bottom" id="markAllAsRead">
+                                            <div
+                                                class="dropdown-header d-flex align-items-center py-3 flex justify-around">
+                                                <h6 class="fw-normal mb-0 me-auto">Notifications</h6>
+                                                @if ($unreadNotificationsCount)
+                                                    <a href="javascript:void(0);" id="mark-all"
+                                                        class="text-slate-400 hover:underline hover:text-slate-500">
+                                                        Mark all as read
                                                     </a>
-                                                </li>
-                                            </ul>
+                                                @endif
+                                            </div>
                                         </li>
-                                    @endforelse
-                                </ul>
+
+                                        @forelse ($unreadNotifications as $notification)
+                                            <li class="dropdown-notifications-list scrollable-container"
+                                                id="notification">
+                                                <ul class="list-group list-group-flush" style="width: 500px; ">
+                                                    <li
+                                                        class="notify list-group-item list-group-item-action dropdown-notifications-item">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <a href="{{ $notification->data['url'] }}"
+                                                                data-id="{{ $notification->id }}"
+                                                                class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
+                                                                <h6 class="mb-1 text-truncate">
+                                                                    @if ($notification->type === 'App\Notifications\TitheNotification')
+                                                                        <strong><span>₱ </span></strong>
+                                                                    @endif
+                                                                    <strong>{{ $notification->data['name'] }}</strong>
+                                                                    <p class="mt-2">
+                                                                        {{ $notification->data['message'] }}</p>
+                                                                </h6>
+                                                                <!-- You can access other notification data similarly -->
+                                                                <small
+                                                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        @empty
+                                            <li class="dropdown-notifications-list scrollable-container">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
+                                                        style="pointer-events: none;">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div
+                                                                class=" overflow-hidden w-px-250 flex flex-col align-items-center text-center">
+                                                                <i
+                                                                    class="fa-solid fa-bell-slash fa-3x text-slate-300 my-3"></i>
+                                                                <span class="text-sm font-bold my-1">No new
+                                                                    notifications
+                                                                    yet.</span>
+                                                                <span class="text-sm font-normal">When you get new
+                                                                    notifications, they'll show up here</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <div class="dropdown-menu-footer border-top p-3">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"
+                                                            id="refresh-btn">
+                                                            Refresh
+                                                        </a>
+                                                    </div>
+                                                </ul>
+                                            </li>
+                                        @endforelse
+                                    </ul>
+                                    {{-- /Notifications --}}
                             </li>
+
                             <li class="nav-item navbar-dropdown dropdown-user dropdown ml-2">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
@@ -673,11 +677,13 @@
             </div>
 
             <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
 
             <!-- Core JS -->
+            <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/js/bootstrap.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
