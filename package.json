@@ -24,6 +24,7 @@
         "bootstrap-datepicker": "^1.10.0",
         "bulma-calendar": "^6.1.19",
         "eonasdan-bootstrap-datetimepicker": "^4.15.35",
+        "flowbite": "^2.2.1",
         "fullcalendar": "^6.1.10",
         "fullcalendar-scheduler": "^6.1.10",
         "moment": "^2.30.1",
