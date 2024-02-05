@@ -274,6 +274,36 @@
         .select-is-invalid {
             border-color: var(--bs-form-invalid-border-color) !important;
         }
+
+        div.z-10.bg-white.block {
+            margin-right: 200px !important;
+            border-top-right-radius: 0px;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            text-overflow: ellipsis;
+        }
+
+        #style-15::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+            background-color: #F5F5F5;
+            border-radius: 10px;
+        }
+
+        #style-15::-webkit-scrollbar {
+            width: 5px;
+            background-color: #F5F5F5;
+        }
+
+        #style-15::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: #FFF;
+            background-image: -webkit-gradient(linear,
+                    40% 0%,
+                    75% 84%,
+                    from(#4D9C41),
+                    to(#19911D),
+                    color-stop(.6, #54DE5D))
+        }
     </style>
 
     @yield('head')
@@ -521,107 +551,92 @@
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             {{-- notification --}}
-
-
-                            <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
-                                class="btn-link" type="button">
-                                    <i class="fa-regular fa-bell mr-2"></i>
+                            <li>
+                                <button class="ml-4 mr-2 my-auto" id="dropdownSearchButton"
+                                    data-dropdown-toggle="dropdownSearch"  data-dropdown-placement="bottom"
+                                    data-dropdown-offset-skidding="-220"
+                                    class="btn-link" type="button">
+                                    <i id="bell" class="fa-regular fa-bell text-xl hover:text-green-700"></i>
                                     <span></span>
-                            </button>
+                                </button>
 
-                            <!-- Dropdown menu -->
-                            <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
-                                <div class="p-3">
-                                    <label for="input-group-search" class="sr-only">Search</label>
-                                    <div class="relative">
-                                        <h5>
-                                            <span>Notifications</span>
-                                        </h5>
+                                <!-- Dropdown menu -->
+                                <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-60 max-w-md mr-20">
+                                    <div class="p-3 bg-gray-50">
+                                        <div class="relative flex justify-between">
+                                            <h5 class="">
+                                                <span>Notifications</span>
+                                            </h5>
+                                            @if ($unreadNotificationsCount)
+                                                <a href="javascript:void(0);" id="mark-all"
+                                                    class="text-slate-400 text-xs mt-0.5 h-0 hover:underline hover:text-green-500">
+                                                    Mark all as read
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <ul class="p-0 pb-3 overflow-y-auto overflow-x-hidden text-sm left-8 text-gray-700 dark:text-slate-200"
+                                        aria-labelledby="dropdownSearchButton" id="style-15" style="height: 600px;">
+                                        @forelse ($unreadNotifications as $notification)
+                                            <div class="hover:bg-green-100">
+                                                <li class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <a href="{{ $notification->data['url'] }}"
+                                                            data-id="{{ $notification->id }}"
+                                                            class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
+                                                            <h6 class="mb-1 text-truncate">
+                                                                @if ($notification->type === 'App\Notifications\TitheNotification')
+                                                                    <strong><span>₱ </span></strong>
+                                                                @endif
+                                                                <strong>{{ $notification->data['name'] }}</strong>
+                                                                <p class="mt-2 overflow-hidden overflow-ellipsis">
+                                                                    {{ $notification->data['message'] }}</p>
+                                                            </h6>
+                                                            <!-- You can access other notification data similarly -->
+                                                            <small
+                                                                class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        @empty
+                                            <li class="dropdown-notifications-list scrollable-container">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
+                                                        style="pointer-events: none;">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <div
+                                                                class=" overflow-hidden w-px-250 flex flex-col align-items-center text-center">
+                                                                <i
+                                                                    class="fa-solid fa-bell-slash fa-3x text-slate-300 my-3"></i>
+                                                                <span class="text-sm font-bold my-1">No new
+                                                                    notifications
+                                                                    yet.</span>
+                                                                <span class="text-sm font-normal">When you get new
+                                                                    notifications, they'll show up here</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <div class="dropdown-menu-footer border-top p-3">
+                                                        <a href="javascript:void(0);"
+                                                            class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"
+                                                            id="refresh-btn">
+                                                            Refresh
+                                                        </a>
+                                                    </div>
+                                                </ul>
+                                            </li>
+                                        @endforelse
+                                    </ul>
+                                    <div class="">
+                                        <a href="#"
+                                            class="flex justify-center p-3 text-sm font-medium text-slate-200 border-t border-gray-200 rounded-b-lg
+                                        bg-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-slate-400 hover:text-green-700 hover:underline">
+                                            <span>See all notification</span>
+                                        </a>
                                     </div>
                                 </div>
-                                <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
-                                    aria-labelledby="dropdownSearchButton">
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-11" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-11"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Bonnie
-                                                Green</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input checked id="checkbox-item-12" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-12"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Jese
-                                                Leos</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-13" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-13"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Michael
-                                                Gough</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-14" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-14"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Robert
-                                                Wall</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-15" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-15"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Joseph
-                                                Mcfall</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-16" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-16"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Leslie
-                                                Livingston</label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div
-                                            class="flex items-center ps-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input id="checkbox-item-17" type="checkbox" value=""
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="checkbox-item-17"
-                                                class="w-full py-2 ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Roberta
-                                                Casas</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <a href="#"
-                                    class="flex items-center p-3 text-sm font-medium text-red-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500 hover:underline">
-                                    <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 20 18">
-                                        <path
-                                            d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z" />
-                                    </svg>
-                                    Delete user
-                                </a>
-                            </div>
+                            </li>
 
 
                             <li class="nav-item navbar-dropdown dropdown-user dropdown ml-2">
@@ -726,57 +741,69 @@
             <!-- Calendar -->
             @stack('scripts')
             <script>
-                function sendMarkRequest(id = null) {
-                    let csrfToken = $('meta[name="csrf-token"]').attr('content');
-                    return $.ajax("{{ route('mark.notification') }}", {
-                        method: 'POST',
-                        data: {
-                            _token: csrfToken,
-                            id
-                        }
-                    });
-                }
+                $(document).ready(function() {
 
-                $(function() {
-                    $('#mark-all').click(function() {
-                        let request = sendMarkRequest();
+                    const bell = document.getElementById('bell');
 
-                        request.done(() => {
-                            $('li.notify').remove(); // Remove all notification list items
-                            window.location.reload();
-                        });
+                    bell.addEventListener('click', function() {
+                        console.log('click');
+                        bell.classList.toggle('text-green-600');
                     });
 
-                    $('.user_notification').click(function() {
-                        let request = sendMarkRequest($(this).data('id'));
-
-                        request.done(() => {
-                            $('a.user_notification').remove(); // Remove all notification list items
-
-                        });
-                    });
-
-                    $('.admin_notification').click(function() {
-                        let request = sendMarkRequest($(this).data('id'));
-
-                        request.done(() => {
-                            $('a.admin_notification').remove(); // Remove all notification list items
-                        });
-                    });
-                });
-
-                $(function() {
-                    $('#refresh-btn').click(function() {
-                        $.ajax({
-                            url: window.location.href, // The current page URL
-                            type: 'GET', // HTTP method
-                            success: function(response) {
-                                var updatedContent = $(response).find('#container').html();
-                                $('#container').html(updatedContent);
-                            },
-                            error: function(xhr, status, error) {
-                                console.error('Error:', error);
+                    function sendMarkRequest(id = null) {
+                        let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                        return $.ajax("{{ route('mark.notification') }}", {
+                            method: 'POST',
+                            data: {
+                                _token: csrfToken,
+                                id
                             }
+                        });
+                    }
+
+                    $(function() {
+                        $('#mark-all').click(function() {
+                            let request = sendMarkRequest();
+
+                            request.done(() => {
+                                $('li.notify').remove(); // Remove all notification list items
+                                window.location.reload();
+                            });
+                        });
+
+                        $('.user_notification').click(function() {
+                            let request = sendMarkRequest($(this).data('id'));
+
+                            request.done(() => {
+                                $('a.user_notification')
+                                    .remove(); // Remove all notification list items
+
+                            });
+                        });
+
+                        $('.admin_notification').click(function() {
+                            let request = sendMarkRequest($(this).data('id'));
+
+                            request.done(() => {
+                                $('a.admin_notification')
+                                    .remove(); // Remove all notification list items
+                            });
+                        });
+                    });
+
+                    $(function() {
+                        $('#refresh-btn').click(function() {
+                            $.ajax({
+                                url: window.location.href, // The current page URL
+                                type: 'GET', // HTTP method
+                                success: function(response) {
+                                    var updatedContent = $(response).find('#container').html();
+                                    $('#container').html(updatedContent);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error('Error:', error);
+                                }
+                            });
                         });
                     });
                 });

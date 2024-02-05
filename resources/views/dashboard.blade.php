@@ -68,6 +68,11 @@
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
         }
+
+        .bg-green-300 {
+            --tw-bg-opacity: 0.3;
+            background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+        }
     </style>
 @endsection
 
@@ -262,7 +267,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col mt-4 py-2 card bg-green-300">
+                                <div class="col mt-4 py-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto">
                                     <strong class="text-slate-800">
                                         Upcoming Events
                                     </strong>
@@ -328,7 +333,6 @@
             const saveCancelButtons = document.getElementById('saveCancelButtons');
 
             editBioButton.addEventListener('click', function() {
-                console.log('click');
                 bioContent.classList.toggle('d-none');
                 bioTextarea.classList.toggle('d-none');
                 editBioButton.classList.toggle('d-none');
