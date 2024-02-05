@@ -317,11 +317,11 @@
             <div class=" bg-slate-600">
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
                     style="background: #fff !important; width:320px;">
-                    <div class="app-brand demo mt-8 flex-col" style="padding-right: 60px; pointer-events: none;">
+                    <div class="app-brand demo mt-8 flex-col" style="padding-right: 60px; pointer-events: none; height: 100px;">
                         <a href="javascript:void(0)" class="app-brand-link">
                             <span class="app-brand-logo demo me-1">
                                 <span style="color: #1b661b">
-                                    <img src="/favicon.ico" alt="">
+                                    <img src="/favicon-96x96.png" alt="">
                                 </span>
                             </span>
                             <div class="flex flex-xl-column">

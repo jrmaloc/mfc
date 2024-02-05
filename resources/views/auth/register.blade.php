@@ -97,7 +97,7 @@
             <a href="/dashboard" class="app-brand-link gap-2">
               <span class="app-brand-logo demo">
                 <span style="color: #1b661b">
-                  <img class="mr-1" src="/favicon.ico" alt="">
+                  <img class="mr-1" src="/favicon-96x96.png" alt="">
                 </span>
               </span>
               <span class="app-brand-text demo text-heading fw-semibold">Register Here!</span>
