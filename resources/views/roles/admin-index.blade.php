@@ -74,6 +74,10 @@
             color: #ECF0F1;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"
+        integrity="sha512-aD9ophpFQ61nFZP6hXYu4Q/b/USW7rpLCQLX6Bi0WJHXNO7Js/fUENpBQf/+P4NtpzNX0jSgR5zVvPOJp+W2Kg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 
 @section('content')
@@ -104,9 +108,9 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mt-3">
-                                <input name="name" type="text" class="form-control" id="" placeholder="Admin"
+                                <input name="name" type="text" class="form-control" id="name" placeholder="Admin"
                                     readonly>
-                                <label for="">Name</label>
+                                <label for="name">Name</label>
                             </div>
                         </div>
                     </div>
@@ -296,8 +300,12 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"
+        integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function() {
+
             $(document).on("click", ".remove-btn", function(e) {
                 let id = $(this).attr("id");
 

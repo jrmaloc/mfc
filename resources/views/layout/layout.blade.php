@@ -43,15 +43,11 @@
 
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/fonts/materialdesignicons.css') }}" />
     <!-- Menu waves for no-customizer fix
@@ -694,11 +690,6 @@
                 <div class="overlay"></div>
             </div>
 
-            <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-
             <!-- Core JS -->
             <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
@@ -709,6 +700,10 @@
             <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
 
             <!-- endbuild -->
+            <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
             <!-- Vendors JS -->
             <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
