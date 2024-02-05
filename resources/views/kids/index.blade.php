@@ -59,20 +59,17 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="fw-bold py-3 mb-4">Kids Members List</h4>
-            <a href="{{ route('kids.create') }}" class="btn btn-success">
-                Add a User
-                <i class="tf-icons mdi mdi-plus ml-1"></i>
-            </a>
+            @can('view-role')
+                <a href="{{ route('kids.create') }}" class="btn btn-success">
+                    Add a User
+                    <i class="tf-icons mdi mdi-plus ml-1"></i>
+                </a>
+            @endcan
         </div>
 
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive-lg text-nowrap">
-                    <!-- Set data attribute on an HTML element -->
-                    <div id="isAdmin"
-                        data-isAdmin="{{ auth()->check() &&(auth()->user()->hasRole('Super Admin') ||auth()->user()->hasRole('Admin')) }}">
-                    </div>
-
                     <table class="table table-striped data-table">
                         <thead>
                             <tr>

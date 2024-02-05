@@ -22,12 +22,14 @@
                     <img src="{{ URL::asset('/assets/img/avatars/2.png') }}" alt="default-avatar"
                         class="d-block w-px-120 h-px-120 rounded" id="uploadedAvatar" />
                 @endif
-                <div class="flex justify-end">
-                    <a href="{{ route($edit, $parameters) }}" class="py-auto btn btn-primary btn-sm flex justify-end">
-                        Edit Profile
-                        <i class="tf-icons mdi mdi-pencil"></i>
-                    </a>
-                </div>
+                @can('view-role')
+                    <div class="flex justify-end">
+                        <a href="{{ route($edit, $parameters) }}" class="py-auto btn btn-primary btn-sm flex justify-end">
+                            Edit Profile
+                            <i class="tf-icons mdi mdi-pencil"></i>
+                        </a>
+                    </div>
+                @endcan
 
             </div>
         </div>

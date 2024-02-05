@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\User;
 use App\Notifications\KidsNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Yajra\DataTables\DataTables;
@@ -27,16 +28,23 @@ class KidsController extends Controller
         if ($request->ajax()) {
             $data = User::where('section_id', '=', 1)->get();
 
-
             return DataTables::of($data)
                 ->addIndexColumn()
-                // ->addColumn('household_servant', '{{$household_servant_name}}')
+            // ->addColumn('household_servant', '{{$household_servant_name}}')
                 ->addColumn("actions", function ($info) {
-                    return '<div class="dropdown">
-                    <a href="kids/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>
-                    <a href="kids/' . $info->id . '/edit" class="btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>
-                    <a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>
-                    </div>';
+                    $editButton = '<a href="kids/' . $info->id . '/edit" class="btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>';
+                    $deleteButton = '<a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>';
+                    $viewButton = '<a href="kids/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
+                    // Check user role before adding edit and delete buttons
+                    if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Super Admin') {
+                        return '<div class="dropdown">' . $editButton . $deleteButton . '</div>';
+                    } elseif (Auth::user()->role == 'editor' && $info->editableByEditor()) {
+                        // Additional check if the user has permission to edit this specific item
+                        return '<div class="dropdown">' . $editButton . '</div>';
+                    } else {
+                        // Default case for users with no edit/delete permissions
+                        return '<div class="dropdown"><a href="kids/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a></div>';
+                    }
                 })
                 ->rawColumns(['actions'])
 
@@ -86,8 +94,6 @@ class KidsController extends Controller
         }
 
         // Activities
-
-
 
         // Notification
 
@@ -190,7 +196,6 @@ class KidsController extends Controller
             return redirect()->back()
                 ->with('success', 'Password updated successfully!');
 
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             // If validation fails, handle the exception here
             session()->flash('error', 'There was an error in the form submission.');
@@ -209,12 +214,12 @@ class KidsController extends Controller
         if ($remove) {
             return response([
                 'status' => true,
-                'message' => 'Profile deleted successfully'
+                'message' => 'Profile deleted successfully',
             ]);
         } else {
             return response([
                 'error' => true,
-                'message' => 'Failed to delete Profile'
+                'message' => 'Failed to delete Profile',
             ]);
         }
     }

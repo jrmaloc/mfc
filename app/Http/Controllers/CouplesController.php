@@ -6,6 +6,7 @@ use App\Models\Couples;
 use App\Models\User;
 use App\Notifications\CouplesNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Yajra\DataTables\DataTables;
@@ -22,16 +23,23 @@ class CouplesController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
-                // ->addColumn('household_servant', '{{$household_servant_name}}')
+            // ->addColumn('household_servant', '{{$household_servant_name}}')
                 ->addColumn("actions", function ($info) {
-                    return '<div class="dropdown">
-                    <a href="couples/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>
-                    <a href="couples/' . $info->id . '/edit" class="btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>
-                    <a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>
-                    </div>';
+                    $editButton = '<a href="couples/' . $info->id . '/edit" class="btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>';
+                    $deleteButton = '<a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>';
+                    $viewButton = '<a href="couples/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
+                    // Check user role before adding edit and delete buttons
+                    if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Super Admin') {
+                        return '<div class="dropdown">' . $editButton . $deleteButton . '</div>';
+                    } elseif (Auth::user()->role == 'editor' && $info->editableByEditor()) {
+                        // Additional check if the user has permission to edit this specific item
+                        return '<div class="dropdown">' . $editButton . '</div>';
+                    } else {
+                        // Default case for users with no edit/delete permissions
+                        return '<div class="dropdown">' . $viewButton . '</div>';
+                    }
                 })
                 ->rawColumns(['actions'])
-
                 ->make(true);
         }
 

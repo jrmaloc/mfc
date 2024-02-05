@@ -358,9 +358,6 @@
                                 <div data-i18n="Icons">Announcements</div>
                             </a>
                         </li>
-
-
-                        @canany(['view-area', 'view-member', 'view-household'])
                             <li class="menu-header small text-uppercase">
                                 <span class="menu-header-text">Management</span>
                             </li>
@@ -381,7 +378,6 @@
                                     <div data-i18n="Directory">Directory</div>
                                 </a>
                                 <ul class="menu-sub">
-                                    @can(['view-member'])
                                         <x-menu-link routeName="{{ route('kids.index') }}" title="Kids"
                                             class="{{ str_contains(Request::path(), 'kids') ? 'active open' : '' }}" />
                                         <x-menu-link routeName="{{ route('youth.index') }}" title="Youth"
@@ -394,11 +390,8 @@
                                             class="{{ str_contains(Request::path(), 'handmaids') ? 'active open' : '' }}" />
                                         <x-menu-link routeName="{{ route('couples.index') }}" title="Couples"
                                             class="{{ str_contains(Request::path(), 'couples') ? 'active open' : '' }}" />
-                                    @endcan
                                 </ul>
                             </li>
-
-                        @endcanany
 
                         <!-- Activities -->
                         <li

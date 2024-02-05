@@ -267,14 +267,15 @@
                                     </div>
                                 </div>
 
-                                <div class="col mt-4 py-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto">
+                                <div class="col mt-4 mx-auto py-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
+                                    style="width: 90%">
                                     <strong class="text-slate-800">
                                         Upcoming Events
                                     </strong>
                                     @foreach ($upcomingEvents as $upcomingEvent)
                                         <div class="mt-1 ml-4 px-4 py-1 flex justify-between">
-                                            <li class="text-slate-600">
-                                                {{ $eventTitle = $upcomingEvent->title }}
+                                            <li class="text-slate-600" style="max-width: 70%;">
+                                                <span>{{ $eventTitle = $upcomingEvent->title }}</span>
                                             </li>
 
                                             <span>
