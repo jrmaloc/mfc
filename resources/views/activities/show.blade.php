@@ -76,7 +76,7 @@
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) readonly @endif />
+                                                auth()->user()->hasRole('Member'))) @disabled(true) @endif />
                                 <label for="showStart_date">Start Date</label>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) readonly @endif />
+                                                auth()->user()->hasRole('Member'))) @disabled(true) @endif />
                                 <label for="showEnd_date">End Date</label>
                             </div>
                         </div>

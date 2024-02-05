@@ -2,11 +2,6 @@
 
 @section('head')
     <title>Calendar</title>
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-    <meta charset="utf-8" />
-
     <style>
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
@@ -74,9 +69,7 @@
 @section('content')
     <!-- Create Modal -->
 
-    @if (auth()->check() &&
-            (auth()->user()->hasRole('Super Admin') ||
-                auth()->user()->hasRole('Admin')))
+    @can('create-activity')
         <div class="modal fade" id="activityModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content px-4 py-2">
@@ -148,7 +141,7 @@
                 </div>
             </div>
         </div>
-    @endif
+    @endcan
 
     <div id='wrap' class=" w-70 mx-16 ">
         <!-- Set data attribute on an HTML element -->
@@ -195,24 +188,28 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            var startDate = $('#start_date').flatpickr({
-                enableTime: true,
-                dateFormat: "Y-m-d H:i:S",
-                minDate: 'today',
-                autoclose: true,
-            });
+            @can('create-activity')
+                var startDate = $('#start_date').flatpickr({
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i:S",
+                    minDate: 'today',
+                    autoclose: true,
+                });
 
-            var test = startDate.selectedDates[0];
+                var test = startDate.selectedDates[0];
+                console.log(test);
 
-            var endDate = $('#end_date').flatpickr({
-                enableTime: true,
-                minDate: test,
-                dateFormat: "Y-m-d H:i:S",
-            });
+                var endDate = $('#end_date').flatpickr({
+                    enableTime: true,
+                    minDate: test,
+                    dateFormat: "Y-m-d H:i:S",
+                });
 
-            startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
-                endDate.set('minDate', selectedDates[0] || '');
-            });
+                startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
+                    endDate.set('minDate', selectedDates[0] || '');
+                });
+            @endcan
+
 
             $.ajaxSetup({
                 headers: {
@@ -220,6 +217,7 @@
                 }
 
             });
+
             var events = @json($events);
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -277,11 +275,11 @@
                     });
 
 
-                    var startDate = moment(start_date.start).format('YYYY-MM-DD HH:mm:ss');
-                    $('#start_date').val(startDate);
-                    var endDate = moment(start_date.end).subtract(1, 'day').add(1, 'hour').format(
+                    var start_Date = moment(start_date.start).format('YYYY-MM-DD HH:mm:ss');
+                    $('#start_date').val(start_Date);
+                    var end_Date = moment(start_date.end).subtract(1, 'day').add(1, 'hour').format(
                         'YYYY-MM-DD HH:mm:ss');
-                    $('#end_date').val(endDate);
+                    $('#end_date').val(end_Date);
 
                     $('#createBtn').off('click').on('click', function() {
                         var title = $('#title').val();
