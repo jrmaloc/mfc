@@ -19,6 +19,9 @@
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
         }
+        input #titleInput:focus{
+            border:none !important;
+        }
     </style>
 @endsection
 
@@ -27,20 +30,15 @@
         <div class="card h-100">
             <div class="card-header mt-4 ml-4 uppercase flex">
                 <div class="w-100">
-                    <h2>
+                    <h2 class="text-2xl my-2 ml-4 fw-bold uppercase">
                         <span class="content" id="title">
                             {{ $data->title }}
                         </span>
 
                         <div class="input-group input-group-lg d-none" id="editTitle">
-                            <input type="text" name="title" id="titleInput" class="form-control title"
-                                value="{{ $data->title }}"
-                                style="
-                                font-size: 2rem;
-                                font-weight: 500;
-                                text-transform: uppercase;
-                                border: none;
-                                ">
+                            <input type="text" class="text-2xl fw-bold uppercase w-100" name="title" id="titleInput" class="form-control title"
+                            style="border: none !important;"
+                                value="{{ $data->title }}">
                         </div>
                     </h2>
                 </div>
@@ -52,7 +50,7 @@
                 </div>
                 <div class="rounded-lg border" style="height: 83%;">
                     <div class="flex-grow-1">
-                        <h6 class="mb-1 mt-3 ml-3">
+                        <h6 class="mb-1 font-medium mt-3 ml-3">
                             <span class="uppercase">Details:</span>
                         </h6>
                         <span id="content" class="ml-7 mt-4">{{ $data->description }}</span>

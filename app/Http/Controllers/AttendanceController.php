@@ -93,7 +93,7 @@ class AttendanceController extends Controller
         return Attendance::with('activity')
             ->whereHas('activity', function ($q) use ($ids) {
                 foreach ($ids as $id) {
-                    $q->orWhereJsonContains('user_ids', $id);
+                    $q->orWhereJsonContains('role_ids', $id);
                 }
             })->get();
     }

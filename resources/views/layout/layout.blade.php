@@ -301,6 +301,11 @@
                     to(#19911D),
                     color-stop(.6, #54DE5D))
         }
+
+        h4.fw-bold.py-3.mb-4{
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
     </style>
 
     @yield('head')
@@ -699,7 +704,6 @@
             <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
-            <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
 
             <!-- endbuild -->
             <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>

@@ -188,7 +188,7 @@
         <div class="row mt-4">
             <div class="flex justify-between gap-10">
                 <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card z-index-2 h-80">
+                    <div class="card z-index-2 h-96">
                         <div class="card-header pb-0 pt-3 bg-transparent">
                             <h6 class="text-capitalize">Ministry Activities {{ now()->subYear()->year }}</h6>
                             {{-- <p class="text-sm mb-0">
@@ -196,7 +196,7 @@
                                 <span class="font-weight-bold">4% more</span> in 2021
                             </p> --}}
                         </div>
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 pb-4">
                             <div class="chart">
                                 <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
                             </div>
@@ -296,6 +296,7 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>

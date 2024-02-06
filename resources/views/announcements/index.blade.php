@@ -145,7 +145,7 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center">
-            <h3 class="fw-bold py-3 mb-4 ml-2">Notice Board</h3>
+            <h4 class="fw-bold py-3 mb-4 ml-2">Notice Board</h4>
             @can('view-member')
                 <a href="#" onclick="add()" class="toggle-btn btn btn-primary mt-4">Create an Announcement
                     <span class="mdi mdi-plus"></span></a>
@@ -172,7 +172,7 @@
         <!-- Create -->
         <div id="addForm" class="card">
             <div class="flex justify-between align-items-center px-12 py-6">
-                <h3 class="fw-bold pt-4">
+                <h3 class="fw-bold text-2xl pt-4">
                     Create Announcement
                 </h3>
                 <a href="javascript:void(0);" onclick="hide()" class="btn"><i class=" fa fa-xmark"
@@ -253,7 +253,7 @@
         <!-- Edit -->
         <div id="edit" class="card">
             <div class="flex justify-between align-items-center px-12 py-6">
-                <h3 class="fw-bold pt-4">
+                <h3 class="fw-bold text-2xl pt-4">
                     Edit Announcement
                 </h3>
                 <a href="javascript:void(0);" onclick="hide()" class="btn"><i class=" fa fa-xmark"
