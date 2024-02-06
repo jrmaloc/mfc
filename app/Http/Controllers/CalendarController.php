@@ -157,9 +157,16 @@ class CalendarController extends Controller
 
                 // Additional properties for specific activities
                 if ($activity->title == 'Liturgical Bible Study') {
-                    $event += [
-                        'startRecur' => '2024-01-01',
-                        'endRecur' => '2028-12-31',
+                    $event = [
+                        'user_id' => $userID,
+                        'id' => $activity->id,
+                        'title' => $activity->title,
+                        'description' => $activity->description,
+                        'location' => $activity->location,
+                        'start' => $startISO8601,
+                        'end' => $endISO8601,
+                        'groupId' => 'blueEvents',
+                        'selectable' => false,
                         'daysOfWeek' => [4],
                     ];
                 }
