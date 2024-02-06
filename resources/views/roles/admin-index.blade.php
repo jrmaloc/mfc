@@ -75,9 +75,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"
-        integrity="sha512-aD9ophpFQ61nFZP6hXYu4Q/b/USW7rpLCQLX6Bi0WJHXNO7Js/fUENpBQf/+P4NtpzNX0jSgR5zVvPOJp+W2Kg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"/>
 @endsection
 
 @section('content')
@@ -169,10 +167,15 @@
                                     ->toArray();
                             @endphp
 
-                            <x-form.select-field name="name" selected="old('name')" error="{{ $errors->first('name') }}"
+                            {{-- <x-form.select-field name="name" selected="old('name')" error="{{ $errors->first('name') }}"
                                 :options="$users" placeholder="Select a User">
                                 Name
-                            </x-form.select-field>
+                            </x-form.select-field> --}}
+
+                            <select class="select2" name="" id="gender">
+                                <option value="">male</option>
+                                <option value="">female</option>
+                            </select>
 
                         </div>
                     </div>
@@ -300,11 +303,13 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"
-        integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+
+            $('.select2').select2({
+
+            });
 
             $(document).on("click", ".remove-btn", function(e) {
                 let id = $(this).attr("id");
