@@ -699,6 +699,7 @@
             <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
             <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
+            <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
 
             <!-- endbuild -->
             <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>

@@ -296,7 +296,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
