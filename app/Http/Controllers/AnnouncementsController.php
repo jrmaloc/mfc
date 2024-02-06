@@ -16,7 +16,7 @@ class AnnouncementsController extends Controller
     {
         $user = Auth::user();
         $id = $user->role_id;
-        $role_id = json_encode($id);
+        $role_id = ($id);
         dd($role_id);
 
         if ($request->ajax()) {
