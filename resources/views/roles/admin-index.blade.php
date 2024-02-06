@@ -167,15 +167,10 @@
                                     ->toArray();
                             @endphp
 
-                            {{-- <x-form.select-field name="name" selected="old('name')" error="{{ $errors->first('name') }}"
+                            <x-form.select-field name="name" selected="old('name')" error="{{ $errors->first('name') }}"
                                 :options="$users" placeholder="Select a User">
                                 Name
-                            </x-form.select-field> --}}
-
-                            <select class="select2" name="" id="gender">
-                                <option value="">male</option>
-                                <option value="">female</option>
-                            </select>
+                            </x-form.select-field>
 
                         </div>
                     </div>
@@ -306,10 +301,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-
-            $('.select2').select2({
-                placeholder: 'Select gender',
-            });
 
             $(document).on("click", ".remove-btn", function(e) {
                 let id = $(this).attr("id");

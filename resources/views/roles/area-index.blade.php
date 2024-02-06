@@ -215,7 +215,7 @@
         <div class="text-sm flex justify-end">
             <a href="javascript:void(0);" id="admin_create" class="btn btn-success capitalized text-sm"
                 style="font-size: small;">
-                add
+                add a user
                 <i class="mdi mdi-plus ml-1"></i>
             </a>
         </div>

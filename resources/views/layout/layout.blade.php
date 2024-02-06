@@ -55,8 +55,8 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/core.css') }}"/>
-    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/theme-default.css') }}"/>
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/core.css') }}" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('assets/css/demo.css') }}" />
 
     <!-- Vendors CSS -->
@@ -64,7 +64,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" />
 
 
     <!-- Helpers -->
@@ -303,9 +303,15 @@
                     color-stop(.6, #54DE5D))
         }
 
-        h4.fw-bold.py-3.mb-4{
+        h4.fw-bold.py-3.mb-4 {
             font-size: 1.5rem;
             line-height: 2rem;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #16b1ff !important;
+            border-color: #16b1ff;
         }
     </style>
 
@@ -320,7 +326,8 @@
             <div class=" bg-slate-600">
                 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
                     style="background: #fff !important; width:320px;">
-                    <div class="app-brand demo mt-8 flex-col" style="padding-right: 60px; pointer-events: none; height: 100px;">
+                    <div class="app-brand demo mt-8 flex-col"
+                        style="padding-right: 60px; pointer-events: none; height: 100px;">
                         <a href="javascript:void(0)" class="app-brand-link">
                             <span class="app-brand-logo demo me-1">
                                 <span style="color: #1b661b">
@@ -361,40 +368,40 @@
                                 <div data-i18n="Icons">Announcements</div>
                             </a>
                         </li>
-                            <li class="menu-header small text-uppercase">
-                                <span class="menu-header-text">Management</span>
-                            </li>
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text">Management</span>
+                        </li>
 
-                            <!-- Management-->
-                            <li
-                                class="menu-item {{ str_contains(Request::path(), 'kids') ||
-                                str_contains(Request::path(), 'youth') ||
-                                str_contains(Request::path(), 'singles') ||
-                                str_contains(Request::path(), 'servants') ||
-                                str_contains(Request::path(), 'handmaids') ||
-                                str_contains(Request::path(), 'couples')
-                                    ? 'active open'
-                                    : '' }}">
+                        <!-- Management-->
+                        <li
+                            class="menu-item {{ str_contains(Request::path(), 'kids') ||
+                            str_contains(Request::path(), 'youth') ||
+                            str_contains(Request::path(), 'singles') ||
+                            str_contains(Request::path(), 'servants') ||
+                            str_contains(Request::path(), 'handmaids') ||
+                            str_contains(Request::path(), 'couples')
+                                ? 'active open'
+                                : '' }}">
 
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class="menu-icon tf-icons mdi mdi-folder-account-outline"></i>
-                                    <div data-i18n="Directory">Directory</div>
-                                </a>
-                                <ul class="menu-sub">
-                                        <x-menu-link routeName="{{ route('kids.index') }}" title="Kids"
-                                            class="{{ str_contains(Request::path(), 'kids') ? 'active open' : '' }}" />
-                                        <x-menu-link routeName="{{ route('youth.index') }}" title="Youth"
-                                            class="{{ str_contains(Request::path(), 'youth') ? 'active open' : '' }}" />
-                                        <x-menu-link routeName="{{ route('singles.index') }}" title="Singles"
-                                            class="{{ str_contains(Request::path(), 'singles') ? 'active open' : '' }}" />
-                                        <x-menu-link routeName="{{ route('servants.index') }}" title="Servants"
-                                            class="{{ str_contains(Request::path(), 'servants') ? 'active open' : '' }}" />
-                                        <x-menu-link routeName="{{ route('handmaids.index') }}" title="Handmaids"
-                                            class="{{ str_contains(Request::path(), 'handmaids') ? 'active open' : '' }}" />
-                                        <x-menu-link routeName="{{ route('couples.index') }}" title="Couples"
-                                            class="{{ str_contains(Request::path(), 'couples') ? 'active open' : '' }}" />
-                                </ul>
-                            </li>
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons mdi mdi-folder-account-outline"></i>
+                                <div data-i18n="Directory">Directory</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <x-menu-link routeName="{{ route('kids.index') }}" title="Kids"
+                                    class="{{ str_contains(Request::path(), 'kids') ? 'active open' : '' }}" />
+                                <x-menu-link routeName="{{ route('youth.index') }}" title="Youth"
+                                    class="{{ str_contains(Request::path(), 'youth') ? 'active open' : '' }}" />
+                                <x-menu-link routeName="{{ route('singles.index') }}" title="Singles"
+                                    class="{{ str_contains(Request::path(), 'singles') ? 'active open' : '' }}" />
+                                <x-menu-link routeName="{{ route('servants.index') }}" title="Servants"
+                                    class="{{ str_contains(Request::path(), 'servants') ? 'active open' : '' }}" />
+                                <x-menu-link routeName="{{ route('handmaids.index') }}" title="Handmaids"
+                                    class="{{ str_contains(Request::path(), 'handmaids') ? 'active open' : '' }}" />
+                                <x-menu-link routeName="{{ route('couples.index') }}" title="Couples"
+                                    class="{{ str_contains(Request::path(), 'couples') ? 'active open' : '' }}" />
+                            </ul>
+                        </li>
 
                         <!-- Activities -->
                         <li
@@ -549,15 +556,15 @@
                             {{-- notification --}}
                             <li>
                                 <button class="ml-4 mr-2 my-auto" id="dropdownSearchButton"
-                                    data-dropdown-toggle="dropdownSearch"  data-dropdown-placement="bottom"
-                                    data-dropdown-offset-skidding="-220"
-                                    class="btn-link" type="button">
+                                    data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
+                                    data-dropdown-offset-skidding="-220" class="btn-link" type="button">
                                     <i id="bell" class="fa-regular fa-bell text-xl hover:text-green-700"></i>
                                     <span></span>
                                 </button>
 
                                 <!-- Dropdown menu -->
-                                <div id="dropdownSearch" class="z-10 hidden bg-white rounded-lg shadow w-60 max-w-md mr-20">
+                                <div id="dropdownSearch"
+                                    class="z-10 hidden bg-white rounded-lg shadow w-60 max-w-md mr-20">
                                     <div class="p-3 bg-gray-50">
                                         <div class="relative flex justify-between">
                                             <h5 class="">
@@ -575,7 +582,8 @@
                                         aria-labelledby="dropdownSearchButton" id="style-15" style="height: 600px;">
                                         @forelse ($unreadNotifications as $notification)
                                             <div class="hover:bg-green-100">
-                                                <li class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
+                                                <li
+                                                    class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
                                                     <div class="d-flex align-items-center gap-2">
                                                         <a href="{{ $notification->data['url'] }}"
                                                             data-id="{{ $notification->id }}"

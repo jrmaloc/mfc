@@ -31,13 +31,3 @@
         <span class="text-danger">{{ $error }}</span>
     @endif
 </div>
-
-
-<script>
-    $(document).ready(function() {
-        var item = $('.select2').select2();
-
-        console.log(item);
-
-    });
-</script>

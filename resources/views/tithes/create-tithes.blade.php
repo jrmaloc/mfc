@@ -82,14 +82,14 @@
                             @enderror
                         </div>
 
-                        <div class="form-floating form-floating-outline mb-3">
+                        {{-- <div class="form-floating form-floating-outline mb-3">
                             <input type="text" class="form-control" id="amount" name="amount" placeholder="₱0000"
                                 value="{{old('amount')}}" />
                             <label for="amount" required>Amount</label>
                             @error('amount')
                             <span class="mt-2 ml-2 text-danger text-xs">{{ $message }}.</span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class=" mt-8 mb-3">
                             <div class="form-check">
