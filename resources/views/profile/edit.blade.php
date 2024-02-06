@@ -261,11 +261,11 @@
                         </div>
 
                         <div class="col grid content-center">
-                            <div class=" w-full justify-items-stretch grid mt-4">
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                            <div class="w-full justify-items-stretch grid mt-4">
+                                <a type="" class="btn btn-info text-white" data-bs-toggle="modal"
                                     data-bs-target="#modalCenter">
                                     Change Password
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

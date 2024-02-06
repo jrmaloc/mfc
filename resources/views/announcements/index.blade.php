@@ -186,8 +186,8 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mt-3">
                                 <input name="title" type="text" class="form-control addInput" id="title"
-                                    placeholder="Title of your Announcement">
-                                <label for="title">Title</label>
+                                    placeholder="Title of your Announcement" required>
+                                <label for="title">Title<span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -196,8 +196,8 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mb-4">
                                 <textarea id="details" name="description" class="form-control addTextArea" placeholder="Details of your Announcement"
-                                    style="height: 300px"></textarea>
-                                <label for="details">Details</label>
+                                    style="height: 300px" required></textarea>
+                                <label for="details">Details<span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <p>
-                                <span>Send To:</span>
+                                <span>Send To:<span class="text-danger">*</span></span>
                             </p>
                             <div class="flex">
                                 <input type="checkbox" class="activity-checkbox" value="3" id="areaCheckbox"
@@ -268,8 +268,8 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mt-3">
                                 <input name="title" type="text" class="form-control" value="" id="edittitle"
-                                    placeholder="Title of your Announcement">
-                                <label for="edittitle">Title</label>
+                                    placeholder="Title of your Announcement" required>
+                                <label for="edittitle">Title<span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -277,8 +277,8 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                             <div class="form-floating form-floating-outline mb-4">
                                 <textarea id="editdescription" name="description" class="form-control" placeholder="Details of your Announcement"
-                                    style="height: 300px"></textarea>
-                                <label for="editdescription">Details</label>
+                                    style="height: 300px" required></textarea>
+                                <label for="editdescription">Details<span class="text-danger">*</span></label>
                             </div>
                         </div>
                     </div>
@@ -433,14 +433,18 @@
                         Toast.fire({
                             icon: "success",
                             timer: 3000,
-                            title: "Event Created Successfully. Reloading...",
+                            title: "Announcement Created Successfully. Reloading...",
                         });
                         setTimeout(function() {
                             window.location.reload();
                         }, 1000);
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        Toast.fire({
+                            icon: "error",
+                            timer: 200000,
+                            title: "Failed to create announcement",
+                        });
                     }
                 });
             });

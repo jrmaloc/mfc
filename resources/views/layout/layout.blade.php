@@ -52,10 +52,11 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/fonts/materialdesignicons.css') }}" />
     <!-- Menu waves for no-customizer fix
     -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.css') }}" /> <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/theme-default.css') }}"
-        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/core.css') }}"/>
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/theme-default.css') }}"/>
     <link rel="stylesheet" href="{{ URL::asset('assets/css/demo.css') }}" />
 
     <!-- Vendors CSS -->
@@ -63,6 +64,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css"/>
 
 
     <!-- Helpers -->
@@ -73,7 +75,6 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>MFC Portal</title>
 
     <style>
@@ -710,6 +711,7 @@
             <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
             <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+            <script src="https://cdn.tailwindcss.com"></script>
 
             <!-- Vendors JS -->
             <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -731,6 +733,7 @@
             <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
 
             <!-- Calendar -->
             @stack('scripts')

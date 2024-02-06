@@ -99,10 +99,11 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col mb-4 mt-2">
+                                    <label for="floatingSelect" class="h-0 ml-1">Name<span class="text-danger">*</span></label>
                                     <div class="form-floating form-floating-outline">
-                                        <select name="id" class="form-select form-control" id="floatingSelect"
+                                        <select name="id" class="form-select" id="floatingSelect"
                                             required>
-                                            <option value="" disabled selected>Choose one</option>
+                                            <option disabled selected>Choose one</option>
 
                                             @foreach ($options as $info)
                                                 @if (auth()->check() &&
@@ -114,7 +115,6 @@
                                                 @endif
                                             @endforeach
                                         </select>
-                                        <label for="floatingSelect">Name</label>
                                     </div>
                                 </div>
                             </div>
@@ -152,10 +152,7 @@
 
 @push('scripts')
     <script>
-
         function loadTable() {
-
-
             let table = $('.data-table').DataTable({
                 processing: true,
                 pageLength: 25,
