@@ -247,20 +247,6 @@
             padding-top: 15px;
         }
 
-        .notification-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: red;
-            color: white;
-            width: 20%;
-            height: 20%;
-            border-radius: 100%;
-            text-align: center;
-            line-height: 20px;
-            font-size: 12px;
-        }
-
         body {
             overflow-x: hidden;
         }
@@ -312,6 +298,26 @@
             color: #fff;
             background-color: #16b1ff !important;
             border-color: #16b1ff;
+        }
+
+        .fa-stack{
+            font-size: 140%;
+        }
+
+        .fa-stack[data-count]:after {
+            position: absolute;
+            left: 50%;
+            top: 10%;
+            content: attr(data-count);
+            font-size: 38%;
+            padding: .6em;
+            border-radius: 999px;
+            line-height: .75em;
+            color: white;
+            background: rgba(255, 0, 0, .85);
+            text-align: center;
+            min-width: 2em;
+            font-weight: bold;
         }
     </style>
 
@@ -554,12 +560,15 @@
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             {{-- notification --}}
-                            <li>
+                            <li class="">
                                 <button class="ml-4 mr-2 my-auto" id="dropdownSearchButton"
                                     data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
                                     data-dropdown-offset-skidding="-220" class="btn-link" type="button">
-                                    <i id="bell" class="fa-regular fa-bell text-xl hover:text-green-700"></i>
-                                    <span></span>
+                                    <div class="flex align-items-start">
+                                        <span class="fa-stack" data-count="{{ $unreadNotificationsCount }}">
+                                            <i class="fa-regular fa-bell"></i>
+                                        </span>
+                                    </div>
                                 </button>
 
                                 <!-- Dropdown menu -->
@@ -572,19 +581,21 @@
                                             </h5>
                                             @if ($unreadNotificationsCount)
                                                 <a href="javascript:void(0);" id="mark-all"
-                                                    class="text-slate-400 text-xs mt-0.5 h-0 hover:underline hover:text-green-500">
+                                                    class="text-slate-400 text-xs mt-0.5 h-0 hover:underline hover:text-green-700">
                                                     Mark all as read
                                                 </a>
                                             @endif
                                         </div>
                                     </div>
-                                    <ul class="p-0 overflow-y-auto overflow-x-hidden text-sm left-8 text-gray-700 dark:text-slate-200"
-                                        aria-labelledby="dropdownSearchButton" id="style-15">
+                                    <ul class="p-0 overflow-y-auto overflow-x-hidden text-sm border border-gray-100 left-8 text-gray-700 dark:text-slate-200"
+                                        aria-labelledby="dropdownSearchButton" id="style-15"
+                                        @if ($unreadNotificationsCount > 0) style="max-height: 600px;" @endif>
+
                                         @forelse ($unreadNotifications as $notification)
                                             <div class="hover:bg-green-100">
-                                                <li class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item"
-                                                    style="height: 600px;">
-                                                    <div class="d-flex justify-center align-items-center gap-2">
+                                                <li
+                                                    class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
+                                                    <div class="d-flex justify-center align-items-center gap-2 pb-2">
                                                         <a href="{{ $notification->data['url'] }}"
                                                             data-id="{{ $notification->id }}"
                                                             class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
@@ -603,16 +614,9 @@
                                                     </div>
                                                 </li>
                                             </div>
-                                            <div class="bg-gray-100">
-                                                <a href="#"
-                                                    class="flex justify-center p-3 text-sm font-medium text-slate-200 border-t border-gray-200 rounded-b-lg
-                                                bg-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-slate-400 hover:text-green-700 hover:underline">
-                                                    <span>See all notification</span>
-                                                </a>
-                                            </div>
                                         @empty
                                             <li class="dropdown-notifications-list scrollable-container">
-                                                <ul class="list-group list-group-flush bg-gray-100">
+                                                <ul class="list-group list-group-flush bg-white">
                                                     <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
                                                         style="pointer-events: none;">
                                                         <div class="d-flex justify-center align-items-center gap-2">
@@ -639,6 +643,17 @@
                                             </li>
                                         @endforelse
                                     </ul>
+
+                                    @if ($unreadNotificationsCount > 0)
+                                        <div class="bg-gray-100">
+                                            <a href="#"
+                                                class="hover:text-slate-400 pointer-events-none flex justify-center p-3 text-sm font-medium text-slate-400 border border-gray-200 rounded-b-lg bg-gray-100">
+                                                <span
+                                                    class="pointer-events-auto hover:bg-gray-100 hover:text-green-700 hover:underline">See
+                                                    all notification</span>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             </li>
 
@@ -751,7 +766,6 @@
                     const bell = document.getElementById('bell');
 
                     bell.addEventListener('click', function() {
-                        console.log('click');
                         bell.classList.toggle('text-green-600');
                     });
 

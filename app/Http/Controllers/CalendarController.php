@@ -208,10 +208,9 @@ class CalendarController extends Controller
         $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
         $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
 
-
         $role_ids = ['role_ids' => '[1, 2, 3, 4, 5, 6, 7]'];
 
-        $activity = Activity::create(array_merge($role_ids, $data, ['start_date' => $formatStartDate,'end_date'=> $formatEndDate]));
+        $activity = Activity::create(array_merge($role_ids, $data, ['start_date' => $formatStartDate, 'end_date' => $formatEndDate]));
 
         $roles = Role::all();
 
@@ -236,7 +235,7 @@ class CalendarController extends Controller
         if ($activity->title === $lbs->title) {
             $data = $request->query('start');
 
-            $start = Carbon::parse($data)->add('1 day')->format('M d, Y').' '.Carbon::parse($activity->start_date)->format('h:iA');
+            $start = Carbon::parse($data)->add('1 day')->format('M d, Y') . ' ' . Carbon::parse($activity->start_date)->format('h:iA');
             $end = Carbon::parse($start)->addHours(2)->addMinutes(15)->format('M d, Y h:iA');
 
             return view('activities.show', [
@@ -317,10 +316,21 @@ class CalendarController extends Controller
             ], 404);
         }
 
-        $activity->update([
+        $save = $activity->update([
             'start_date' => Carbon::parse($request->input('start_date')),
             'end_date' => Carbon::parse($request->input('end_date')),
         ]);
+
+        if ($save) {
+            $roles = Role::all();
+
+            $admins = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('id', $roles->pluck('id'));
+            })->get();
+
+            Notification::send($admins, new EventNotification($activity, 'An Event has been updated!'));
+        }
+
         return response()->json([
             'messaege' => 'Event Changed Successfully!',
             'status' => 'success',
