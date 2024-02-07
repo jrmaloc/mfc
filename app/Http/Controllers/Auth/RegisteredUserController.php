@@ -46,9 +46,10 @@ class RegisteredUserController extends Controller
         $data['gender'] = $request->input('gender', null);
         $data['area'] = $request->input('area', null);
         $data['chapter'] = $request->input('chapter', null);
+        $data['role_id'] = 7;
 
         $user = User::create($data)->assignRole('Member');
-        $newMember = Member::create(array_merge($data, ['user_id' => $user->id]));
+
 
         $admins = User::whereHas('roles', function ($query) {
             $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
