@@ -564,8 +564,8 @@
 
                                 <!-- Dropdown menu -->
                                 <div id="dropdownSearch"
-                                    class="z-10 hidden bg-white rounded-lg shadow w-60 max-w-md mr-20">
-                                    <div class="p-3 bg-gray-50">
+                                    class="z-10 hidden border border-gray-500 bg-gray-50 rounded-lg shadow w-60 max-w-md mr-20">
+                                    <div class="p-3 bg-gray-100">
                                         <div class="relative flex justify-between">
                                             <h5 class="">
                                                 <span>Notifications</span>
@@ -578,13 +578,13 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <ul class="p-0 pb-3 overflow-y-auto overflow-x-hidden text-sm left-8 text-gray-700 dark:text-slate-200"
-                                        aria-labelledby="dropdownSearchButton" id="style-15" style="height: 600px;">
+                                    <ul class="p-0 overflow-y-auto overflow-x-hidden text-sm left-8 text-gray-700 dark:text-slate-200"
+                                        aria-labelledby="dropdownSearchButton" id="style-15">
                                         @forelse ($unreadNotifications as $notification)
                                             <div class="hover:bg-green-100">
-                                                <li
-                                                    class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
-                                                    <div class="d-flex align-items-center gap-2">
+                                                <li class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item"
+                                                    style="height: 600px;">
+                                                    <div class="d-flex justify-center align-items-center gap-2">
                                                         <a href="{{ $notification->data['url'] }}"
                                                             data-id="{{ $notification->id }}"
                                                             class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
@@ -603,14 +603,21 @@
                                                     </div>
                                                 </li>
                                             </div>
+                                            <div class="bg-gray-100">
+                                                <a href="#"
+                                                    class="flex justify-center p-3 text-sm font-medium text-slate-200 border-t border-gray-200 rounded-b-lg
+                                                bg-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-slate-400 hover:text-green-700 hover:underline">
+                                                    <span>See all notification</span>
+                                                </a>
+                                            </div>
                                         @empty
                                             <li class="dropdown-notifications-list scrollable-container">
-                                                <ul class="list-group list-group-flush">
+                                                <ul class="list-group list-group-flush bg-gray-100">
                                                     <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
                                                         style="pointer-events: none;">
-                                                        <div class="d-flex align-items-center gap-2">
+                                                        <div class="d-flex justify-center align-items-center gap-2">
                                                             <div
-                                                                class=" overflow-hidden w-px-250 flex flex-col align-items-center text-center">
+                                                                class="pb-4 overflow-hidden w-px-250 flex flex-col align-items-center text-center">
                                                                 <i
                                                                     class="fa-solid fa-bell-slash fa-3x text-slate-300 my-3"></i>
                                                                 <span class="text-sm font-bold my-1">No new
@@ -621,7 +628,7 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <div class="dropdown-menu-footer border-top p-3">
+                                                    <div class="dropdown-menu-footer border-top p-3 bg-gray-100">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"
                                                             id="refresh-btn">
@@ -632,13 +639,6 @@
                                             </li>
                                         @endforelse
                                     </ul>
-                                    <div class="">
-                                        <a href="#"
-                                            class="flex justify-center p-3 text-sm font-medium text-slate-200 border-t border-gray-200 rounded-b-lg
-                                        bg-gray-100 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-slate-400 hover:text-green-700 hover:underline">
-                                            <span>See all notification</span>
-                                        </a>
-                                    </div>
                                 </div>
                             </li>
 
