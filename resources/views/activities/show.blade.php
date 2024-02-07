@@ -71,38 +71,45 @@
                         <div class="col mb-2">
                             <div class="form-floating form-floating-outline">
                                 <input type="text" id="showStart_date" class="datepicker form-control" name="start_date"
-                                    value="{{ $activity->start_date }}" @if (auth()->check() &&
+                                    value="{{ $start_date }}"
+                                    @if (
+                                        (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) @disabled(true) @endif />
+                                                auth()->user()->hasRole('Member'))) ||
+                                            $activity->title == 'Liturgical Bible Study') disabled @endif>
                                 <label for="showStart_date">Start Date</label>
                             </div>
                         </div>
                         <div class="col mb-2">
                             <div class="form-floating form-floating-outline">
                                 <input type="text" id="showEnd_date" class="datepicker form-control" name="end_date"
-                                    value="{{ $activity->end_date }}" @if (auth()->check() &&
+                                    value="{{ $end_date }}"
+                                    @if (
+                                        (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) @disabled(true) @endif />
+                                                auth()->user()->hasRole('Member'))) ||
+                                            $activity->title == 'Liturgical Bible Study') disabled @endif>
                                 <label for="showEnd_date">End Date</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    @if (auth()->check() &&
-                            (auth()->user()->hasRole('Super Admin') ||
-                                auth()->user()->hasRole('Admin')))
-                        <div class="flex justify-end gap-2">
-                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                            <a href="#" class="btn btn-danger remove-btn" data-id="{{ $id }}">Delete</a>
-                            <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
-                        </div>
+                    @if ($activity->title != 'Liturgical Bible Study')
+                        @if (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin')))
+                            <div class="flex justify-end gap-2">
+                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                                <a href="#" class="btn btn-danger remove-btn"
+                                    data-id="{{ $id }}">Delete</a>
+                                <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
+                            </div>
+                        @endif
                     @endif
                 </div>
             </form>
@@ -138,20 +145,32 @@
 
 @push('scripts')
     <script>
+        var formattedStartDate = "{!! \Carbon\Carbon::parse($start_date)->format('Y-m-d H:iA') !!}";
+        var formattedEndDate = "{!! \Carbon\Carbon::parse($end_date)->format('Y-m-d H:iA') !!}";
+
         $(document).ready(function() {
             var showStartDatePicker = $('#showStart_date').flatpickr({
                 enableTime: true,
-                dateFormat: "Y-m-d H:i:S",
-                minDate: 'today',
+                altInput: true,
+                altFormat: "F j, Y @ h:i K",
+                dateFormat: "Y-m-d h:i K",
+                defaultDate: formattedStartDate,
+                allowInput: true,
                 autoclose: true,
             });
 
             var test = showStartDatePicker.selectedDates[0];
+            console.log(showStartDatePicker.selectedDates[0]);
 
             var showEndDatePicker = $('#showEnd_date').flatpickr({
                 enableTime: true,
+                altInput: true,
+                altFormat: "F j, Y @ h:i K",
+                dateFormat: "Y-m-d h:i K",
+                defaultDate: formattedEndDate,
                 minDate: test,
-                dateFormat: "Y-m-d H:i:S",
+                allowInput: true,
+                autoclose: true,
             });
 
             showStartDatePicker.config.onChange.push(function(selectedDates, dateStr, instance) {
@@ -164,7 +183,7 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove servant from list",
+                    text: "Remove activity from list",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

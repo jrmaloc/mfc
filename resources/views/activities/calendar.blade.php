@@ -110,8 +110,7 @@
 
                         <div class="col mb-4 mt-2">
                             <div class="form-floating form-floating-outline mb-3">
-                                <input type="number" class="form-control" id="reg_fee" name="reg_fee"
-                                    placeholder="₱0000" />
+                                <input type="number" class="form-control" id="reg_fee" name="reg_fee" placeholder="₱0000" />
                                 <label for="reg_fee">Registration Fee</label>
                                 <span id="reg_feeError" class="text-danger"></span>
                             </div>
@@ -120,13 +119,13 @@
                         <div class="row">
                             <div class="col mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="text" id="start_date" class="form-control" />
+                                    <input type="text" id="start_date" class="startDate form-control" />
                                     <label for="start_date">Start Date</label>
                                 </div>
                             </div>
                             <div class="col mb-2">
                                 <div class="form-floating form-floating-outline">
-                                    <input type="text" id="end_date" class="form-control" />
+                                    <input type="text" id="end_date" class="endDate form-control" />
                                     <label for="end_date">End Date</label>
                                 </div>
                             </div>
@@ -189,20 +188,25 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             @can('create-activity')
-                var startDate = $('#start_date').flatpickr({
+                var startDate = $('.startDate').flatpickr({
                     enableTime: true,
-                    dateFormat: "Y-m-d H:i:S",
+                    altInput: true,
+                    altFormat: "F j, Y @ h:i K",
+                    dateFormat: "Y-m-d h:i K",
+                    allowInput: true,
                     minDate: 'today',
                     autoclose: true,
                 });
 
                 var test = startDate.selectedDates[0];
-                console.log(test);
 
-                var endDate = $('#end_date').flatpickr({
+                var endDate = $('.endDate').flatpickr({
                     enableTime: true,
                     minDate: test,
-                    dateFormat: "Y-m-d H:i:S",
+                    altInput: true,
+                    altFormat: "F j, Y @ h:i K",
+                    dateFormat: "Y-m-d h:i K",
+                    allowInput: true,
                 });
 
                 startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
@@ -240,27 +244,42 @@
                     let newStartDate = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
                     let newEndDate = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
 
-                    alert(event.title + " is moved to a new date");
+                    // alert(event.title + " is moved to a new date");
 
-                    if (!confirm("is this okay?")) {
-                        info.revert();
-                    }
+                    // if (!confirm("is this okay?")) {
+                    //     info.revert();
+                    // }
 
-                    $.ajax({
-                        method: 'PUT',
-                        url: `calendar/drag/${eventId}`,
-                        data: {
-                            start_date: newStartDate,
-                            end_date: newEndDate
-                        },
-                        success: function() {
-                            Toast.fire({
-                                icon: "success",
-                                title: "Event updated Successfully.",
-                            });
-                        },
-                        error: function(error) {
-                            console.log(error);
+                    var id = $(this).data('id');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Move this event to a new date?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, move it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                method: 'PUT',
+                                url: `calendar/drag/${eventId}`,
+                                data: {
+                                    start_date: newStartDate,
+                                    end_date: newEndDate
+                                },
+                                success: function(response) {
+                                    Toast.fire({
+                                        icon: "success",
+                                        title: "Event updated Successfully.",
+                                    });
+                                },
+
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            })
                         }
                     })
                 },
@@ -336,10 +355,19 @@
                 },
 
                 eventClick: function(data) {
-                    window.location.href = "{{ route('calendar.show', '') }}/" + data.event.id;
-                },
+                    var start = data.event.start;
+                    var end = data.event.end;
+                    var eventId = data.event.id;
 
+                    // Construct the URL with the event ID and start date as query parameters
+                    var url = "{{ route('calendar.show', ['']) }}/" + eventId + "?start=" + start
+                        .toISOString();
+
+                    // Redirect to the constructed URL
+                    window.location.href = url;
+                },
             });
+
             calendar.render();
         });
     </script>

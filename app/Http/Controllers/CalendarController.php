@@ -157,6 +157,8 @@ class CalendarController extends Controller
 
                 // Additional properties for specific activities
                 if ($activity->title == 'Liturgical Bible Study') {
+                    $start = '18:45:00';
+                    $startISO8601 = date('Y-m-d\TH:i:s', strtotime($activity->start_date)) . $start;
                     $event = [
                         'user_id' => $userID,
                         'id' => $activity->id,
@@ -164,9 +166,10 @@ class CalendarController extends Controller
                         'description' => $activity->description,
                         'location' => $activity->location,
                         'start' => $startISO8601,
-                        'end' => $endISO8601,
+                        'end' => $startISO8601,
                         'groupId' => 'blueEvents',
                         'selectable' => false,
+                        'editable' => false,
                         'daysOfWeek' => [4],
                     ];
                 }
@@ -199,9 +202,16 @@ class CalendarController extends Controller
             'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/',
         ]);
 
+        $startDate = $data['start_date'];
+        $endDate = $data['end_date'];
+
+        $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
+        $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+
+
         $role_ids = ['role_ids' => '[1, 2, 3, 4, 5, 6, 7]'];
 
-        $activity = Activity::create(array_merge($role_ids, $data));
+        $activity = Activity::create(array_merge($role_ids, $data, ['start_date' => $formatStartDate,'end_date'=> $formatEndDate]));
 
         $roles = Role::all();
 
@@ -221,14 +231,38 @@ class CalendarController extends Controller
     {
         $activity = Activity::findOrFail($id);
 
+        $lbs = Activity::where('title', 'Liturgical Bible Study')->first();
+
+        if ($activity->title === $lbs->title) {
+            $data = $request->query('start');
+
+            $start = Carbon::parse($data)->add('1 day')->format('M d, Y').' '.Carbon::parse($activity->start_date)->format('h:iA');
+            $end = Carbon::parse($start)->addHours(2)->addMinutes(15)->format('M d, Y h:iA');
+
+            return view('activities.show', [
+                'id' => $id,
+                'start_date' => $start,
+                'end_date' => $end,
+                'activity' => $activity,
+            ]);
+        } else {
+            $info = $activity->start_date;
+            $info2 = $activity->end_date;
+
+            $start_date = Carbon::parse($info)->format('M d, Y h:iA');
+            $end_date = Carbon::parse($info2)->format('M d, Y h:iA');
+
+            return view('activities.show', [
+                'id' => $id,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'activity' => $activity,
+            ]);
+        }
+
         if ($request->ajax()) {
             return response()->json(['redirect' => route('calendar.show', ['id' => $id])]);
         };
-
-        return view('activities.show', [
-            'id' => $id,
-            'activity' => $activity,
-        ]);
     }
 
     /**
@@ -287,7 +321,10 @@ class CalendarController extends Controller
             'start_date' => Carbon::parse($request->input('start_date')),
             'end_date' => Carbon::parse($request->input('end_date')),
         ]);
-        return response()->json(['messaege' => 'Event Changed Successfully!']);
+        return response()->json([
+            'messaege' => 'Event Changed Successfully!',
+            'status' => 'success',
+        ]);
     }
 
     /**
