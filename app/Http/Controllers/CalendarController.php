@@ -239,15 +239,32 @@ class CalendarController extends Controller
         if ($activity->title === $lbs->title) {
             $data = $request->query('start');
 
-            $start = Carbon::parse($data)->add('1 day')->format('M d, Y') . ' ' . Carbon::parse($activity->start_date)->format('h:iA');
-            $end = Carbon::parse($start)->addHours(2)->addMinutes(15)->format('M d, Y h:iA');
+            if ($data) {
+                $start = Carbon::parse($data)->add('1 day')->format('M d, Y') . ' ' . Carbon::parse($activity->start_date)->format('h:iA');
+                $end = Carbon::parse($start)->addHours(2)->addMinutes(15)->format('M d, Y h:iA');
 
-            return view('activities.show', [
-                'id' => $id,
-                'start_date' => $start,
-                'end_date' => $end,
-                'activity' => $activity,
-            ]);
+                return view('activities.show', [
+                    'id' => $id,
+                    'start_date' => $start,
+                    'end_date' => $end,
+                    'activity' => $activity,
+                ]);
+            } else {
+                $info = $activity->start_date;
+                $info2 = $activity->end_date;
+
+                $start_date = Carbon::parse($info)->format('M d, Y h:iA');
+                $end_date = Carbon::parse($info2)->format('M d, Y h:iA');
+
+                return view('activities.show', [
+                    'id' => $id,
+                    'user' => $user,
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'activity' => $activity,
+                ]);
+            }
+
         } else {
             $info = $activity->start_date;
             $info2 = $activity->end_date;
@@ -317,7 +334,11 @@ class CalendarController extends Controller
 
         Notification::send($admins, new EventNotification($activity, 'An Event has been updated!'));
 
-        return redirect()->route('calendar.show', ['id' => $id])->with('success', 'Activity Updated Successfully');
+        return redirect()->route('calendar.show', [
+            'id' => $id,
+            'start_date' => $formattedStartDate,
+            'end_date' => $formattedEndDate,
+        ])->with('success', 'Activity Updated Successfully');
     }
 
     public function dragEvent(Request $request, $id)

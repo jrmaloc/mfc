@@ -214,12 +214,6 @@
                 });
             @endcan
 
-
-            // $.ajaxSetup({
-
-
-            // });
-
             var events = @json($events);
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
