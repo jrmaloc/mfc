@@ -14,7 +14,7 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    @vite('resources/css/app.css')
+    <link href="{{ URL::asset('assets/src/output.css') }}" rel="stylesheet">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -300,7 +300,7 @@
             border-color: #16b1ff;
         }
 
-        .fa-stack{
+        .fa-stack {
             font-size: 140%;
         }
 
@@ -565,7 +565,8 @@
                                     data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
                                     data-dropdown-offset-skidding="-220" class="btn-link" type="button">
                                     <div class="flex align-items-start">
-                                        <span class="fa-stack" data-count="{{ $unreadNotificationsCount }}">
+                                        <span id="bell" class="fa-stack"
+                                            data-count="{{ $unreadNotificationsCount }}">
                                             <i class="fa-regular fa-bell"></i>
                                         </span>
                                     </div>
@@ -734,7 +735,6 @@
             <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
             <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-            <script src="https://cdn.tailwindcss.com"></script>
 
             <!-- Vendors JS -->
             <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
@@ -760,6 +760,7 @@
 
             <!-- Calendar -->
             @stack('scripts')
+
             <script>
                 $(document).ready(function() {
 
