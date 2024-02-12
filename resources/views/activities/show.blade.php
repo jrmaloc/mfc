@@ -107,7 +107,7 @@
                     @elseif ($activity->id != 13)
                         <div class="flex justify-end gap-2">
                             <button class="btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
-                                data-bs-target="#regField" aria-controls="regField">Register!</button>
+                                data-bs-target="#regField" aria-controls="regField" disabled>Register!</button>
                         </div>
                     @endif
                 </div>
