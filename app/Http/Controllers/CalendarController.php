@@ -159,6 +159,9 @@ class CalendarController extends Controller
                 if ($activity->title == 'Liturgical Bible Study') {
                     $start = '18:45:00';
                     $startISO8601 = date('Y-m-d\TH:i:s', strtotime($activity->start_date)) . $start;
+
+                    $date = Carbon::parse($activity->start_date);
+                    $dayOfWeek = $date->dayOfWeek;
                     $event = [
                         'user_id' => $userID,
                         'id' => $activity->id,
@@ -168,9 +171,9 @@ class CalendarController extends Controller
                         'start' => $startISO8601,
                         'end' => $startISO8601,
                         'groupId' => 'blueEvents',
-                        'selectable' => false,
-                        'editable' => false,
-                        'daysOfWeek' => [4],
+                        // 'selectable' => false,
+                        // 'editable' => false,
+                        'daysOfWeek' => [$dayOfWeek],
                     ];
                 }
 
@@ -229,6 +232,7 @@ class CalendarController extends Controller
     public function show(Request $request, string $id)
     {
         $activity = Activity::findOrFail($id);
+        $user = Auth::user();
 
         $lbs = Activity::where('title', 'Liturgical Bible Study')->first();
 
@@ -253,6 +257,7 @@ class CalendarController extends Controller
 
             return view('activities.show', [
                 'id' => $id,
+                'user' => $user,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'activity' => $activity,
@@ -293,6 +298,15 @@ class CalendarController extends Controller
             'end_date' => 'required',
         ]);
 
+        $startDate = $data['start_date'];
+        $endDate = $data['end_date'];
+
+        $formattedStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
+        $formattedEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+
+        $data['start_date'] = $formattedStartDate;
+        $data['end_date'] = $formattedEndDate;
+
         $activity->update($data);
 
         $roles = Role::all();
@@ -309,6 +323,7 @@ class CalendarController extends Controller
     public function dragEvent(Request $request, $id)
     {
         $activity = Activity::find($id);
+        $lbs = Activity::find(13);
 
         if (!$activity) {
             return response()->json([
@@ -316,10 +331,32 @@ class CalendarController extends Controller
             ], 404);
         }
 
-        $save = $activity->update([
-            'start_date' => Carbon::parse($request->input('start_date')),
-            'end_date' => Carbon::parse($request->input('end_date')),
-        ]);
+        if ($activity->title == $lbs->title) {
+            $start_date = $request->start_date;
+
+            $act_start = Carbon::parse($activity->start_date);
+
+            $hour = $act_start->hour;
+            $minute = $act_start->minute;
+            $second = $act_start->second;
+
+            $newStart_date = Carbon::parse($start_date);
+            $newStart_date->setTime($hour, $minute, $second);
+            $newStart_date_formatted = $newStart_date->format('Y-m-d H:i:s');
+
+            $newEnd_date = $newStart_date->copy()->addHours(2);
+
+            $save = $activity->update([
+                'start_date' => $newStart_date_formatted,
+                'end_date' => $newEnd_date->format('Y-m-d H:i:s'),
+            ]);
+
+        } else {
+            $save = $activity->update([
+                'start_date' => Carbon::parse($request->input('start_date')),
+                'end_date' => Carbon::parse($request->input('end_date')),
+            ]);
+        }
 
         if ($save) {
             $roles = Role::all();
@@ -332,8 +369,9 @@ class CalendarController extends Controller
         }
 
         return response()->json([
-            'messaege' => 'Event Changed Successfully!',
+            'message' => 'Event Changed Successfully!',
             'status' => 'success',
+            'activity' => $activity,
         ]);
     }
 

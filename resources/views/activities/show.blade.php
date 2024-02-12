@@ -72,44 +72,36 @@
                             <div class="form-floating form-floating-outline">
                                 <input type="text" id="showStart_date" class="datepicker form-control" name="start_date"
                                     value="{{ $start_date }}"
-                                    @if (
-                                        (auth()->check() &&
+                                    @if (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) ||
-                                            $activity->title == 'Liturgical Bible Study') disabled @endif>
+                                                auth()->user()->hasRole('Member'))) disabled {{ auth()->user()->role }} @endif>
                                 <label for="showStart_date">Start Date</label>
                             </div>
                         </div>
                         <div class="col mb-2">
                             <div class="form-floating form-floating-outline">
                                 <input type="text" id="showEnd_date" class="datepicker form-control" name="end_date"
-                                    value="{{ $end_date }}"
-                                    @if (
-                                        (auth()->check() &&
+                                    value="{{ $end_date }}" @if (auth()->check() &&
                                             (auth()->user()->hasRole('Area Servant') ||
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) ||
-                                            $activity->title == 'Liturgical Bible Study') disabled @endif>
+                                                auth()->user()->hasRole('Member'))) disabled @endif>
                                 <label for="showEnd_date">End Date</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    @if ($activity->title != 'Liturgical Bible Study')
-                        @if (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin')))
-                            <div class="flex justify-end gap-2">
-                                <button type="reset" class="btn btn-outline-secondary">Reset</button>
-                                <a href="#" class="btn btn-danger remove-btn"
-                                    data-id="{{ $id }}">Delete</a>
-                                <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
-                            </div>
-                        @endif
+                    @if (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin')))
+                        <div class="flex justify-end gap-2">
+                            <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                            <a href="#" class="btn btn-danger remove-btn" data-id="{{ $id }}">Delete</a>
+                            <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
+                        </div>
                     @endif
                 </div>
             </form>

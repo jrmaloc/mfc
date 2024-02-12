@@ -215,12 +215,10 @@
             @endcan
 
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+            // $.ajaxSetup({
 
-            });
+
+            // });
 
             var events = @json($events);
             var calendarEl = document.getElementById('calendar');
@@ -244,12 +242,6 @@
                     let newStartDate = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
                     let newEndDate = moment(event.end).format('YYYY-MM-DD HH:mm:ss');
 
-                    // alert(event.title + " is moved to a new date");
-
-                    // if (!confirm("is this okay?")) {
-                    //     info.revert();
-                    // }
-
                     var id = $(this).data('id');
 
                     Swal.fire({
@@ -262,7 +254,12 @@
                         confirmButtonText: 'Yes, move it!'
                     }).then((result) => {
                         if (result.isConfirmed) {
+
                             $.ajax({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                        'content')
+                                },
                                 method: 'PUT',
                                 url: `calendar/drag/${eventId}`,
                                 data: {
