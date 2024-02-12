@@ -102,9 +102,51 @@
                             <a href="#" class="btn btn-danger remove-btn" data-id="{{ $id }}">Delete</a>
                             <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
                         </div>
+
+                        {{-- REGISTRATION --}}
+                    @elseif ($activity->id != 13)
+                        <div class="flex justify-end gap-2">
+                            <button class="btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#regField" aria-controls="regField">Register!</button>
+                        </div>
                     @endif
                 </div>
             </form>
+
+            <div class="offcanvas offcanvas-end" style="min-width: 550px;" tabindex="-1" id="regField"
+                aria-labelledby="regFieldLabel">
+                <div class="offcanvas-header mt-12">
+                    <h5 id="regFieldLabel" class="offcanvas-title uppercase font-bold">
+                        {{ $activity->title }} Registration</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body mx-0 flex-grow-0">
+                    <form action="{{ route('calendar.registration', ['id' => $id]) }}" method="POST">
+                        @csrf
+                        @method('POST')
+                        <x-form.input-group class="row-cols-1">
+                            <x-form.input-field name="name" type="text" icon="account" placeholder="Juan A. Dela Cruz"
+                                value="{{ $user->name }}" error="{{ $errors->first('name') }}">
+                                Full Name
+                            </x-form.input-field>
+                            <x-form.input-field name="contact_number" type="tel" icon="phone"
+                                placeholder="09123456789" value="{{ $user->contact_number }}"
+                                error="{{ $errors->first('contact_number') }}">
+                                Contact Number
+                            </x-form.input-field>
+                            <x-form.input-field name="reg_fee" type="text" icon="cash"
+                                value="{{ $activity->reg_fee }}" error="{{ $errors->first('reg_fee') }}"
+                                param="readonly">
+                                Registration Fee
+                            </x-form.input-field>
+                        </x-form.input-group>
+
+                        <x-form.btn-grp class="my-8" submit="Register Now!" reset="RESET">
+                        </x-form.btn-grp>
+                    </form>
+                </div>
+            </div>
     </x-layout>
 
     <style>
@@ -118,8 +160,6 @@
         <script>
             var Toast = Swal.mixin({
                 toast: true,
-                icon: 'success',
-                title: 'General Title',
                 animation: true,
                 position: 'top-right',
                 showConfirmButton: false,
@@ -130,6 +170,23 @@
             Toast.fire({
                 icon: 'success',
                 title: '{{ session('success') }}',
+            });
+        </script>
+    @elseif (session('error'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            var Toast = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            Toast.fire({
+                icon: 'error',
+                title: '{{ session('error') }}',
             });
         </script>
     @endif
@@ -152,7 +209,6 @@
             });
 
             var test = showStartDatePicker.selectedDates[0];
-            console.log(showStartDatePicker.selectedDates[0]);
 
             var showEndDatePicker = $('#showEnd_date').flatpickr({
                 enableTime: true,

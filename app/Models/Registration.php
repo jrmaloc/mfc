@@ -15,11 +15,7 @@ class Registration extends Model
     protected $fillable = [
         'user_id',
         'activity_id',
-        'name',
-        'email',
-        'contact_number',
-        'chapter',
-        'area',
+        'ref_number',
         'paid',
     ];
 

@@ -7,7 +7,6 @@ use App\Models\Registration;
 use App\Models\User;
 use App\Notifications\EventNotification;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
@@ -36,27 +35,57 @@ class CalendarController extends Controller
         return view('activities.activities');
     }
 
-    public function registration(Request $request, string $id)
+    public function registration(Request $request)
     {
-        dd($request->all());
-        $client = new Client();
+        $activity = Activity::find($request->id);
+        $user = User::where('name', $request->name)->first();
 
-        $response = $client->request('POST', 'https://pg-sandbox.paymaya.com/checkout/v1/checkouts', [
-            'body' => '{"totalAmount":{"value":1000,"currency":"PHP"},"requestReferenceNumber":"5fc10b93-bdbd-4f31-b31d-4575a3785009"}',
-            'headers' => [
-                'accept' => 'application/json',
-                'authorization' => 'Basic cGstZW80c0wzOTNDV1U1S212ZUpVYVc4VjczMFRUZWkyelk4ekU0ZEhKRHhrRjpHb2Rlc3EyMDIxIQ==',
-                'content-type' => 'application/json',
-            ],
-        ]);
+        if ($user) {
+            $existingRegistration = Registration::where('activity_id', $request->id)
+                ->where('user_id', $user->id)
+                ->first();
 
-        // Assuming the API response is successful and returns a JSON object
-        $result = $response->getBody();
-        $data = json_decode($result);
+            if ($existingRegistration) {
+                return back()->with('error', 'User is already registered for this activity');
+            }
 
-        $redirectUrl = $data->redirectUrl;
+            $data['activity_id'] = $request->id;
+            $data['user_id'] = $user->id;
+            $data['ref_number'] = '';
 
-        return redirect()->to($redirectUrl);
+            $register = Registration::create($data);
+
+            if ($register) {
+                $recipient = User::where('user_id', $user->id)->first();
+
+
+
+                return redirect()->route('calendar.show', [
+                    'id' => $activity->id,
+                ])->with('success', 'Registration successful');
+            }
+        }
+
+        return back()->with('error', 'Registration failed');
+
+        // $client = new Client();
+
+        // $response = $client->request('POST', 'https://pg-sandbox.paymaya.com/checkout/v1/checkouts', [
+        //     'body' => '{"totalAmount":{"value":1000,"currency":"PHP"},"requestReferenceNumber":"5fc10b93-bdbd-4f31-b31d-4575a3785009"}',
+        //     'headers' => [
+        //         'accept' => 'application/json',
+        //         'authorization' => 'Basic cGstZW80c0wzOTNDV1U1S212ZUpVYVc4VjczMFRUZWkyelk4ekU0ZEhKRHhrRjpHb2Rlc3EyMDIxIQ==',
+        //         'content-type' => 'application/json',
+        //     ],
+        // ]);
+
+        // // Assuming the API response is successful and returns a JSON object
+        // $result = $response->getBody();
+        // $data = json_decode($result);
+
+        // $redirectUrl = $data->redirectUrl;
+
+        // return redirect()->to($redirectUrl);
 
         // $name = $request->name;
         // $attendee = User::where('name', $name)->first();

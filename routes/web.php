@@ -116,7 +116,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::put('calendar/drag/{id}', [CalendarController::class, 'dragEvent'])->name('calendar.dragEvent');
     Route::delete('calendar/destroy/{id}', [CalendarController::class, 'destroy'])->name('calendar.delete');
     Route::get('calendar/show/{id}', [CalendarController::class, 'show'])->name('calendar.show');
-    Route::post('registration/{id}', [CalendarController::class, 'registration'])->name('calendar.registration');
+    Route::post('registration', [CalendarController::class, 'registration'])->name('calendar.registration');
     Route::get('attendees/{id}', [CalendarController::class, 'attendees'])->name('calendar.attendees');
 
     Route::get('redirect', [CalendarController::class, 'redirect'])->name('redirect');
