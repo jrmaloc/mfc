@@ -39,8 +39,6 @@ class CalendarController extends Controller
     {
         $activity = Activity::findOrFail($id);
 
-        $title = $activity->title;
-
         $attendees = Registration::where('activity_id', $id)->get();
         $user_ids = [];
 
@@ -65,6 +63,9 @@ class CalendarController extends Controller
             //         $query->whereIn('id', $user_ids);
             //     })
             //     ->get();
+            if ($data->isEmpty()) {
+                $data->push(['title' => $activity->title]);
+            }
 
             return DataTables::of($data)
                 ->addIndexColumn()

@@ -229,15 +229,23 @@
                     method: 'GET',
                     success: function(response) {
                         if (response && response.data) {
-                            if (response.data.length > 0) {
-                                response.data.forEach(activity => {
+                            response.data.forEach(activity => {
+                                if (activity.registrations) {
                                     $('#title').text(activity.title);
                                     populateAttendeesTable(activity.registrations);
-                                });
-                            } else {
-                                populateAttendeesTable(response.data);
-                                $('#title').text('No Attendees Yet');
-                            }
+                                } else {
+                                    response.data.forEach(activity => {
+                                        $('#title').text(activity.title);
+                                    });
+                                    response.data = [];
+                                    populateAttendeesTable(response.data);
+                                }
+
+                            });
+                            // } else {
+                            //     populateAttendeesTable(response.data);
+                            //     $('#title').text('No Attendees Yet');
+                            // }
                         } else {
                             console.error('Unexpected response format:', response);
                         }
@@ -357,7 +365,7 @@
             let id = $(this).attr('value');
 
             $.ajax({
-                url: "{{ route('registration.update', ['registration' =>" + id + " ]) }}",
+                url: "{{ route('registration.update', ['registration' => ' + id + ']) }}",
                 method: "PUT",
                 data: {
                     _token: "{{ csrf_token() }}",
