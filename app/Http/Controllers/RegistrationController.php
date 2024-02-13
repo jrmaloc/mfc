@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Registration;
 use Illuminate\Http\Request;
-use User;
+use App\Models\User;
 
 class RegistrationController extends Controller
 {
@@ -46,6 +46,7 @@ class RegistrationController extends Controller
             $data['activity_id'] = $request->id;
             $data['user_id'] = $user->id;
             $data['ref_number'] = '';
+            $data['paid'] = 'Pending';
 
             $register = Registration::create($data);
 
