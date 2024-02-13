@@ -6,6 +6,7 @@ use App\Http\Controllers\AreaServantController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ChapterServantController;
 use App\Http\Controllers\HouseholdServantController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TithesController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ProfileController;
@@ -144,6 +145,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::resource('/household', HouseholdServantController::class);
     Route::resource('/permissions', PermissionsController::class);
     Route::resource('/attendance', AttendanceController::class);
+    Route::resource('/registration', RegistrationController::class);
 });
 
 require __DIR__ . '/auth.php';

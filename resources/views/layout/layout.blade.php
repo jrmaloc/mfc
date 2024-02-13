@@ -319,6 +319,10 @@
             min-width: 2em;
             font-weight: bold;
         }
+
+        div.swal2-container.swal2-top-right.swal2-backdrop-show {
+            z-index: 9999 !important;
+        }
     </style>
 
     @yield('head')
@@ -766,6 +770,15 @@
 
             <script>
                 $(document).ready(function() {
+
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        animation: true,
+                        position: 'top-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
 
                     const bell = document.getElementById('bell');
 

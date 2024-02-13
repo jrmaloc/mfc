@@ -99,16 +99,14 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col mb-4 mt-2">
-                                    <label for="floatingSelect" class="h-0 ml-1">Name<span class="text-danger">*</span></label>
+                                    <label for="floatingSelect" class="h-0 ml-1">Name<span
+                                            class="text-danger">*</span></label>
                                     <div class="form-floating form-floating-outline">
-                                        <select name="id" class="form-select" id="floatingSelect"
-                                            required>
+                                        <select name="id" class="form-select" id="floatingSelect" required>
                                             <option disabled selected>Choose one</option>
 
                                             @foreach ($options as $info)
-                                                @if (auth()->check() &&
-                                                        (auth()->user()->hasRole('Super Admin') ||
-                                                            auth()->user()->hasRole('Admin')))
+                                                @if (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin')))
                                                     <option value="{{ $info->id }}">{{ $info->name }}</option>
                                                 @else
                                                     <option value="{{ $info->id }}">{{ $info->user->name }}</option>
@@ -233,7 +231,19 @@
                         status: status
                     },
                     success: function(data) {
-                        console.log(data);
+                        var Toast = Swal.mixin({
+                            toast: true,
+                            animation: true,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Attendance Saved!',
+                        });
                     },
                     error: function(data) {
                         console.log('Error:', data);

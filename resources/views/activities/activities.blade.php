@@ -51,6 +51,51 @@
             background-color: #1aa142 !important;
             color: #ffffff !important;
         }
+
+        input[type=checkbox] {
+            display: none;
+        }
+
+        .activity-checkbox+label {
+            font-size: 1.2rem;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: .1rem solid var(--blue);
+            border-radius: 50%;
+            background: var(--darkblue);
+            transition: .1s all;
+            cursor: pointer;
+            z-index: 999 !important;
+        }
+
+        .admin {
+            pointer-events: none !important;
+        }
+
+        .activity-checkbox+label:hover {
+            transform: scale(.95);
+        }
+
+        .activity-checkbox+label:after {
+            content: "⚪";
+        }
+
+        .activity-checkbox:checked+label {
+            background: var(--blue);
+            transform: scale(1.1);
+        }
+
+        .activity-checkbox:checked+label:hover {
+            background: var(--blue);
+            transform: scale(1.05);
+        }
+
+        .activity-checkbox:checked+label:after {
+            content: "✔️";
+        }
     </style>
 @endsection
 
@@ -63,7 +108,7 @@
             </h2>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+        <div class="offcanvas-body mx-0 flex-grow-0">
             <div class="table-responsive-lg text-nowrap">
                 <table class="table table-striped" id="attendeesTable">
                     <thead>
@@ -191,7 +236,7 @@
                                 });
                             } else {
                                 populateAttendeesTable(response.data);
-                                $('#title').text('Attendees');
+                                $('#title').text('No Attendees Yet');
                             }
                         } else {
                             console.error('Unexpected response format:', response);
@@ -226,7 +271,7 @@
                         processing: true,
                         serverSide: false,
                         scrollX: 700,
-                        scrollY: 800,
+                        scrollY: 550,
                         data: dataTableData,
                         columns: [{
                                 data: 'number',
@@ -260,23 +305,40 @@
                             },
                             {
                                 data: 'paid',
-                                name: 'status',
+                                name: 'paid',
                                 width: '20%',
-                                render: function(data, type, row) {
-                                    let badgeHTML = '';
+                                render: function(data, type, full, meta) {
+                                    let rowIndex = meta.row;
+                                    let colIndex = meta.col;
 
-                                    if (data === 'Paid') {
-                                        badgeHTML =
-                                            '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-success px-4 py-2">' +
-                                            data + '</span></div>';
+                                    let uniqueId = 'checkbox_' + rowIndex + '_' + colIndex;
+                                    let value = full.number;
+
+                                    if (data == 'Pending') {
+                                        let checkbox = '<div class="flex justify-center">';
+                                        checkbox += '<input type="checkbox" id="' + uniqueId +
+                                            '" value="' + value +
+                                            '" class="activity-checkbox"' +
+                                            ' style="pointer-events: pointer;">' +
+                                            '<label for="' + uniqueId +
+                                            '"></label>';
+                                        checkbox += '</div>';
+
+                                        return checkbox;
                                     } else {
-                                        badgeHTML =
-                                            '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-warning px-4 py-2">' +
-                                            data + '</span></div>';
+                                        let checkbox = '<div class="flex justify-center">';
+                                        checkbox += '<input type="checkbox" id="' + uniqueId +
+                                            '" value="' + value +
+                                            '" class="activity-checkbox"' +
+                                            ' style="pointer-events: pointer;" checked>' +
+                                            '<label for="' + uniqueId +
+                                            '"></label>';
+                                        checkbox += '</div>';
+
+                                        return checkbox;
                                     }
 
-                                    return badgeHTML;
-                                },
+                                }
                             }
                             // Define other columns as needed
                         ],
@@ -289,6 +351,39 @@
                 }
             }
         });
+
+        $('#attendeesTable').on('change', '.activity-checkbox', function() {
+            let status = this.checked;
+            let id = $(this).attr('value');
+
+            $.ajax({
+                url: "{{ route('registration.update', ['registration' =>" + id + " ]) }}",
+                method: "PUT",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    status: status
+                },
+                success: function(data) {
+                    var Toast = Swal.mixin({
+                        toast: true,
+                        animation: true,
+                        position: 'top-right',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: data.message,
+                    });
+                },
+                error: function(data) {
+                    console.log('Error:', data);
+                }
+            })
+        })
 
 
         $(document).on("click", ".remove-btn", function(e) {

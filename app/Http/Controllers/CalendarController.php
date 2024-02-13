@@ -35,37 +35,6 @@ class CalendarController extends Controller
         return view('activities.activities');
     }
 
-    public function registration(Request $request)
-    {
-        $activity = Activity::find($request->id);
-        $user = User::where('name', $request->name)->first();
-
-        if ($user) {
-            $existingRegistration = Registration::where('activity_id', $request->id)
-                ->where('user_id', $user->id)
-                ->first();
-
-            if ($existingRegistration) {
-                return back()->with('error', 'User is already registered for this activity');
-            }
-
-            $data['activity_id'] = $request->id;
-            $data['user_id'] = $user->id;
-            $data['ref_number'] = '';
-
-            $register = Registration::create($data);
-
-            if ($register) {
-                // $recipient = User::where('user_id', $user->id)->first();
-                return redirect()->route('calendar.show', [
-                    'id' => $activity->id,
-                ])->with('success', 'Registration successful');
-            }
-        }
-
-        return back()->with('error', 'Registration failed');
-    }
-
     public function attendees(Request $request, string $id)
     {
         $activity = Activity::findOrFail($id);
