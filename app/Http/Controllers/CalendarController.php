@@ -25,7 +25,7 @@ class CalendarController extends Controller
                 ->addIndexColumn()
                 ->addColumn("actions", function ($activity) {
                     return '<div class="dropdown">
-                    <a href="javascript:void(0);" onclick="show()" data-id="' . $activity->id . '" class="btn btn-primary attendees btn-sm" style="text-transform: capitalize !important">Attendees</a>
+                    <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd" data-id="' . $activity->id . '" class="btn btn-primary attendees btn-sm" style="text-transform: capitalize !important">Attendees</a>
                     <a href="javascript:void(0);" id="' . $activity->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>
                     </div>';
                 })
@@ -56,10 +56,7 @@ class CalendarController extends Controller
             $register = Registration::create($data);
 
             if ($register) {
-                $recipient = User::where('user_id', $user->id)->first();
-
-
-
+                // $recipient = User::where('user_id', $user->id)->first();
                 return redirect()->route('calendar.show', [
                     'id' => $activity->id,
                 ])->with('success', 'Registration successful');
@@ -67,57 +64,14 @@ class CalendarController extends Controller
         }
 
         return back()->with('error', 'Registration failed');
-
-        // $client = new Client();
-
-        // $response = $client->request('POST', 'https://pg-sandbox.paymaya.com/checkout/v1/checkouts', [
-        //     'body' => '{"totalAmount":{"value":1000,"currency":"PHP"},"requestReferenceNumber":"5fc10b93-bdbd-4f31-b31d-4575a3785009"}',
-        //     'headers' => [
-        //         'accept' => 'application/json',
-        //         'authorization' => 'Basic cGstZW80c0wzOTNDV1U1S212ZUpVYVc4VjczMFRUZWkyelk4ekU0ZEhKRHhrRjpHb2Rlc3EyMDIxIQ==',
-        //         'content-type' => 'application/json',
-        //     ],
-        // ]);
-
-        // // Assuming the API response is successful and returns a JSON object
-        // $result = $response->getBody();
-        // $data = json_decode($result);
-
-        // $redirectUrl = $data->redirectUrl;
-
-        // return redirect()->to($redirectUrl);
-
-        // $name = $request->name;
-        // $attendee = User::where('name', $name)->first();
-
-        // if (!$attendee) {
-        //     $user = User::create([
-        //         'name' => $name,
-        //         'email' => $request->email,
-        //         'contact_number' => $request->contact_number,
-        //         'password' => 'password',
-        //     ]);
-        // }
-
-        // $data = [
-        //     'activity_id' => $id,
-        //     'ref_number' => $request->ref_number,
-        //     'paid' => 'Paid',
-        // ];
-
-        // $user_id = $attendee->id;
-        // $register = Registration::create(array_merge($data, ['user_id' => $user_id]));
-
-        // if ($register) {
-        //     return response()->json(['success' => true, 'message' => 'Registration successful']);
-        // } else {
-        //     return response()->json(['success' => false, 'message' => 'Registration failed']);
-        // }
     }
 
     public function attendees(Request $request, string $id)
     {
         $activity = Activity::findOrFail($id);
+
+        $title = $activity->title;
+
         $attendees = Registration::where('activity_id', $id)->get();
         $user_ids = [];
 
@@ -126,12 +80,22 @@ class CalendarController extends Controller
         }
 
         if ($request->ajax()) {
-            $data = Registration::where('activity_id', $id)
-                ->with('user')
-                ->whereHas('user', function ($query) use ($user_ids) {
-                    $query->whereIn('id', $user_ids);
-                })
-                ->get();
+            $data = Activity::where('id', $id)
+                ->with('registrations', 'registrations.user')
+                ->whereHas('registrations', function ($q) use ($id, $user_ids) {
+                    $q->where('activity_id', $id)
+                        ->with('user')
+                        ->whereHas('user', function ($query) use ($user_ids) {
+                            $query->whereIn('id', $user_ids);
+                        });
+                })->get();
+
+            // $data = Registration::where('activity_id', $id)
+            //     ->with('user')
+            //     ->whereHas('user', function ($query) use ($user_ids) {
+            //         $query->whereIn('id', $user_ids);
+            //     })
+            //     ->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()

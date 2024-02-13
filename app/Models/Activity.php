@@ -35,17 +35,6 @@ class Activity extends Model
         return $this->hasMany(Registration::class);
     }
 
-    // public function attendees(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(User::class, 'registrations')
-    //         ->withPivot('name', 'email', 'contact_number', 'area', 'chapter', 'paid');
-    // }
-
-    // public function roles(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Role::class);
-    // }
-
     public function members(): BelongsTo
     {
         return $this->belongsTo(Member::class);

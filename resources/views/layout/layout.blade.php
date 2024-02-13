@@ -596,22 +596,25 @@
                                             <div class="hover:bg-green-100">
                                                 <li
                                                     class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
-                                                    <div class="d-flex justify-center align-items-center gap-2 pb-2">
-                                                        <a href="{{ $notification->data['url'] }}"
-                                                            data-id="{{ $notification->id }}"
-                                                            class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
-                                                            <h6 class="mb-1 text-truncate">
-                                                                @if ($notification->type === 'App\Notifications\TitheNotification')
-                                                                    <strong><span>₱ </span></strong>
-                                                                @endif
-                                                                <strong>{{ $notification->data['name'] }}</strong>
-                                                                <p class="mt-2 overflow-hidden overflow-ellipsis">
-                                                                    {{ $notification->data['message'] }}</p>
-                                                            </h6>
-                                                            <!-- You can access other notification data similarly -->
-                                                            <small
-                                                                class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
-                                                        </a>
+                                                    <div class="divide-y divide-blue-200 ">
+                                                        <div
+                                                            class="d-flex justify-center align-items-center gap-2 pb-2">
+                                                            <a href="{{ $notification->data['url'] }}"
+                                                                data-id="{{ $notification->id }}"
+                                                                class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
+                                                                <h6 class="mb-1 text-truncate">
+                                                                    @if ($notification->type === 'App\Notifications\TitheNotification')
+                                                                        <strong><span>₱ </span></strong>
+                                                                    @endif
+                                                                    <strong>{{ $notification->data['name'] }}</strong>
+                                                                    <p class="mt-2 overflow-hidden overflow-ellipsis">
+                                                                        {{ $notification->data['message'] }}</p>
+                                                                </h6>
+                                                                <!-- You can access other notification data similarly -->
+                                                                <small
+                                                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </li>
                                             </div>

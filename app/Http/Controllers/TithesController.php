@@ -95,69 +95,6 @@ class TithesController extends Controller
         }
 
         return redirect()->away('https://paymaya.me/GodesQDigital');
-
-        // $amount = $request->input('amount');
-        // $name = $request->input('name');
-        // $email = $request->input('email');
-        // $phone = $request->input('contact_number');
-
-        // $data = [
-        //     'data' => [
-        //         'attributes' => [
-        //             'line_items' => [
-        //                 [
-        //                     'currency' => 'PHP',
-        //                     'amount' => $amount * 100,
-        //                     'description' => 'Tithe',
-        //                     'name' => 'Contribution',
-        //                     'quantity' => 1
-        //                 ]
-        //             ],
-        //             'payment_method_types' => [
-        //                 'card',
-        //                 'gcash',
-        //                 'paymaya'
-        //             ],
-        //             'success_url' => 'http://127.0.0.1:8000/tithes/create',
-        //             'cancel_url' => 'http://127.0.0.1:8000/tithes/create',
-        //             'description' => 'Tithe'
-        //         ]
-        //     ]
-        // ];
-
-        // $response = Http::withHeaders([
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => 'Basic ' . base64_encode(env('PAYMONGO_SECRET_KEY') . ':'),
-        //     'accept' => 'application/json'
-        // ])
-        //     ->post('https://api.paymongo.com/v1/checkout_sessions', $data);
-
-        // if ($response->successful()) {
-        //     $decodedResponse = $response->json();
-        //     if (isset($decodedResponse['data'])) {
-        //         $transactionId = $decodedResponse['data']['id']; // Get the transaction ID from Paymongo
-        //         Session::put('session_id', $transactionId);
-
-        //         // Store the transaction details in your database or any storage mechanism
-        //         $transaction = Tithe::create([
-        //             'name' => $name,
-        //             'email' => $email,
-        //             'contact_number' => $phone,
-        //             'amount' => $amount,
-        //             'transaction_number' => $transactionId,
-        //             // Add more fields as needed
-        //         ]);
-
-        //         $admins = User::whereHas('roles', function ($query) {
-        //             $query->whereIn('id', [1, 2, 3, 4, 5]); // Use whereIn for multiple IDs
-        //         })->get();
-
-        //         Notification::send($admins, new TitheNotification($transaction, 'New tithe has been recorded!'));
-
-        //         return redirect()->to($decodedResponse['data']['attributes']['checkout_url']);
-        //     }
-        // }
-        // dd($response->body());
     }
 
 }

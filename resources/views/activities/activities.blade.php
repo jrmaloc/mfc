@@ -56,28 +56,30 @@
 
 @section('content')
     <!-- Attendee Modal -->
-    <div id="attendeesForm" class="card">
+    <div class="offcanvas offcanvas-end w-75" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
         <div class="flex justify-between px-12 py-6" style="background: #1b661b;">
-            <h2 class="fw-bold pt-4 text-white">
+            <h2 class="fw-bold pt-4 text-white" id="title">
                 Attendees
             </h2>
-            <a href="javascript:void(0);" onclick="hide()" class="btn text-white"><i class="fa fa-xmark fa-2x"></i></a>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="card-body">
-            <table class="table table-striped" id="attendeesTable">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Contact Number</th>
-                        <th>Area</th>
-                        <th>Chapter</th>
-                        <th>Status</th>
-                        <!-- Add other columns as needed -->
-                    </tr>
-                </thead>
-            </table>
+        <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+            <div class="table-responsive-lg text-nowrap">
+                <table class="table table-striped" id="attendeesTable">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Contact Number</th>
+                            <th>Area</th>
+                            <th>Chapter</th>
+                            <th>Status</th>
+                            <!-- Add other columns as needed -->
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -115,7 +117,7 @@
 @push('scripts')
     <script>
         const isVisible =
-            {{ auth()->user()->hasRole('Admin') ||auth()->user()->hasRole('Super Admin') ||auth()->user()->hasRole('Area Servant')? 'true': 'false' }};
+            {{ auth()->user()->hasRole('Admin') || auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Area Servant') ? 'true' : 'false' }};
 
         function loadTable() {
             let table = $('.data-table').DataTable({
@@ -170,35 +172,9 @@
             });
         }
 
-        function show() {
-            const showForm = document.getElementById('attendeesForm');
-            const overlay = document.querySelector('.overlay');
-            showForm.classList.add('active');
-            overlay.style.display = 'block'; // Show the overlay
-            showForm.style.zIndex = '1500'; // Set a high z-index for the form
-            document.body.style.overflowY = 'hidden';
-        }
-
-        function hide() {
-            const hideForm = document.getElementById('attendeesForm');
-            const overlay = document.querySelector('.overlay');
-            hideForm.classList.remove('active');
-            overlay.style.display = 'none'; // Hide the overlay
-            hideForm.style.zIndex = '1100'; // Set a default z-index for the form
-            document.body.classList.remove('no-scroll');
-            $('#attendeesTable').DataTable().destroy();
-        }
-
-        function remove(event) {
-            const addRoleForm = document.getElementById('attendeesForm');
-            if (addRoleForm.classList.contains('active') && !addRoleForm.contains(event.target)) {
-                hide();
-            }
-        }
-
-        document.addEventListener('mouseup', remove);
-
         document.addEventListener("DOMContentLoaded", function() {
+            var attendeesTable;
+
             $(document).on('click', '.attendees', function(e) {
                 e.preventDefault();
                 var id = $(this).data('id');
@@ -208,7 +184,15 @@
                     method: 'GET',
                     success: function(response) {
                         if (response && response.data) {
-                            populateAttendeesTable(response.data); // Assuming 'data' is the property containing the attendee information
+                            if (response.data.length > 0) {
+                                response.data.forEach(activity => {
+                                    $('#title').text(activity.title);
+                                    populateAttendeesTable(activity.registrations);
+                                });
+                            } else {
+                                populateAttendeesTable(response.data);
+                                $('#title').text('Attendees');
+                            }
                         } else {
                             console.error('Unexpected response format:', response);
                         }
@@ -236,68 +220,73 @@
                     };
                 });
 
-                $('#attendeesTable').DataTable({
-                    processing: true,
-                    serverSide: false,
-                    scrollX: 700,
-                    scrollY: 800,
-                    data: dataTableData,
-                    columns: [{
-                            data: 'number',
-                            name: 'No.',
-                            width: '5%',
-                        },
-                        {
-                            data: 'name',
-                            name: 'name',
-                            width: '25%'
-                        },
-                        {
-                            data: 'email',
-                            name: 'email',
-                            width: '25%'
-                        },
-                        {
-                            data: 'contact_number',
-                            name: 'contact_number',
-                            width: '15%',
-                        },
-                        {
-                            data: 'area',
-                            name: 'area',
-                            width: '20%',
-                        },
-                        {
-                            data: 'chapter',
-                            name: 'chapter',
-                            width: '20%',
-                        },
-                        {
-                            data: 'paid',
-                            name: 'status',
-                            width: '20%',
-                            render: function(data, type, row) {
-                                let badgeHTML = '';
 
-                                if (data === 'Paid') {
-                                    badgeHTML =
-                                        '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-success px-4 py-2">' +
-                                        data + '</span></div>';
-                                } else {
-                                    badgeHTML =
-                                        '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-warning px-4 py-2">' +
-                                        data + '</span></div>';
-                                }
-
-                                return badgeHTML;
+                if (!attendeesTable) {
+                    attendeesTable = $('#attendeesTable').DataTable({
+                        processing: true,
+                        serverSide: false,
+                        scrollX: 700,
+                        scrollY: 800,
+                        data: dataTableData,
+                        columns: [{
+                                data: 'number',
+                                name: 'No.',
+                                width: '5%',
                             },
-                        }
-                        // Define other columns as needed
-                    ],
-                    order: [
-                        [0, 'desc'] // Sort by the first column (index 0) in descending order
-                    ]
-                });
+                            {
+                                data: 'name',
+                                name: 'name',
+                                width: '25%'
+                            },
+                            {
+                                data: 'email',
+                                name: 'email',
+                                width: '25%'
+                            },
+                            {
+                                data: 'contact_number',
+                                name: 'contact_number',
+                                width: '15%',
+                            },
+                            {
+                                data: 'area',
+                                name: 'area',
+                                width: '20%',
+                            },
+                            {
+                                data: 'chapter',
+                                name: 'chapter',
+                                width: '20%',
+                            },
+                            {
+                                data: 'paid',
+                                name: 'status',
+                                width: '20%',
+                                render: function(data, type, row) {
+                                    let badgeHTML = '';
+
+                                    if (data === 'Paid') {
+                                        badgeHTML =
+                                            '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-success px-4 py-2">' +
+                                            data + '</span></div>';
+                                    } else {
+                                        badgeHTML =
+                                            '<div class= "flex justify-center"><span class="badge rounded-pill bg-label-warning px-4 py-2">' +
+                                            data + '</span></div>';
+                                    }
+
+                                    return badgeHTML;
+                                },
+                            }
+                            // Define other columns as needed
+                        ],
+                        order: [
+                            [0, 'desc'] // Sort by the first column (index 0) in descending order
+                        ]
+                    });
+                } else {
+                    attendeesTable.clear().rows.add(dataTableData).draw();
+                }
             }
         });
 
@@ -341,8 +330,6 @@
                 }
             })
         });
-
-
 
         loadTable();
     </script>
