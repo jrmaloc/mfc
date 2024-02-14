@@ -122,10 +122,10 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body mx-0 flex-grow-0">
-                    <form action="{{ route('registration.store', ['id' => $id]) }}" method="POST">
+                    <form action="{{ route('paymaya.checkout') }}" method="POST">
                         @csrf
-                        @method('POST')
                         <x-form.input-group class="row-cols-1">
+                            <input type="hidden" name="id" value="{{ $activity->id }}">
                             <x-form.input-field name="name" type="text" icon="account" placeholder="Juan A. Dela Cruz"
                                 value="{{ $user->name }}" error="{{ $errors->first('name') }}">
                                 Full Name
@@ -171,8 +171,6 @@
                 icon: 'success',
                 title: '{{ session('success') }}',
             });
-
-            window.location.href = "https://paymaya.me/GodesQDigital";
         </script>
     @elseif (session('error'))
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

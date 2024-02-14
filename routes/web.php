@@ -4,31 +4,34 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\AreaServantController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\ChapterServantController;
-use App\Http\Controllers\HouseholdServantController;
-use App\Http\Controllers\RegistrationController;
-use App\Http\Controllers\TithesController;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\AvatarController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ChapterServantController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CouplesController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HandmaidsController;
+use App\Http\Controllers\HouseholdServantController;
+use App\Http\Controllers\KidsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RolesController;
-use App\Http\Controllers\UnitServantController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AvatarController;
-use App\Http\Controllers\CouplesController;
-use App\Http\Controllers\HandmaidsController;
-use App\Http\Controllers\KidsController;
-use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\ServantsController;
 use App\Http\Controllers\SinglesController;
+use App\Http\Controllers\TithesController;
+use App\Http\Controllers\UnitServantController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\YouthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +42,7 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -51,7 +54,7 @@ Route::get('/', function () {
 Route::redirect('/login', '/');
 
 Auth::routes([
-    'verify' => true
+    'verify' => true,
 ]);
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
@@ -66,8 +69,6 @@ Route::get('/verify-email-message', function (Request $request) {
 })->middleware('guest')->name('verify');
 
 Route::post('password', [PasswordController::class, 'update'])->middleware('guest')->name('password.update');
-
-
 
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route::middleware(['auth'])->group(function () {
@@ -109,9 +110,6 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     });
 
-    Route::get('tithe', [PaymentsController::class, 'pay'])->name('payment.tithe');
-    Route::get('success', [PaymentsController::class, 'success'])->name('payment.success');
-
     Route::post('calendar', [CalendarController::class, 'store'])->name('calendar.store');
     Route::put('calendar/{id}', [CalendarController::class, 'update'])->name('calendar.update');
     Route::put('calendar/drag/{id}', [CalendarController::class, 'dragEvent'])->name('calendar.dragEvent');
@@ -146,6 +144,17 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::resource('/permissions', PermissionsController::class);
     Route::resource('/attendance', AttendanceController::class);
     Route::resource('/registration', RegistrationController::class);
+
+    Route::post('registration/payment', [RegistrationController::class, 'payment'])->name('registration.payment');
+
+    Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('paymaya.checkout');
+    Route::get('/paymaya/checkout/success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
+    Route::get('/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
+    Route::get('/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
+
+    Route::post('/webhook/paymaya', [WebhookController::class, 'handle'])->name('webhook.paymaya');
+
+
 });
 
 require __DIR__ . '/auth.php';
