@@ -38,9 +38,9 @@ class CheckoutController extends Controller
                                 'currency' => 'PHP',
                             ],
                             'redirectURL' => [
-                                'success' => 'payment/success',
-                                'failure' => 'payment/failed',
-                                'cancel' => 'payment/cancelled',
+                                'success' => route('checkout.success'),
+                                'failure' => route('checkout.failure'),
+                                'cancel' => route('checkout.cancel'),
                             ],
                             'requestReferenceNumber' => $requestReferenceNumber,
                         ],
