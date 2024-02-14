@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\EventRegistrationMail;
 use App\Models\Activity;
 use App\Models\Registration;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
@@ -51,7 +54,17 @@ class RegistrationController extends Controller
             $register = Registration::create($data);
 
             if ($register) {
-                // $recipient = User::where('user_id', $user->id)->first();
+
+                $recipient = $user->email;
+
+                $start = $activity->start_date;
+                $end = $activity->end_date;
+
+                $start_date = Carbon::parse($start)->toDayDateTimeString();
+                $end_date = Carbon::parse($end)->toDayDateTimeString();
+
+                Mail::to($recipient)->send(new EventRegistrationMail($activity, $start_date, $end_date));
+
                 return redirect()->route('calendar.show', [
                     'id' => $activity->id,
                 ])->with('success', 'Registration successful');
