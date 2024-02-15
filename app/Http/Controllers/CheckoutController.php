@@ -50,16 +50,6 @@ class CheckoutController extends Controller
                             'content-type' => 'application/json',
                         ],
                     ]);
-
-                    $responseData = json_decode($response->getBody()->getContents(), true);
-
-                    if (isset($responseData['redirectUrl'])) {
-                        $redirectURL = $responseData['redirectUrl'];
-                        // Process $redirectURL as needed
-                        return redirect($redirectURL);
-                    } else {
-                        // Handle the case where redirectURL is not present in the response
-                    }
                 } catch (\Exception $e) {
                     // Handle exceptions here
                     return $e->getMessage();
