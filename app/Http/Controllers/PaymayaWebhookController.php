@@ -10,6 +10,10 @@ class PaymayaWebhookController extends Controller
     public function handleWebhook(Request $request)
     {
         // Verify webhook signature to ensure it's from PayMaya
+        if ($request->header('X-PayMaya-Webhook-Signature') !== 'expected_signature') {
+            // Invalid signature
+            abort(403);
+        }
 
         // Retrieve and process webhook payload
         $payload = $request->all();
