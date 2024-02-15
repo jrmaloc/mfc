@@ -13,6 +13,6 @@ class WebhookController extends Controller
         $payload = $request->all();
 
         // Return a response (optional)
-        return response()->json(['message' => 'Webhook received successfully']);
+        return response()->json(['message' => 'Webhook received successfully', $payload]);
     }
 }
