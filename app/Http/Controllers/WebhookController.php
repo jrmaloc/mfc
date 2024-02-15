@@ -12,6 +12,8 @@ class WebhookController extends Controller
         // Parse and process the webhook payload
         $payload = $request->all();
 
+        dd('wewak');
+
         // Return a response (optional)
         return response()->json(['message' => 'Webhook received successfully', $payload]);
     }
