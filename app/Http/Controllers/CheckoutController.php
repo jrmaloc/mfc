@@ -70,11 +70,11 @@ class CheckoutController extends Controller
 
     public function checkoutSuccess(Request $request)
     {
-        $payload = $request->all();
+        // $payload = $request->all();
 
-        return response()->json(['message' => 'Webhook received successfully', $payload]);
+        // return response()->json(['message' => 'Webhook received successfully', $payload]);
         // Handle successful checkout
-        // return view('payments.success');
+        return view('payments.success');
     }
 
     public function checkoutFailure(Request $request)
