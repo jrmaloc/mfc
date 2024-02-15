@@ -13,6 +13,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        '/webhook/paymaya'
+        '/webhook/paymaya',
+        '/paymaya/checkout/success',
+        '/paymaya/checkout/failure',
+        '/paymaya/checkout/cancel'
     ];
 }
