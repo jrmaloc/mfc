@@ -31,8 +31,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,16 +145,13 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
     Route::post('registration/payment', [RegistrationController::class, 'payment'])->name('registration.payment');
 
-
-    Route::get('/paymaya/checkout/success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
-    Route::get('/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
-    Route::get('/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
-
-    Route::post('/webhook/paymaya', [WebhookController::class, 'handle'])->name('webhook.paymaya');
-
+    Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('paymaya.checkout');
 
 });
 
-Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('paymaya.checkout');
+Route::post('/webhook/paymaya', [WebhookController::class, 'handle'])->name('webhook.paymaya');
+Route::get('/paymaya/checkout/success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::get('/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
+Route::get('/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
 
 require __DIR__ . '/auth.php';

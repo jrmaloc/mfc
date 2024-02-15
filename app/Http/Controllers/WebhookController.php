@@ -14,10 +14,6 @@ class WebhookController extends Controller
 
         dd($payload);
 
-        // Handle the payload data as needed
-        // Example: Log the payload
-        \Log::info('PayMaya Webhook Payload:', $payload);
-
         // Return a response (optional)
         return response()->json(['message' => 'Webhook received successfully']);
     }
