@@ -31,7 +31,7 @@ class CheckoutController extends Controller
                 $client = new Client();
 
                 try {
-                    $response = $client->request('POST', 'https://pg-sandbox.paymaya.com/checkout/v1/checkouts', [
+                    $response = $client->request('POST', 'https://pg.paymaya.com/checkout/v1/checkouts', [
                         'json' => [
                             'totalAmount' => [
                                 'value' => 1,
@@ -46,7 +46,7 @@ class CheckoutController extends Controller
                         ],
                         'headers' => [
                             'accept' => 'application/json',
-                            'authorization' => 'Basic cGstWjBPU3pMdkljT0kyVUl2RGhkVEdWVmZSU1NlaUdTdG5jZXF3VUU3bjBBaDpzay1YOHFvbFlqeTYya0l6RWJyMFFSSzFoNGI0S0RWSGFOY3dNWWszOWpJblNs',
+                            'authorization' => 'Basic cGstNDc2VHh6MGxrbWlQeVAxbWdDM0dzczdKakMxdEl5WjYxWGx1b29vdjBFRzpzay1zay10NGwwVUpmUmVtWDQwVkVZRTROdlAwS01MRzB3YkF3a1lrUWhoSVN4Smx4',
                             'content-type' => 'application/json',
                         ],
                     ]);
