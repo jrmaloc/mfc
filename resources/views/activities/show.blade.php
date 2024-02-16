@@ -122,13 +122,17 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body mx-0 flex-grow-0">
-                    <form action="{{ route('paymaya.checkout') }}" method="POST">
+                    <form action="{{ route('registration.store') }}" method="POST">
                         @csrf
                         <x-form.input-group class="row-cols-1">
                             <input type="hidden" name="id" value="{{ $activity->id }}">
                             <x-form.input-field name="name" type="text" icon="account" placeholder="Juan A. Dela Cruz"
                                 value="{{ $user->name }}" error="{{ $errors->first('name') }}">
                                 Full Name
+                            </x-form.input-field>
+                            <x-form.input-field name="email" type="email" icon="email" placeholder="juandelacruz@sample.com"
+                                value="{{ $user->email }}" error="{{ $errors->first('email') }}">
+                                Email Address
                             </x-form.input-field>
                             <x-form.input-field name="contact_number" type="tel" icon="phone"
                                 placeholder="09123456789" value="{{ $user->contact_number }}"

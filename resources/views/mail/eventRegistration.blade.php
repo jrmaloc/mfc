@@ -329,25 +329,34 @@
                 <div class="content">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader ">This is preheader text. Some clients will show this text as a
-                        preview.</span>
+                    <!-- <span class="preheader ">This is preheader text. Some clients will show this text as a
+                        preview.</span> -->
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
 
                         <!-- START MAIN CONTENT AREA -->
                         <tr>
                             <td class="wrapper">
-                                <p style="font-weight: 700; color: rgb(71 85 105); font-size: 1.5rem; line-height: 2rem; display: flex; justify-content: center; margin: 1.25rem;">
+                                <p
+                                    style="font-weight: 700;
+                                    color: rgb(71 85 105);
+                                    font-size: 1.5rem;
+                                    line-height: 2rem;
+                                    display: flex;
+                                    justify-content: center;
+                                    margin-bottom: 1.25rem;">
                                     MFC Portal
                                 </p>
                                 <p style="margin-bottom: 1.25rem;">Hi there,</p>
                                 <p>Thank you for registering to our event. Here are some details that you need to
                                     remember:</p>
-                                <div style="background: rgb(50, 65, 84); padding:1rem; border-radius: 0.25rem; margin: 0.5rem 0; color: rgb(225, 232, 240);">
+                                <div
+                                    style="background: rgb(50, 65, 84); padding:1rem; border-radius: 0.25rem; margin: 0.5rem 0; color: rgb(225, 232, 240);">
                                     <strong>What: </strong><span>{{ $data->title }}</span><br>
 
                                     <strong>Where: </strong><span>{{ $data->location }}</span><br>
 
-                                    <strong>When: </strong><span>{{ $start }}</span><strong> to </strong><span>{{ $end }}</span><br>
+                                    <strong>When: </strong><span>{{ $start }}</span><strong> to
+                                    </strong><span>{{ $end }}</span><br>
                                 </div>
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0"
                                     class="btn btn-primary" style="margin-top: 2rem;">
@@ -359,7 +368,8 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <a href="#" target="_blank">See
+                                                                <a href="{{ route('calendar.show', ['id' => $data->id]) }}"
+                                                                    target="_blank">See
                                                                     More!</a>
                                                             </td>
                                                         </tr>
@@ -369,9 +379,19 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <p style="margin-top: 0.5rem;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
-                                    ducimus fuga reiciendis distinctio at optio reprehenderit voluptas sed dolor sint.
-                                    In dignissimos minus quasi possimus!</p>
+
+                                <p style="margin-top: 0.5rem;">
+                                    Please make sure to settle payments for your convenience. You can contact your
+                                    household servant for the confirmation of your payment.
+                                </p>
+                                <p style="margin-top: 0.5rem;">
+                                    If your payment was cancelled, or problem in your payment, You can contact <a
+                                        href="#" style="font-weight: 800; color:#0c911e;">us!</a>
+                                </p>
+                                <p style="margin-top: 0.5rem;">
+                                    or you can continue to pay <a href="https://paymaya.me/GodesQDigital"
+                                        style="color:#0c911e;">here.</a>
+                                </p>
                                 <p style="margin-top: 2.5rem;">See you there, Kapatid!</p>
                             </td>
                         </tr>

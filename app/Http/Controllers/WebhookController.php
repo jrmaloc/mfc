@@ -12,10 +12,10 @@ class WebhookController extends Controller
     public function handle(Request $request)
     {
         // // Parse and process the webhook payload
-        // $payload = $request->all();
+        $payload = $request->all();
 
         // // Return a response (optional)
-        // return response()->json(['message' => 'Webhook received successfully', $payload]);
+        return response()->json(['message' => 'Webhook received successfully', $payload]);
 
         // return redirect(route('checkout.success'));
     }
