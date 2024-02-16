@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Aceraven777\PayMaya\API\Checkout;
+use Aceraven777\PayMaya\PayMayaSDK;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Registration;
@@ -38,9 +40,9 @@ class CheckoutController extends Controller
                                 'currency' => 'PHP',
                             ],
                             'redirectURL' => [
-                                'success' => route('checkout.success'),
-                                'failure' => route('checkout.failure'),
-                                'cancel' => route('checkout.cancel'),
+                                'success' => route('checkout.success', ['id' => $requestReferenceNumber]),
+                                'failure' => route('checkout.failure', ['id' => $requestReferenceNumber]),
+                                'cancel' => route('checkout.cancel', ['id' => $requestReferenceNumber]),
                             ],
                             'requestReferenceNumber' => $requestReferenceNumber,
                         ],
@@ -72,11 +74,7 @@ class CheckoutController extends Controller
 
     public function checkoutSuccess(Request $request)
     {
-        $payload = $request->all();
-
-
-        // return response()->json(['message' => 'Webhook received successfully', $payload]);
-        // Handle successful checkout
+        dd($request);
         return view('payments.success');
     }
 
