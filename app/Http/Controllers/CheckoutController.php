@@ -85,13 +85,15 @@ class CheckoutController extends Controller
 
             $webhookData = json_decode($response->getBody(), true);
 
-            if($webhookData){
-                return redirect()->to($webhookData->callbackUrl);
+            if (isset($webhookData['callbackUrl'])) {
+                $callbackUrl = $webhookData['callbackUrl'];
+                // Process $redirectURL as needed
+                return redirect($callbackUrl);
+            } else {
+                // Process $webhookData as needed
+                // For example, you can return it to a view or perform further operations
+                return response()->json($webhookData);
             }
-
-            // Process $webhookData as needed
-            // For example, you can return it to a view or perform further operations
-            return response()->json($webhookData);
         } catch (\Exception $e) {
             // Handle exceptions
             // For example, log the error message or return an error response
