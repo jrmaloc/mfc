@@ -86,7 +86,7 @@ class CheckoutController extends Controller
             $webhookData = json_decode($response->getBody(), true);
 
             if($webhookData){
-                return view('payments.success');
+                return redirect()->to($webhookData->callbackUrl);
             }
 
             // Process $webhookData as needed
