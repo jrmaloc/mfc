@@ -79,7 +79,7 @@ class RegistrationController extends Controller
                     $response = $client->request('POST', 'https://pg.paymaya.com/checkout/v1/checkouts', [
                         'json' => [
                             'totalAmount' => [
-                                'value' => $reg_fee,
+                                'value' => 1,
                                 'currency' => 'PHP',
                             ],
                             'redirectURL' => [
