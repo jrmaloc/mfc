@@ -17,6 +17,8 @@ class WebhookController extends Controller
         // // Return a response (optional)
         // return response()->json(['message' => 'Webhook received successfully', $payload]);
 
-        return redirect(route('checkout.success'));
+        // return redirect(route('checkout.success'));
+
+        return view('payments.authorized');
     }
 }
