@@ -72,12 +72,34 @@ class CheckoutController extends Controller
 
     public function checkoutSuccess(Request $request)
     {
-        $payload = $request->all();
+        // $payload = $request->all();
+        $client = new Client();
 
+        try {
+            $response = $client->request('GET', 'https://pg.paymaya.com/payments/v1/webhooks/93bab374-34f4-4a0f-b49b-e8824fd67001', [
+                'headers' => [
+                    'accept' => 'application/json',
+                    'authorization' => 'Basic c2stdDRsMFVKZlJlbVg0MFZFWUU0TnZQMEtNTEcwd2JBd2tZa1FoaElTeEpseDpway00NzZUeHowbGttaVB5UDFtZ0MzR3NzN0pqQzF0SXlaNjFYbHVvb292MEVH',
+                ],
+            ]);
+
+            $webhookData = json_decode($response->getBody(), true);
+
+            if($webhookData){
+                return view('payments.success');
+            }
+
+            // Process $webhookData as needed
+            // For example, you can return it to a view or perform further operations
+            return response()->json($webhookData);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            // For example, log the error message or return an error response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
 
         // return response()->json(['message' => 'Webhook received successfully', $payload]);
         // Handle successful checkout
-        return view('payments.success');
     }
 
     public function checkoutFailure(Request $request)
