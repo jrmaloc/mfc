@@ -10,10 +10,13 @@ use Aceraven777\PayMaya\Model\Checkout\ItemAmountDetails;
 use Aceraven777\PayMaya\PayMayaSDK;
 use App\Http\Controllers\Controller;
 use App\Libraries\PayMaya\User as PayMayaUser;
+use App\Mail\EventRegistration\Success;
 use App\Models\Activity;
 use App\Models\Registration;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -44,7 +47,6 @@ class CheckoutController extends Controller
         $activity = Activity::find($request->id);
         $user = User::where('email', $request->email)->first();
         $reg_fee = $request->reg_fee;
-
         $prefix = 'payment_';
         $requestReferenceNumber = uniqid($prefix);
 
@@ -71,7 +73,7 @@ class CheckoutController extends Controller
                 $shopCustomization->iconUrl = asset('favicon-32x32.png');
                 $shopCustomization->appleTouchIconUrl = asset('apple-touch-icon.png');
                 $shopCustomization->customTitle = 'PayMaya Payment Gateway';
-                $shopCustomization->colorScheme = '#f3dc2a';
+                $shopCustomization->colorScheme = '#0093f5ff';
 
                 $shopCustomization->set();
 
@@ -115,6 +117,7 @@ class CheckoutController extends Controller
 
                 if ($itemCheckout->execute() === false) {
                     $error = $itemCheckout::getError();
+                    dd($error);
                     return redirect()->back()->withErrors(['message' => $error]);
                 }
 
@@ -169,8 +172,10 @@ class CheckoutController extends Controller
 
             $user_id = $user->id;
             $activity_id = $activity->id;
+            $start_date = $activity->start_date;
+            $end_date = $activity->end_date;
 
-            Registration::create([
+            $registered = Registration::create([
                 'activity_id' => $activity_id,
                 'user_id' => $user_id,
                 'ref_number' => $ref_number,
@@ -178,16 +183,21 @@ class CheckoutController extends Controller
                 'payment' => 'Paid',
             ]);
 
+            if ($registered) {
+                $start = Carbon::parse($start_date)->format('F d, Y \\@ h:i A');
+                $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
+                Mail::to($email)->send(new Success($activity, $start, $end));
+            }
+
         }
 
         return view('payments.success', [
-            'id' => $activity_id
+            'id' => $activity_id,
         ]);
     }
 
     public function checkoutFailure(Request $request)
     {
-        $sessions = $request->session()->all();
         $data = $request->session()->get('data');
 
         $transaction_id = $data['id'];
@@ -212,19 +222,18 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['message' => $error]);
         }
 
-        return view('payments.failed');
+        $title = $checkout['items']['0']['name'];
+
+        $activity = Activity::where('title', $title)->first();
+
+        return view('payments.failed', [
+            'id' => $activity->id,
+        ]);
     }
 
     public function checkoutCancel(Request $request)
     {
-        $sessions = $request->session()->all();
         $data = $request->session()->get('data');
-
-        $buyer = $data['buyer'];
-        $contact = $buyer['contact'];
-        $email = $contact['email'];
-
-        dd($email);
 
         $transaction_id = $data['id'];
 

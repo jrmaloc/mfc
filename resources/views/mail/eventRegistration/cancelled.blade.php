@@ -355,7 +355,7 @@
 
                                     <strong>Where: </strong><span>{{ $data->location }}</span><br>
 
-                                    <strong>When: </strong><span>{{ $start }}</span><strong> to
+                                    <strong>When: </strong><span>{{ $start }}</span><strong> to <br>
                                     </strong><span>{{ $end }}</span><br>
                                 </div>
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0"

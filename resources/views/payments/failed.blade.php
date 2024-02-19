@@ -11,7 +11,7 @@
     }
 
     h1 {
-        color: #b0a94b;
+        color: #4b83b0;
         font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
         font-weight: 900;
         font-size: 40px;
@@ -19,14 +19,14 @@
     }
 
     p {
-        color: #404F5E;
+        color: #40455e;
         font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
         font-size: 20px;
         margin: 0;
     }
 
     i {
-        color: #d4c70e;
+        color: #0e53d4;
         font-size: 100px;
         line-height: 200px;
         margin-left: -15px;
@@ -45,12 +45,19 @@
         color: #30772a;
 
     }
+
+    .checkmark {
+        color: #a3aef0;
+        font-size: 180px;
+        line-height: 200px;
+        margin-left: -15px;
+    }
 </style>
 
 <body>
     <div class="card">
-        <div style="border-radius:200px; height:200px; width:200px; background: #fafaf5; margin:0 auto;">
-            <i class="checkmark">❕</i>
+        <div style="border-radius:200px; height:200px; width:200px; background: #f5f7fa; margin:0 auto;">
+            <i class="checkmark">!</i>
         </div>
         <h1>Failed</h1>
         <p>Payment Failed!<br />Please check your balance and <a href="{{ route('calendar.list') }}" class="try-again">try again.</a></p>
