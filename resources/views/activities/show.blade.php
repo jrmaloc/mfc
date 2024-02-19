@@ -122,7 +122,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="offcanvas-body mx-0 flex-grow-0">
-                    <form action="{{ route('registration.store') }}" method="POST">
+                    <form action="{{ route('initiate.checkout') }}" method="POST">
                         @csrf
                         <x-form.input-group class="row-cols-1">
                             <input type="hidden" name="id" value="{{ $activity->id }}">

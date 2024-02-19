@@ -53,7 +53,7 @@
             <i class="checkmark">✖</i>
         </div>
         <h1>Cancelled</h1>
-        <p>Payment Cancelled!<br /><a href="{{ route('calendar.list') }}" class="try-again">Go Back!</a></p>
+        <p>Payment Cancelled!<br /><a href="{{ route('calendar.list') }}" class="try-again">Go Back to Merchant!</a></p>
     </div>
 </body>
 

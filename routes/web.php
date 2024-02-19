@@ -145,7 +145,8 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
     Route::post('registration/payment', [RegistrationController::class, 'payment'])->name('registration.payment');
 
-    Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('paymaya.checkout');
+    Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('initiate.checkout');
+    Route::post('/paymaya/customize', [CheckoutController::class, 'customizeMerchantPage'])->name('customize.checkout');
 
 });
 

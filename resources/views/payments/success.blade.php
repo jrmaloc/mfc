@@ -48,7 +48,7 @@
             <i class="checkmark">✓</i>
         </div>
         <h1>Success</h1>
-        <p>We received your purchase request, Thank you<br /> <a href="{{ route('calendar.list') }}">Go Back</a></p>
+        <p>We received your purchase request, Thank you<br /> <a href="{{ route('calendar.show', ['id' => $id]) }}">Go Back</a></p>
     </div>
 </body>
 

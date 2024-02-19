@@ -33,5 +33,5 @@ return [
     | live transactions.
     |
     */
-    'environment' => env('PAYMAYA_ENVIRONMENT', 'SANDBOX'),
+    'environment' => env('PAYMAYA_ENVIRONMENT', 'PRODUCTION'),
 ];

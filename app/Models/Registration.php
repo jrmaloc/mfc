@@ -16,7 +16,8 @@ class Registration extends Model
         'user_id',
         'activity_id',
         'ref_number',
-        'paid',
+        'receipt_number',
+        'payment',
     ];
 
     public function activity(): BelongsTo
