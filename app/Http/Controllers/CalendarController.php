@@ -159,6 +159,11 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->selectedValues == ['yes']){
+            dd('yes');
+        }
+
+        dd('no');
         $data = $request->validate([
             'title' => 'required|unique:activities',
             'description' => 'required',

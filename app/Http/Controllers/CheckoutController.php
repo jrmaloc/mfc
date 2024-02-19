@@ -178,18 +178,11 @@ class CheckoutController extends Controller
         }
 
         $payment_status = $checkout['paymentStatus'];
-        $title = $checkout['items']['0']['name'];
 
         if ($payment_status === "PAYMENT_SUCCESS") {
-            $ref_number = $checkout['requestReferenceNumber'];
             $receipt_number = $checkout['receiptNumber'];
-            $buyer = $data['buyer'];
-            $contact = $buyer['contact'];
-            $email = $contact['email'];
+            $email = $data['buyer']['contact']['email'];
 
-            $user = User::where('email', $email)->first();
-
-            $user_id = $user->id;
             $activity_id = $activity->id;
             $start_date = $activity->start_date;
             $end_date = $activity->end_date;
@@ -204,7 +197,6 @@ class CheckoutController extends Controller
                 $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
                 Mail::to($email)->send(new Success($activity, $start, $end));
             }
-
         }
 
         return view('payments.success', [
