@@ -152,7 +152,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
 Route::post('/webhook/paymaya', [WebhookController::class, 'handle'])->name('webhook.paymaya');
 Route::post('/webhook/create', [RegistrationController::class, 'setupWebhooks'])->name('webhook.create');
-Route::match(['get', 'post'], '/paymaya/checkout/success', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::match(['get', 'post'], '/paymaya/checkout/success/{id}', [CheckoutController::class, 'checkoutSuccess'])->name('checkout.success');
 Route::match(['get', 'post'], '/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
 Route::match(['get', 'post'], '/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
 

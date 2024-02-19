@@ -52,87 +52,107 @@ class CheckoutController extends Controller
 
         if ($user) {
             $existingRegistration = Registration::where('activity_id', $request->id)
-                ->where('user_id', $user->id)
+                ->where('user_id', $user->id)->where('payment_status', 'Paid')
                 ->first();
 
             if ($existingRegistration) {
                 return back()->with('error', 'User is already registered for this activity');
             } else {
-                // User is not already registered for this activity
-                // Initialize PayMaya SDK for checkout
-                PayMayaSDK::getInstance()->initCheckout(
-                    config('paymaya.public_key'),
-                    config('paymaya.secret_key'),
-                    app()->environment('production') ? 'PRODUCTION' : 'SANDBOX'
-                );
 
-                $shopCustomization = new Customization();
-                $shopCustomization->get();
+                $pending = Registration::where('activity_id', $request->id)
+                    ->where('user_id', $user->id)->where('payment_status', 'Pending')
+                    ->first();
+                $registered = '';
+                if (!$pending) {
+                    $registered = Registration::create([
+                        'activity_id' => $activity->id,
+                        'user_id' => $user->id,
+                        'ref_number' => $requestReferenceNumber,
+                        'payment' => 'Pending',
+                    ]);
+                } else {
 
-                $shopCustomization->logoUrl = asset('favicon-96x96.png');
-                $shopCustomization->iconUrl = asset('favicon-32x32.png');
-                $shopCustomization->appleTouchIconUrl = asset('apple-touch-icon.png');
-                $shopCustomization->customTitle = 'PayMaya Payment Gateway';
-                $shopCustomization->colorScheme = '#0093f5ff';
+                    $authorized = true;
+                    // Initialize PayMaya SDK for checkout
+                    PayMayaSDK::getInstance()->initCheckout(
+                        config('paymaya.public_key'),
+                        config('paymaya.secret_key'),
+                        app()->environment('production') ? 'PRODUCTION' : 'SANDBOX'
+                    );
 
-                $shopCustomization->set();
+                    $shopCustomization = new Customization();
+                    $shopCustomization->get();
 
-                $item_name = $activity->title;
-                $total_price = $reg_fee;
+                    $shopCustomization->logoUrl = asset('favicon-96x96.png');
+                    $shopCustomization->iconUrl = asset('favicon-32x32.png');
+                    $shopCustomization->appleTouchIconUrl = asset('apple-touch-icon.png');
+                    $shopCustomization->customTitle = 'PayMaya Payment Gateway';
+                    $shopCustomization->colorScheme = '#0093f5ff';
 
-                $user_phone = $user->contact_number;
-                $user_email = $user->email;
+                    $shopCustomization->set();
 
-                $reference_number = $requestReferenceNumber;
+                    $item_name = $activity->title;
+                    $total_price = $reg_fee;
 
-                // Item
-                $itemAmountDetails = new ItemAmountDetails();
-                $itemAmountDetails->tax = "0.00";
-                $itemAmountDetails->subtotal = number_format($total_price, 2, '.', '');
-                $itemAmount = new ItemAmount();
-                $itemAmount->currency = "PHP";
-                $itemAmount->value = $itemAmountDetails->subtotal;
-                $itemAmount->details = $itemAmountDetails;
-                $item = new Item();
-                $item->name = $item_name;
-                $item->amount = $itemAmount;
-                $item->totalAmount = $itemAmount;
+                    $user_phone = $user->contact_number;
+                    $user_email = $user->email;
 
-                // Checkout
-                $itemCheckout = new Checkout();
+                    $reference_number = $requestReferenceNumber;
 
-                $user = new PayMayaUser();
-                $user->contact->phone = $user_phone;
-                $user->contact->email = $user_email;
+                    // Item
+                    $itemAmountDetails = new ItemAmountDetails();
+                    $itemAmountDetails->tax = "0.00";
+                    $itemAmountDetails->subtotal = number_format($total_price, 2, '.', '');
+                    $itemAmount = new ItemAmount();
+                    $itemAmount->currency = "PHP";
+                    $itemAmount->value = $itemAmountDetails->subtotal;
+                    $itemAmount->details = $itemAmountDetails;
+                    $item = new Item();
+                    $item->name = $item_name;
+                    $item->amount = $itemAmount;
+                    $item->totalAmount = $itemAmount;
 
-                $itemCheckout->buyer = $user->buyerInfo();
-                $itemCheckout->items = array($item);
-                $itemCheckout->totalAmount = $itemAmount;
-                $itemCheckout->requestReferenceNumber = $reference_number;
-                $itemCheckout->redirectUrl = array(
-                    "success" => route('checkout.success'),
-                    "failure" => route('checkout.failure'),
-                    "cancel" => url('/paymaya/checkout/cancel'),
-                );
+                    // Checkout
+                    $itemCheckout = new Checkout();
 
-                if ($itemCheckout->execute() === false) {
-                    $error = $itemCheckout::getError();
-                    dd($error);
-                    return redirect()->back()->withErrors(['message' => $error]);
+                    $user = new PayMayaUser();
+                    $user->contact->phone = $user_phone;
+                    $user->contact->email = $user_email;
+
+                    $itemCheckout->buyer = $user->buyerInfo();
+                    $itemCheckout->items = array($item);
+                    $itemCheckout->totalAmount = $itemAmount;
+                    $itemCheckout->requestReferenceNumber = $reference_number;
+                    $itemCheckout->redirectUrl = array(
+                        "success" => route('checkout.success', ['id' => $activity->id]),
+                        "failure" => route('checkout.failure'),
+                        "cancel" => url('/paymaya/checkout/cancel'),
+                    );
+
+                    if ($itemCheckout->execute() === false) {
+                        $error = $itemCheckout::getError();
+                        return back()->with('error', ['message' => $error]);
+                    }
+
+                    if ($itemCheckout->retrieve() === false) {
+                        $error = $itemCheckout::getError();
+                        // return redirect()->back()->withErrors(['message' => $error]);
+                        return back()->with('error', ['message' => $error]);
+                    }
                 }
 
-                if ($itemCheckout->retrieve() === false) {
-                    $error = $itemCheckout::getError();
-                    return redirect()->back()->withErrors(['message' => $error]);
+                if ($authorized) {
+                    return redirect()->to($itemCheckout->url)->with('data', $itemCheckout->retrieve());
+                } else {
+                    return back()->with('error', 'Registration Failed');
                 }
-
-                return redirect()->to($itemCheckout->url)->with('data', $itemCheckout->retrieve());
             }
         }
     }
 
-    public function checkoutSuccess(Request $request)
+    public function checkoutSuccess(Request $request, string $id)
     {
+        $activity = Activity::find($id);
         $data = $request->session()->get('data');
 
         $transaction_id = $data['id'];
@@ -168,19 +188,15 @@ class CheckoutController extends Controller
             $email = $contact['email'];
 
             $user = User::where('email', $email)->first();
-            $activity = Activity::where('title', $title)->first();
 
             $user_id = $user->id;
             $activity_id = $activity->id;
             $start_date = $activity->start_date;
             $end_date = $activity->end_date;
 
-            $registered = Registration::create([
-                'activity_id' => $activity_id,
-                'user_id' => $user_id,
-                'ref_number' => $ref_number,
+            $registered = $activity->update([
                 'receipt_number' => $receipt_number,
-                'payment' => 'Paid',
+                'payment_status' => 'Paid',
             ]);
 
             if ($registered) {
@@ -257,6 +273,11 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['message' => $error]);
         }
 
-        return view('payments.cancelled');
+        $title = $checkout['items']['0']['name'];
+        $activity = Activity::where('title', $title)->first();
+
+        return view('payments.cancelled', [
+            'id' => $activity->id,
+        ]);
     }
 }

@@ -144,12 +144,12 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
+                                <th>Actions</th>
                                 <th>Title</th>
                                 <th class="description-column">Description</th>
                                 <th>Location</th>
                                 <th>Event Start</th>
                                 <th>Event End</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                     </table>
@@ -180,6 +180,12 @@
                         name: 'id'
                     },
                     {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: false,
+                        visible: isVisible,
+                    },
+                    {
                         data: 'title',
                         name: 'title',
                     },
@@ -198,12 +204,6 @@
                     {
                         data: 'end_date',
                         name: 'end_date'
-                    },
-                    {
-                        data: 'actions',
-                        name: 'actions',
-                        orderable: false,
-                        visible: isVisible,
                     },
                 ],
                 columnDefs: [{
