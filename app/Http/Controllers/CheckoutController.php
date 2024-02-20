@@ -44,6 +44,7 @@ class CheckoutController extends Controller
 
     public function initiateCheckout(Request $request)
     {
+
         $activity = Activity::find($request->id);
         $user = User::where('email', $request->email)->first();
         $reg_fee = $request->reg_fee;
@@ -58,7 +59,6 @@ class CheckoutController extends Controller
             if ($existingRegistration) {
                 return back()->with('error', 'User is already registered for this activity');
             } else {
-
                 $pending = Registration::where('activity_id', $request->id)
                     ->where('user_id', $user->id)->where('payment_status', 'Pending')
                     ->first();
@@ -140,14 +140,10 @@ class CheckoutController extends Controller
                         return back()->with('error', ['message' => $error]);
                     }
                 }
-
-                if ($authorized) {
-                    return redirect()->to($itemCheckout->url)->with('data', $itemCheckout->retrieve());
-                } else {
-                    return back()->with('error', 'Registration Failed');
-                }
+                return redirect()->to($itemCheckout->url)->with('data', $itemCheckout->retrieve());
             }
         }
+        return back()->with('error', 'Registration Failed');
     }
 
     public function checkoutSuccess(Request $request, string $id)
@@ -187,15 +183,22 @@ class CheckoutController extends Controller
             $start_date = $activity->start_date;
             $end_date = $activity->end_date;
 
-            $registered = $activity->update([
+            $user = User::where('email', $email)->first();
+            $registrations = Registration::where('activity_id', $id)->where('user_id', $user->id)->get();
+
+            $data = [
                 'receipt_number' => $receipt_number,
                 'payment_status' => 'Paid',
-            ]);
+            ];
 
-            if ($registered) {
-                $start = Carbon::parse($start_date)->format('F d, Y \\@ h:i A');
-                $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
-                Mail::to($email)->send(new Success($activity, $start, $end));
+            foreach ($registrations as $registration) {
+                $registered = $registration->update($data);
+
+                if ($registered) {
+                    $start = Carbon::parse($start_date)->format('F d, Y \\@ h:i A');
+                    $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
+                    Mail::to($email)->send(new Success($activity, $start, $end));
+                }
             }
         }
 
