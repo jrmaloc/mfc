@@ -119,12 +119,12 @@ class CalendarController extends Controller
                 ];
 
                 // Additional properties for specific activities
-                if ($activity->title == 'Liturgical Bible Study') {
+                if ($activity->recurring == 'Yes') {
                     $start = '18:45:00';
                     $startISO8601 = date('Y-m-d\TH:i:s', strtotime($activity->start_date)) . $start;
 
-                    $date = Carbon::parse($activity->start_date);
-                    $dayOfWeek = $date->dayOfWeek;
+                    // $date = Carbon::parse($activity->start_date);
+                    // $dayOfWeek = $date->dayOfWeek;
                     $event = [
                         'user_id' => $userID,
                         'id' => $activity->id,
@@ -133,10 +133,8 @@ class CalendarController extends Controller
                         'location' => $activity->location,
                         'start' => $startISO8601,
                         'end' => $startISO8601,
-                        'groupId' => 'blueEvents',
-                        // 'selectable' => false,
-                        // 'editable' => false,
-                        'daysOfWeek' => [$dayOfWeek],
+                        'groupId' => $activity->title,
+                        'daysOfWeek' => [$activity->daysOfWeek],
                     ];
                 }
 
@@ -159,11 +157,47 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->selectedValues == ['yes']){
-            dd('yes');
+        if ($request->selectedValues[0] == 'yes') {
+            $data = $request->validate([
+                'title' => 'required|unique:activities',
+                'description' => 'required',
+                'location' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/',
+                'selectedValues' => 'required',
+            ]);
+
+            $startDate = $data['start_date'];
+            $endDate = $data['end_date'];
+            $recurring = ['recurring' => 'Yes'];
+            $roles = array_slice($data['selectedValues'], 1, 5);
+            $role_ids = json_encode($roles);
+
+            $date = Carbon::parse($startDate);
+            $daysOfWeek = $date->dayOfWeek;
+            $dow = ['daysOfWeek' => $daysOfWeek];
+
+            $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
+            $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
+
+            $activity = Activity::create(array_merge($data, $recurring, $dow, [
+                'start_date' => $formatStartDate,
+                'end_date' => $formatEndDate,
+                'role_ids' => $role_ids,
+            ]));
+
+            $admins = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('id', $roles);
+            })->get();
+
+            if ($activity && $admins) {
+                Notification::send($admins, new EventNotification($activity, 'New Recurring Event has been created!'));
+            }
+
+            return response()->json($activity);
         }
 
-        dd('no');
         $data = $request->validate([
             'title' => 'required|unique:activities',
             'description' => 'required',
@@ -171,25 +205,30 @@ class CalendarController extends Controller
             'start_date' => 'required',
             'end_date' => 'required',
             'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/',
+            'selectedValues' => 'required',
         ]);
 
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
+        $roles = array_slice($data['selectedValues'], 0, 5);
+        $role_ids = json_encode($roles);
 
         $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
         $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
 
-        $role_ids = ['role_ids' => '[1, 2, 3, 4, 5, 6, 7]'];
-
-        $activity = Activity::create(array_merge($role_ids, $data, ['start_date' => $formatStartDate, 'end_date' => $formatEndDate]));
-
-        $roles = Role::all();
+        $activity = Activity::create(array_merge($data, [
+            'start_date' => $formatStartDate,
+            'end_date' => $formatEndDate,
+            'role_ids' => $role_ids,
+        ]));
 
         $admins = User::whereHas('roles', function ($query) use ($roles) {
-            $query->whereIn('id', $roles->pluck('id'));
+            $query->whereIn('id', $roles);
         })->get();
 
-        Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
+        if ($activity && $admins) {
+            Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
+        }
 
         return response()->json($activity);
     }

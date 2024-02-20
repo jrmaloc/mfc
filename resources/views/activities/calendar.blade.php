@@ -171,6 +171,51 @@
                                                 class="text-danger">*</span></span></p>
                                 </div>
                             </div>
+
+                            <label for="">Show To:<span class="text-danger">*</span></label>
+
+                            <div class="mb-4">
+                                <div class="col-xs-12">
+                                    <div class="flex">
+                                        <input type="checkbox" class="activity-checkbox" value="3" id="areaCheckbox"
+                                            name="">
+                                        <label for="areaCheckbox"></label>
+                                        <p class="mb-1 ml-1 flex align-items-center"><span>Area Servants</span></p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="flex">
+                                        <input type="checkbox" class="activity-checkbox" value="4" id="chapterCheckbox"
+                                            name="">
+                                        <label for="chapterCheckbox"></label>
+                                        <p class="mb-1 ml-1 flex align-items-center"><span>Chapter Servants</span></p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="flex">
+                                        <input type="checkbox" class="activity-checkbox" value="5" id="unitCheckbox"
+                                            name="">
+                                        <label for="unitCheckbox"></label>
+                                        <p class="mb-1 ml-1 flex align-items-center"><span>Unit Servants</span></p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="flex">
+                                        <input type="checkbox" class="activity-checkbox" value="6"
+                                            id="householdCheckbox" name="">
+                                        <label for="householdCheckbox"></label>
+                                        <p class="mb-1 ml-1 flex align-items-center"><span>Household Servants</span></p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="flex">
+                                        <input type="checkbox" class="activity-checkbox" value="7" id="all"
+                                            name="">
+                                        <label for="all"></label>
+                                        <p class="mb-1 ml-1 flex align-items-center"><span>Members</span></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -352,13 +397,14 @@
                         var title = $('#title').val();
                         var description = $('#description').val();
                         var location = $('#location').val();
-                        var start_date = $('#start_date').val();
-                        var end_date = $('#end_date').val();
+                        var start = $('#start_date').val();
+                        var start_date = moment(start). format('YYYY-MM-DD HH:mm:ss');
+                        var end = $('#end_date').val();
+                        var end_date = moment(end). format('YYYY-MM-DD HH:mm:ss');
                         var reg_fee = $('#reg_fee').val();
                         var selectedValues = $('.activity-checkbox:checked').map(function() {
                             return $(this).val();
                         }).get();
-                        console.log(selectedValues);
 
                         $.ajax({
                             headers: {

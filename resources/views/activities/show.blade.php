@@ -6,10 +6,12 @@
 
 @section('content')
     <x-layout>
-        <div class="flex justify-end mb-2 mt-3"> <a href="{{ route('calendar.list') }}" class="my-4 btn btn-dark">See
-                Calendar of Events
-                <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a>
+        <div class="flex justify-end mb-2 mt-3">
+            <button class="my-4 btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#regField" aria-controls="regField">Register!<i class="tf-icons mdi mdi-arrow-right ml-2"></i>
+            </button>
         </div>
+
         <div class="card">
             <div class="card-header">
                 <h4>
@@ -104,11 +106,11 @@
                         </div>
 
                         {{-- REGISTRATION --}}
-                    @elseif ($activity->id != 13)
+                        {{-- @elseif ($activity->id != 13)
                         <div class="flex justify-end gap-2">
                             <button class="btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
                                 data-bs-target="#regField" aria-controls="regField">Register!</button>
-                        </div>
+                        </div> --}}
                     @endif
                 </div>
             </form>
@@ -130,8 +132,9 @@
                                 value="{{ $user->name }}" error="{{ $errors->first('name') }}">
                                 Full Name
                             </x-form.input-field>
-                            <x-form.input-field name="email" type="email" icon="email" placeholder="juandelacruz@sample.com"
-                                value="{{ $user->email }}" error="{{ $errors->first('email') }}">
+                            <x-form.input-field name="email" type="email" icon="email"
+                                placeholder="juandelacruz@sample.com" value="{{ $user->email }}"
+                                error="{{ $errors->first('email') }}">
                                 Email Address
                             </x-form.input-field>
                             <x-form.input-field name="contact_number" type="tel" icon="phone"

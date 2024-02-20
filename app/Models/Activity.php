@@ -21,6 +21,8 @@ class Activity extends Model
         'title',
         'start_date',
         'end_date',
+        'recurring',
+        'daysOfWeek',
         'location',
         'description',
         'reg_fee',
