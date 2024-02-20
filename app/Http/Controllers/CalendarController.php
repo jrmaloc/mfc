@@ -157,47 +157,6 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->selectedValues[0] == 'yes') {
-            $data = $request->validate([
-                'title' => 'required|unique:activities',
-                'description' => 'required',
-                'location' => 'required',
-                'start_date' => 'required',
-                'end_date' => 'required',
-                'reg_fee' => 'required|regex:/^[0-9]+(?:\.[0-9]{1,2})?$/',
-                'selectedValues' => 'required',
-            ]);
-
-            $startDate = $data['start_date'];
-            $endDate = $data['end_date'];
-            $recurring = ['recurring' => 'Yes'];
-            $roles = array_slice($data['selectedValues'], 1, 5);
-            $role_ids = json_encode($roles);
-
-            $date = Carbon::parse($startDate);
-            $daysOfWeek = $date->dayOfWeek;
-            $dow = ['daysOfWeek' => $daysOfWeek];
-
-            $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
-            $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
-
-            $activity = Activity::create(array_merge($data, $recurring, $dow, [
-                'start_date' => $formatStartDate,
-                'end_date' => $formatEndDate,
-                'role_ids' => $role_ids,
-            ]));
-
-            $admins = User::whereHas('roles', function ($query) use ($roles) {
-                $query->whereIn('id', $roles);
-            })->get();
-
-            if ($activity && $admins) {
-                Notification::send($admins, new EventNotification($activity, 'New Recurring Event has been created!'));
-            }
-
-            return response()->json($activity);
-        }
-
         $data = $request->validate([
             'title' => 'required|unique:activities',
             'description' => 'required',
@@ -210,27 +169,62 @@ class CalendarController extends Controller
 
         $startDate = $data['start_date'];
         $endDate = $data['end_date'];
-        $roles = array_slice($data['selectedValues'], 0, 5);
-        $role_ids = json_encode($roles);
 
         $formatStartDate = Carbon::parse($startDate)->format('Y-m-d H:i:s');
         $formatEndDate = Carbon::parse($endDate)->format('Y-m-d H:i:s');
 
-        $activity = Activity::create(array_merge($data, [
-            'start_date' => $formatStartDate,
-            'end_date' => $formatEndDate,
-            'role_ids' => $role_ids,
-        ]));
+        $user = Auth()->user();
+        $userID = $user->id;
 
-        $admins = User::whereHas('roles', function ($query) use ($roles) {
-            $query->whereIn('id', $roles);
-        })->get();
+        dd($userID);
 
-        if ($activity && $admins) {
-            Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
+        if ($request->selectedValues[0] == 'yes') {
+            $recurring = ['recurring' => 'Yes'];
+            $roles = array_slice($data['selectedValues'], 1, 5);
+            $role_ids = json_encode($roles);
+
+            $date = Carbon::parse($startDate);
+            $daysOfWeek = $date->dayOfWeek;
+            $dow = ['daysOfWeek' => $daysOfWeek];
+
+            $activity = Activity::create(array_merge($data, $recurring, $dow, [
+                'start_date' => $formatStartDate,
+                'end_date' => $formatEndDate,
+                'role_ids' => $role_ids,
+                'user_ids' => $userID,
+            ]));
+
+            $admins = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('id', $roles);
+            })->get();
+
+            if ($activity && $admins) {
+                Notification::send($admins, new EventNotification($activity, 'New Recurring Event has been created!'));
+            }
+
+            return response()->json($activity);
+
+        } else {
+            $roles = array_slice($data['selectedValues'], 0, 5);
+            $role_ids = json_encode($roles);
+
+            $activity = Activity::create(array_merge($data, [
+                'start_date' => $formatStartDate,
+                'end_date' => $formatEndDate,
+                'role_ids' => $role_ids,
+                'user_ids' => $userID,
+            ]));
+
+            $admins = User::whereHas('roles', function ($query) use ($roles) {
+                $query->whereIn('id', $roles);
+            })->get();
+
+            if ($activity && $admins) {
+                Notification::send($admins, new EventNotification($activity, 'New Event has been created!'));
+            }
+
+            return response()->json($activity);
         }
-
-        return response()->json($activity);
     }
 
     /**
@@ -255,6 +249,7 @@ class CalendarController extends Controller
                     'start_date' => $start,
                     'end_date' => $end,
                     'activity' => $activity,
+                    'user' => $user,
                 ]);
             } else {
                 $info = $activity->start_date;

@@ -6,11 +6,16 @@
 
 @section('content')
     <x-layout>
-        <div class="flex justify-end mb-2 mt-3">
-            <button class="my-4 btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#regField" aria-controls="regField">Register!<i class="tf-icons mdi mdi-arrow-right ml-2"></i>
-            </button>
-        </div>
+        @cannot('view-role')
+            @if ($user->id != $activity->user_ids)
+                <div class="flex justify-end mb-2 mt-3">
+                    <button class="my-4 btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#regField" aria-controls="regField">Register!<i
+                            class="tf-icons mdi mdi-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            @endif
+        @endcannot
 
         <div class="card">
             <div class="card-header">
@@ -30,7 +35,8 @@
                                             auth()->user()->hasRole('Chapter Servant') ||
                                             auth()->user()->hasRole('Unit Servant') ||
                                             auth()->user()->hasRole('Household Servant') ||
-                                            auth()->user()->hasRole('Member'))) readonly @endif>{{ $activity->description }}</textarea>
+                                            auth()->user()->hasRole('Member')) &&
+                                        $user->id != $activity->user_ids) readonly @endif>{{ $activity->description }}</textarea>
                             <label for="showDescription">Description</label>
                         </div>
                     </div>
@@ -44,7 +50,8 @@
                                             auth()->user()->hasRole('Chapter Servant') ||
                                             auth()->user()->hasRole('Unit Servant') ||
                                             auth()->user()->hasRole('Household Servant') ||
-                                            auth()->user()->hasRole('Member'))) readonly @endif />
+                                            auth()->user()->hasRole('Member')) &&
+                                        $user->id != $activity->user_ids) readonly @endif />
                             <label for="showLocation">Location</label>
                         </div>
                     </div>
@@ -60,7 +67,8 @@
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) readonly @endif />
+                                                auth()->user()->hasRole('Member')) &&
+                                            $user->id != $activity->user_ids) readonly @endif />
                                 <label for="showReg_fee">Registration Fee</label>
                             </div>
                             @error('amount')
@@ -79,7 +87,8 @@
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) disabled {{ auth()->user()->role }} @endif>
+                                                auth()->user()->hasRole('Member')) &&
+                                            $user->id != $activity->user_ids) disabled {{ auth()->user()->role }} @endif>
                                 <label for="showStart_date">Start Date</label>
                             </div>
                         </div>
@@ -91,26 +100,22 @@
                                                 auth()->user()->hasRole('Chapter Servant') ||
                                                 auth()->user()->hasRole('Unit Servant') ||
                                                 auth()->user()->hasRole('Household Servant') ||
-                                                auth()->user()->hasRole('Member'))) disabled @endif>
+                                                auth()->user()->hasRole('Member')) &&
+                                            $user->id != $activity->user_ids) disabled @endif>
                                 <label for="showEnd_date">End Date</label>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    @if (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin')))
+                    @if (
+                        (auth()->check() && (auth()->user()->hasRole('Super Admin') || auth()->user()->hasRole('Admin'))) ||
+                            $user->id == $activity->user_ids)
                         <div class="flex justify-end gap-2">
                             <button type="reset" class="btn btn-outline-secondary">Reset</button>
                             <a href="#" class="btn btn-danger remove-btn" data-id="{{ $id }}">Delete</a>
                             <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
                         </div>
-
-                        {{-- REGISTRATION --}}
-                        {{-- @elseif ($activity->id != 13)
-                        <div class="flex justify-end gap-2">
-                            <button class="btn btn-success reg-btn" type="button" data-bs-toggle="offcanvas"
-                                data-bs-target="#regField" aria-controls="regField">Register!</button>
-                        </div> --}}
                     @endif
                 </div>
             </form>
