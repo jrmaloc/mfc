@@ -22,13 +22,12 @@ class AnnouncementsController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
-                    $actions = '<a href="javascript:void(0);" onclick="show(' . $data['id'] . ')" class="btn mr-2 btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
+                    $actions = '<a href="' . route("announcements.show", ["announcement" => $data['id']]) . '" class="btn mr-2 btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
 
                     if (auth()->user()->can('view-household')) {
-                        $actions .= '<a href="javascript:void(0);" onclick="edit(' . $data['id'] . ')" class="btn mr-1 btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>
-                     <a href="javascript:void(0);" id="' . $data['id'] . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>';
+                        $actions .= '<button type="button" id="' . $data['id'] . '" class="btn mr-1 btn-outline-info btn-sm edit-btn" data-bs-toggle="offcanvas" data-bs-target="#editForm" aria-controls="offcanvasEnd"><i class="tf-icons mdi mdi-pencil"></i></a>
+                     <button id="' . $data['id'] . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></button>';
                     }
-
                     return $actions;
                 })
                 ->rawColumns(['roles', 'actions'])

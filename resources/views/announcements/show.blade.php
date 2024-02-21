@@ -10,17 +10,33 @@
             height: fit-content;
         }
 
-        .form-control:focus,
-        .form-select:focus,
-        .input-group-text:focus {
-            border-color: #58b61200 !important;
-        }
+        /* .form-control:focus,
+            .form-select:focus,
+            .input-group-text:focus {
+                border-color: #58b61200 !important;
+            } */
 
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
         }
-        input #titleInput:focus{
-            border:none !important;
+
+        input#titleInput:focus {
+            padding: 10px;
+        }
+
+        @media (max-width: 780px) {
+            div.card-body {
+                padding: 0 20px !important;
+            }
+
+            h2 {
+                margin: 0 !important;
+            }
+
+            i.mdi-arrow-left {
+                display: block !important;
+                margin: 20px 0 0 20px !important;
+            }
         }
     </style>
 @endsection
@@ -28,7 +44,9 @@
 @section('content')
     <x-layout>
         <div class="card h-100">
+            <i id="back" class="mdi mdi-arrow-left mdi-36px text-slate-600 d-none"></i>
             <div class="card-header mt-4 ml-4 uppercase flex">
+
                 <div class="w-100">
                     <h2 class="text-2xl my-2 ml-4 fw-bold uppercase">
                         <span class="content" id="title">
@@ -36,9 +54,8 @@
                         </span>
 
                         <div class="input-group input-group-lg d-none" id="editTitle">
-                            <input type="text" class="text-2xl fw-bold uppercase w-100" name="title" id="titleInput" class="form-control title"
-                            style="border: none !important;"
-                                value="{{ $data->title }}">
+                            <input type="text" class="text-2xl fw-bold uppercase form-control w-100" name="title"
+                                id="titleInput" class="form-control title" value="{{ $data->title }}">
                         </div>
                     </h2>
                 </div>
@@ -146,6 +163,12 @@
             editTextArea.classList.toggle('d-none');
             editButton.classList.toggle('d-none');
             saveCancelButtons.classList.toggle('d-none');
+        });
+
+        $(document).ready(function() {
+            $("#back").click(function() {
+                window.history.back();
+            });
         });
     </script>
 @endpush
