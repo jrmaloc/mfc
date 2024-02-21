@@ -15,7 +15,7 @@ class AnnouncementsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $role_id = $user->role_id;
+        $role_id = json_encode($user->role_id);
 
         if ($request->ajax()) {
             $data = Announcement::whereJsonContains('user_ids', $role_id)->get();
