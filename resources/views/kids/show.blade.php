@@ -37,14 +37,6 @@
 @push('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const errorInputs = document.querySelectorAll('span.text-danger');
-        if (errorInputs.length > 0) {
-            const firstErrorInput = errorInputs[0].closest('.col').querySelector('.form-control');
-            if (firstErrorInput) {
-                firstErrorInput.focus();
-            }
-        }
-
         $('#upload').change(function (e) {
             var file = e.target.files[0];
             if (file) {

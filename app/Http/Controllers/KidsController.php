@@ -32,7 +32,7 @@ class KidsController extends Controller
                 ->addIndexColumn()
             // ->addColumn('household_servant', '{{$household_servant_name}}')
                 ->addColumn("actions", function ($info) {
-                    $editButton = '<a href="kids/' . $info->id . '/edit" class="ml-2 btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>';
+                    $editButton = '<a href="kids/' . $info->id . '/edit" class="mr-2 btn btn-outline-info btn-sm"><i class="tf-icons mdi mdi-pencil"></i></a>';
                     $deleteButton = '<a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>';
                     $viewButton = '<a href="kids/' . $info->id . '" class="mr-2 btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
                     // Check user role before adding edit and delete buttons

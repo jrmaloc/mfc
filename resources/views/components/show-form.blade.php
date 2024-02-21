@@ -6,10 +6,10 @@
 ])
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="flex justify-end">
-        <a href="{{ route($back) }}" class="my-4 btn btn-dark">
-            Back To List
+        <button id="back" type="button" class="my-4 btn btn-dark">
+            Back
             <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i>
-        </a>
+        </button>
     </div>
     <div class="card">
         <h4 class="card-header capitalize">Profile Details</h4> <!-- Account -->
@@ -39,7 +39,14 @@
                 <span class="menu-header-text">Account Information</span>
             </div>
 
-            <div class="row row-cols-4 row-cols-lg-2 mb-8 gy-4">
+            <style>
+                @media (max-width: 780px) {
+                    div.col {
+                        width: 100% !important;
+                    }
+                }
+            </style>
+            <div id="inputG" class="row row-cols-4 mb-8 gy-4">
                 <div class="col">
                     <div>
                         <label for="name" class="form-label">Full Name</label>

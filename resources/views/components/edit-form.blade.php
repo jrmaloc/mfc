@@ -58,11 +58,22 @@
 </div>
 
 <!-- Main Content -->
+<style>
+    @media (max-width: 768px) {
+        label.btn, div.col{
+            width: 100% !important;
+        }
+
+        label.form-check-label{
+            width: 200%;
+        }
+    }
+</style>
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="flex justify-end"> <a href="{{ route($back) }}" class="my-4 btn
-  btn-dark">Back to List<i
-                class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a> </div>
+    <div class="flex justify-end"> <button type="button" id="back" class="my-4 btn text-xs btn-dark">
+        Back
+        <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></button> </div>
     <div class="card mb-4">
         <h4 class="card-header mt-2">Account Editing</h4> <!-- Account -->
 

@@ -295,6 +295,32 @@
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
         }
+
+        @media(max-width:780px) {
+            h4#nb {
+                font-size: 1.25rem;
+            }
+
+            a.btn,
+            a.btn~i {
+                font-size: 0.75rem;
+            }
+
+            div#DataTables_Table_0_length {
+                display: flex;
+                justify-content: flex-start;
+                margin-bottom: 20px;
+            }
+
+            div#DataTables_Table_0_filter {
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            ul.pagination {
+                margin-bottom: 20px !important;
+            }
+        }
     </style>
 
     @yield('head')
@@ -556,7 +582,9 @@
                                 </button>
 
                                 <!-- Dropdown menu -->
-                                <div id="dropdownSearch" class="row-col-xs-1 z-10 hidden border border-gray-500 bg-gray-50 shadow" style="width: 500px;">
+                                <div id="dropdownSearch" onShow="bellColor()"
+                                    class="row-col-xs-1 z-10 hidden border border-gray-500 bg-gray-50 shadow"
+                                    style="width: 500px;">
                                     <div class="col-xs-1">
                                         <div class="p-3 bg-gray-100">
                                             <div class="relative flex justify-between">
@@ -785,6 +813,17 @@
     <script>
         $(document).ready(function() {
 
+            var dropdown = document.getElementById('dropdownSearch');
+
+            function addColor() {
+                // Add a class to the dropdown element
+                dropdown.classList.toggle('text-green-600');
+            }
+
+            $(document).on('click', '#back', function(e) {
+                window.history.back();
+            });
+
             var Toast = Swal.mixin({
                 toast: true,
                 animation: true,
@@ -792,12 +831,6 @@
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
-            });
-
-            const bell = document.getElementById('bell');
-
-            bell.addEventListener('click', function() {
-                bell.classList.toggle('text-green-600');
             });
 
             function sendMarkRequest(id = null) {

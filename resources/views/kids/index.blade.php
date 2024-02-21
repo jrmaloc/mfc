@@ -57,8 +57,10 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold py-3 mb-4">Kids Members List</h4>
+        <div class="align-items-center">
+            <h4 id="nb" class="fw-bold pt-3">Kids Members List</h4>
+        </div>
+        <div class="flex justify-end mb-4">
             @can('view-role')
                 <a href="{{ route('kids.create') }}" class="btn btn-success">
                     Add a User
@@ -152,8 +154,8 @@
                 pageLength: 25,
                 responsive: true,
                 serverSide: true,
-                scrollX: true,
-                scrollY: 700,
+                scrollX: 460,
+                scrollY: 500,
                 ajax: {
                     url: "{{ route('kids.index') }}"
                 },
