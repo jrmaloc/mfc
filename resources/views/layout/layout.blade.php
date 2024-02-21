@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default"
-    data-assets-path="{{ URL::asset('assets') }}" data-template="vertical-menu-template-free">
+    data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
-
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
@@ -78,47 +78,24 @@
     <title>MFC Portal</title>
 
     <style>
-        ul.menu-sub li.menu-item a.menu-link {
-            padding: 10px 90px !important;
+        .menu-item {
+            padding-right: 5px;
         }
 
-        /* ul.menu-sub li.menu-item.active a.menu-link,
-        li.menu-item {
-            width: 360px !important;
-        } */
-        /*
-        .fc-day:hover .fc-day-top {
-            background-color: #EAFAF1;
-        } */
-
-        .menu-vertical .menu-item .menu-link>div:not(.badge) {
-            overflow: visible !important;
+        .menu-vertical .menu-item .menu-link,
+        .menu-vertical .menu-header,
+        .menu-vertical .menu-block {
+            margin-inline: 0.6rem;
         }
 
-        li.menu-item,
-        li.menu-item.active {
-            width: 360px !important;
+        .menu-vertical .menu-item .menu-link,
+        .menu-vertical .menu-header,
+        .menu-vertical .menu-block {
+            margin-inline: 0.6px !important;
         }
 
-        ul.menu-sub li.menu-item a.menu-link::before {
-            margin-left: 50px !important;
-        }
-
-        .bg-menu-theme .menu-item.active:not(.open)>.menu-link:not(.menu-toggle)::before {
-            border-color: #1D8348 !important;
-        }
-
-        a.menu-link.menu-toggle.waves-effect::after {
-            margin-right: 20px !important;
-        }
-
-        .bg-menu-theme .menu-item.active:not(.open)>.menu-link:not(.menu-toggle),
-        .bg-menu-theme .menu-item.active:not(.open)>.menu-link:not(.menu-toggle)::before {
-            color: #5D6D7E !important;
-        }
-
-        a.menu-link {
-            padding-left: 40px !important;
+        aside.bg-menu-theme {
+            background-color: #ffff !important;
         }
 
         .form-check-input:active {
@@ -159,11 +136,6 @@
 
         .colored-toast .swal2-html-container {
             color: white;
-        }
-
-        .bg-menu-theme .menu-item.active>.menu-link:not(.menu-toggle) {
-            background: rgb(232, 248, 245);
-            background: linear-gradient(90deg, rgba(232, 248, 245, 1) 91.5%, rgba(18, 200, 1, 1) 91.5%);
         }
 
         .btn .btn-primary::hover {
@@ -328,216 +300,213 @@
     @yield('head')
 </head>
 
-<body class="body" style="background: #FCF7F4 !important;" id="container">
+<body>
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             <!-- Menu -->
-            <div class=" bg-slate-600">
-                <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme"
-                    style="background: #fff !important; width:320px;">
-                    <div class="app-brand demo mt-8 flex-col"
-                        style="padding-right: 60px; pointer-events: none; height: 100px;">
-                        <a href="javascript:void(0)" class="app-brand-link">
-                            <span class="app-brand-logo demo me-1">
-                                <span style="color: #1b661b">
-                                    <img src="/favicon-96x96.png" alt="">
-                                </span>
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo mt-8 flex-col mb-2" style="pointer-events: none; height: 150px;">
+                    <a href="javascript:void(0)" class="flex flex-col align-items-center">
+                        <span class=" flex justify-center">
+                            <span style="color: #1b661b">
+                                <img src="/favicon-96x96.png" alt="">
                             </span>
-                            <div class="flex flex-xl-column">
-                                <span class="app-brand-text menu-text ms-2"
-                                    style="
+                        </span>
+                        <span class="app-brand-text demo menu-text"
+                            style="
                                 font-family: 'Roboto', sans-serif;
                                 font-weight: 900;
                                 font-size: 1.5rem;">
-                                    MFC
-                                </span>
-                                <span class="app-brand-text demo menu-text fw-semibold ms-2"
-                                    style="font-family: 'Roboto', sans-serif;">Portal</span>
-                            </div>
-                        </a>
-                    </div>
+                            MFC
+                        </span>
+                        <span class="app-brand-text demo menu-text"
+                            style="font-family: 'Roboto', sans-serif;">Portal</span>
+                    </a>
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                        <i class="mdi menu-toggle-icon d-xl-block align-middle mdi-20px"></i>
+                    </a>
+                </div>
 
-                    <ul class="menu-inner py-1" style="margin-top: 20px; padding-bottom: 130px !important;">
-                        <!-- Dashboard -->
-                        @can('view-role')
-                            <li class="menu-item {{ preg_match('/dashboard/', Request::path()) ? 'active' : null }}">
-                                <a href="/dashboard" class="menu-link">
-                                    <i class="menu-icon tf-icons mdi mdi-view-dashboard"></i>
-                                    <div data-i18n="Dashboards">Dashboard</div>
-                                    <div class="badge bg-danger rounded-pill ms-auto mr-12">5</div>
+                <ul class="menu-inner py-1">
+                    <div class="menu-inner-shadow"></div>
+                    <!-- Dashboard -->
+                    @can('view-role')
+                        <li class="menu-item {{ preg_match('/dashboard/', Request::path()) ? 'active' : null }}">
+                            <a href="/dashboard" class="menu-link">
+                                <i class="menu-icon tf-icons mdi mdi-view-dashboard"></i>
+                                <div data-i18n="Dashboards">Dashboard</div>
+                                <div class="badge bg-danger rounded-pill" style="margin-left: 4rem;">5</div>
+                            </a>
+                        </li>
+                    @endcan
+
+                    <!--Notice Board -->
+
+                    <li class="menu-item {{ preg_match('/announcements/', Request::path()) ? 'active' : null }}">
+                        <a href="/announcements" class="menu-link">
+                            <i class="menu-icon tf-icon mdi mdi-clipboard-outline"></i>
+                            <div data-i18n="Icons">Announcements</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Management</span>
+                    </li>
+
+                    <!-- Management-->
+                    <li
+                        class="menu-item {{ str_contains(Request::path(), 'kids') ||
+                        str_contains(Request::path(), 'youth') ||
+                        str_contains(Request::path(), 'singles') ||
+                        str_contains(Request::path(), 'servants') ||
+                        str_contains(Request::path(), 'handmaids') ||
+                        str_contains(Request::path(), 'couples')
+                            ? 'active open'
+                            : '' }}">
+
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons mdi mdi-folder-account-outline"></i>
+                            <div data-i18n="Directory">Directory</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <x-menu-link routeName="{{ route('kids.index') }}" title="Kids"
+                                class="{{ str_contains(Request::path(), 'kids') ? 'active' : '' }}" />
+                            <x-menu-link routeName="{{ route('youth.index') }}" title="Youth"
+                                class="{{ str_contains(Request::path(), 'youth') ? 'active' : '' }}" />
+                            <x-menu-link routeName="{{ route('singles.index') }}" title="Singles"
+                                class="{{ str_contains(Request::path(), 'singles') ? 'active' : '' }}" />
+                            <x-menu-link routeName="{{ route('servants.index') }}" title="Servants"
+                                class="{{ str_contains(Request::path(), 'servants') ? 'active' : '' }}" />
+                            <x-menu-link routeName="{{ route('handmaids.index') }}" title="Handmaids"
+                                class="{{ str_contains(Request::path(), 'handmaids') ? 'active' : '' }}" />
+                            <x-menu-link routeName="{{ route('couples.index') }}" title="Couples"
+                                class="{{ str_contains(Request::path(), 'couples') ? 'active' : '' }}" />
+                        </ul>
+                    </li>
+
+                    <!-- Activities -->
+                    <li
+                        class="menu-item {{ str_contains(Request::path(), 'activity/list') || str_contains(Request::path(), 'calendar')
+                            ? 'active open'
+                            : null }}">
+
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <span class="menu-icon tf-icons mdi mdi-calendar-heart-outline"></span>
+                            <div>Events</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li
+                                class="menu-item {{ preg_match('/activity\/list/', Request::path()) ? 'active' : '' }}">
+                                <a href="{{ route('activity.list') }}" class="menu-link">
+                                    <div class="ml-4">List</div>
                                 </a>
                             </li>
-                        @endcan
+                            <li class="menu-item {{ preg_match('/calendar/', Request::path()) ? 'active' : null }}">
+                                <a href="{{ route('calendar.list') }}" class="menu-link">
+                                    <div class="ml-4">Calendar</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-                        <!--Notice Board -->
+                    <!-- Tithes -->
+                    <li
+                        class="menu-item {{ preg_match('/tithes\/create/', Request::path()) ? 'active open' : null }}
+                                            {{ preg_match('/tithes\/list/', Request::path()) ? 'active open' : null }}">
 
-                        <li class="menu-item {{ preg_match('/announcements/', Request::path()) ? 'active' : null }}">
-                            <a href="/announcements" class="menu-link">
-                                <i class="menu-icon tf-icon mdi mdi-clipboard-outline"></i>
-                                <div data-i18n="Icons">Announcements</div>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons mdi mdi-cash-multiple"></i>
+                            <div>Tithes</div>
+                        </a>
+
+                        <ul class="menu-sub">
+                            <li
+                                class="menu-item {{ preg_match('/tithes\/list/', Request::path()) ? 'active' : null }}">
+                                @can('view-tithes')
+                                    <a href="{{ route('tithes.list') }}" class=" menu-link">
+                                        <div data-i18n="Icons" class="ml-2">List</div>
+                                    </a>
+                                @endcan
+
+                            </li>
+                            <li
+                                class="menu-item {{ preg_match('/tithes\/create/', Request::path()) ? 'active' : null }}">
+                                <a href="{{ route('tithes.create') }}" class=" menu-link">
+                                    <div data-i18n="Icons" class="ml-2">Registration</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Notifications -->
+                    @php
+                        $unreadNotificationsCount = \App\Models\User::find(Auth::id())->unreadNotifications->count();
+                    @endphp
+
+                    <!-- Attendance -->
+
+                    @can('view-member')
+                        <li class="menu-item {{ preg_match('/attendance/', Request::path()) ? 'active' : null }}">
+                            <a href="/attendance" class="menu-link">
+                                <i class="menu-icon tf-icon mdi mdi-account-check-outline"></i>
+                                <div data-i18n="Icons">Attendance</div>
                             </a>
                         </li>
+                    @endcan
+
+                    @can('view-roles')
+                        <!-- Roles/Permission -->
                         <li class="menu-header small text-uppercase">
-                            <span class="menu-header-text">Management</span>
+                            <span class="menu-header-text">Roles & Permission</span>
                         </li>
 
-                        <!-- Management-->
+                        <!-- Roles -->
                         <li
-                            class="menu-item {{ str_contains(Request::path(), 'kids') ||
-                            str_contains(Request::path(), 'youth') ||
-                            str_contains(Request::path(), 'singles') ||
-                            str_contains(Request::path(), 'servants') ||
-                            str_contains(Request::path(), 'handmaids') ||
-                            str_contains(Request::path(), 'couples')
-                                ? 'active open'
-                                : '' }}">
-
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <i class="menu-icon tf-icons mdi mdi-folder-account-outline"></i>
-                                <div data-i18n="Directory">Directory</div>
-                            </a>
-                            <ul class="menu-sub">
-                                <x-menu-link routeName="{{ route('kids.index') }}" title="Kids"
-                                    class="{{ str_contains(Request::path(), 'kids') ? 'active open' : '' }}" />
-                                <x-menu-link routeName="{{ route('youth.index') }}" title="Youth"
-                                    class="{{ str_contains(Request::path(), 'youth') ? 'active open' : '' }}" />
-                                <x-menu-link routeName="{{ route('singles.index') }}" title="Singles"
-                                    class="{{ str_contains(Request::path(), 'singles') ? 'active open' : '' }}" />
-                                <x-menu-link routeName="{{ route('servants.index') }}" title="Servants"
-                                    class="{{ str_contains(Request::path(), 'servants') ? 'active open' : '' }}" />
-                                <x-menu-link routeName="{{ route('handmaids.index') }}" title="Handmaids"
-                                    class="{{ str_contains(Request::path(), 'handmaids') ? 'active open' : '' }}" />
-                                <x-menu-link routeName="{{ route('couples.index') }}" title="Couples"
-                                    class="{{ str_contains(Request::path(), 'couples') ? 'active open' : '' }}" />
-                            </ul>
-                        </li>
-
-                        <!-- Activities -->
-                        <li
-                            class="menu-item {{ str_contains(Request::path(), 'activity/list') || str_contains(Request::path(), 'calendar')
-                                ? 'active open'
+                            class="menu-item {{ str_contains(Request::path(), 'roles') ||
+                            str_contains(Request::path(), 'admin') ||
+                            str_contains(Request::path(), 'area') ||
+                            str_contains(Request::path(), 'chapter') ||
+                            str_contains(Request::path(), 'unit') ||
+                            str_contains(Request::path(), 'household')
+                                ? 'open'
                                 : null }}">
 
                             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <span class="menu-icon tf-icons mdi mdi-calendar-heart-outline"></span>
-                                <div>Events</div>
+                                <i class="menu-icon tf-icon mdi mdi-account-file-outline"></i>
+                                <div data-i18n="Roles">Roles</div>
                             </a>
                             <ul class="menu-sub">
-                                <li
-                                    class="menu-item {{ preg_match('/activity\/list/', Request::path()) ? 'active' : '' }}">
-                                    <a href="{{ route('activity.list') }}" class="menu-link">
-                                        <div class="ml-4">List</div>
-                                    </a>
-                                </li>
-                                <li
-                                    class="menu-item {{ preg_match('/calendar/', Request::path()) ? 'active' : null }}">
-                                    <a href="{{ route('calendar.list') }}" class="menu-link">
-                                        <div class="ml-4">Calendar</div>
-                                    </a>
-                                </li>
+                                <x-menu-link routeName="{{ route('roles.index') }}" title="Super Admin"
+                                    class="{{ str_contains(Request::path(), 'roles') ? 'active' : '' }}" />
+                                <x-menu-link routeName="{{ route('admin.index') }}" title="Admin"
+                                    class="{{ str_contains(Request::path(), 'admin') ? 'active' : '' }}" />
+                                <x-menu-link routeName="{{ route('area.index') }}" title="Area Servants"
+                                    class="{{ str_contains(Request::path(), 'area') ? 'active' : '' }}" />
+                                <x-menu-link routeName="{{ route('chapter.index') }}" title="Chapter Servants"
+                                    class="{{ str_contains(Request::path(), 'chapter') ? 'active' : '' }}" />
+                                <x-menu-link routeName="{{ route('unit.index') }}" title="Unit Servants"
+                                    class="{{ str_contains(Request::path(), 'unit') ? 'active' : '' }}" />
+                                <x-menu-link routeName="{{ route('household.index') }}" title="Household Servants"
+                                    class="{{ str_contains(Request::path(), 'household') ? 'active' : '' }}" />
                             </ul>
                         </li>
+                    @endcan
 
-                        <!-- Tithes -->
-                        <li
-                            class="menu-item {{ preg_match('/tithes\/create/', Request::path()) ? 'active open' : null }}
-                                                {{ preg_match('/tithes\/list/', Request::path()) ? 'active open' : null }}">
-
-                            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                <i class="menu-icon tf-icons mdi mdi-cash-multiple"></i>
-                                <div>Tithes</div>
+                    @can('view-permissions')
+                        <!-- Permission -->
+                        <li class="menu-item {{ preg_match('/permissions/', Request::path()) ? 'active' : null }}">
+                            <a href="/permissions" class="menu-link" style="margin-bottom: 130px;">
+                                <i class="menu-icon tf-icon mdi mdi-key-outline"></i>
+                                <div data-i18n="Icons">Permission</div>
                             </a>
-
-                            <ul class="menu-sub">
-                                <li
-                                    class="menu-item {{ preg_match('/tithes\/list/', Request::path()) ? 'active' : null }}">
-                                    @can('view-tithes')
-                                        <a href="{{ route('tithes.list') }}" class=" menu-link">
-                                            <div data-i18n="Icons" class="ml-2">List</div>
-                                        </a>
-                                    @endcan
-
-                                </li>
-                                <li
-                                    class="menu-item {{ preg_match('/tithes\/create/', Request::path()) ? 'active' : null }}">
-                                    <a href="{{ route('tithes.create') }}" class=" menu-link">
-                                        <div data-i18n="Icons" class="ml-2">Registration</div>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-
-                        <!-- Notifications -->
-                        @php
-                            $unreadNotificationsCount = \App\Models\User::find(Auth::id())->unreadNotifications->count();
-                        @endphp
-
-                        <!-- Attendance -->
-
-                        @can('view-member')
-                            <li class="menu-item {{ preg_match('/attendance/', Request::path()) ? 'active' : null }}">
-                                <a href="/attendance" class="menu-link">
-                                    <i class="menu-icon tf-icon mdi mdi-account-check-outline"></i>
-                                    <div data-i18n="Icons">Attendance</div>
-                                </a>
-                            </li>
-                        @endcan
-
-                        @can('view-roles')
-                            <!-- Roles/Permission -->
-                            <li class="menu-header small text-uppercase">
-                                <span class="menu-header-text">Roles & Permission</span>
-                            </li>
-
-                            <!-- Roles -->
-                            <li
-                                class="menu-item {{ str_contains(Request::path(), 'roles') ||
-                                str_contains(Request::path(), 'admin') ||
-                                str_contains(Request::path(), 'area') ||
-                                str_contains(Request::path(), 'chapter') ||
-                                str_contains(Request::path(), 'unit') ||
-                                str_contains(Request::path(), 'household')
-                                    ? 'open'
-                                    : null }}">
-
-                                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                                    <i class="menu-icon tf-icon mdi mdi-account-file-outline"></i>
-                                    <div data-i18n="Roles">Roles</div>
-                                </a>
-                                <ul class="menu-sub">
-                                    <x-menu-link routeName="{{ route('roles.index') }}" title="Super Admin"
-                                        class="{{ str_contains(Request::path(), 'roles') ? 'active open' : '' }}" />
-                                    <x-menu-link routeName="{{ route('admin.index') }}" title="Admin"
-                                        class="{{ str_contains(Request::path(), 'admin') ? 'active open' : '' }}" />
-                                    <x-menu-link routeName="{{ route('area.index') }}" title="Area Servants"
-                                        class="{{ str_contains(Request::path(), 'area') ? 'active open' : '' }}" />
-                                    <x-menu-link routeName="{{ route('chapter.index') }}" title="Chapter Servants"
-                                        class="{{ str_contains(Request::path(), 'chapter') ? 'active open' : '' }}" />
-                                    <x-menu-link routeName="{{ route('unit.index') }}" title="Unit Servants"
-                                        class="{{ str_contains(Request::path(), 'unit') ? 'active open' : '' }}" />
-                                    <x-menu-link routeName="{{ route('household.index') }}" title="Household Servants"
-                                        class="{{ str_contains(Request::path(), 'household') ? 'active open' : '' }}" />
-                                </ul>
-                            </li>
-                        @endcan
-
-                        @can('view-permissions')
-                            <!-- Permission -->
-                            <li class="menu-item {{ preg_match('/permissions/', Request::path()) ? 'active' : null }}">
-                                <a href="/permissions" class="menu-link" style="margin-bottom: 130px;">
-                                    <i class="menu-icon tf-icon mdi mdi-key-outline"></i>
-                                    <div data-i18n="Icons">Permission</div>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </aside>
-            </div>
+                    @endcan
+                </ul>
+            </aside>
             <!-- / Menu -->
 
             <!-- Layout container -->
-            <div class="layout-page ml-16 mr-4">
+            <div class="layout-page">
                 <!-- Navbar -->
 
                 <nav class="my-2 layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -548,14 +517,15 @@
                         </a>
                     </div>
 
-                    <div class="navbar-nav-right d-flex py-2 px-4 mt-6 bg-neutral-50 rounded-full"
-                        id="navbar-collapse">
+                    <div class="navbar-nav-right d-flex py-2 px-4 mt-6" id="navbar-collapse">
+
                         <!-- Search -->
                         <div class="navbar-nav align-items-center w-100 ">
                             <div class="nav-item d-flex align-items-center input-group-merge w-100">
-                                <i class="mdi mdi-magnify mdi-24px lh-0"></i>
-                                <input type="text" class="bg-neutral-50 form-control border-0 shadow-none"
-                                    id="search" name="search" placeholder="Search..." aria-label="Search..." />
+                                <i class="mdi mdi-magnify mdi-24px lh-0 mr-2"></i>
+                                <input type="text" class="form-control border-0 shadow-none"
+                                    style="background: #f5f6faff;" id="search" name="search"
+                                    placeholder="Search..." aria-label="Search..." />
                             </div>
                         </div>
                         <!-- /Search -->
@@ -564,10 +534,19 @@
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->
                             {{-- notification --}}
-                            <li class="">
+                            <li class="w-50">
+                                <style>
+                                    @media (max-width: 440px) {
+                                        div#dropdownSearch {
+                                            width: 300px !important;
+                                            margin-left: 10px !important;
+                                        }
+                                    }
+                                </style>
                                 <button class="ml-4 mr-2 my-auto" id="dropdownSearchButton"
-                                    data-dropdown-toggle="dropdownSearch" data-dropdown-placement="bottom"
-                                    data-dropdown-offset-skidding="-220" class="btn-link" type="button">
+                                    data-dropdown-toggle="dropdownSearch" data-dropdown-offset-distance="-5"
+                                    data-dropdown-placement="bottom" data-dropdown-offset-skidding="-250"
+                                    class="btn-link" type="button">
                                     <div class="flex align-items-start">
                                         <span id="bell" class="fa-stack"
                                             data-count="{{ $unreadNotificationsCount }}">
@@ -577,19 +556,20 @@
                                 </button>
 
                                 <!-- Dropdown menu -->
-                                <div id="dropdownSearch"
-                                    class="z-10 hidden border border-gray-500 bg-gray-50 rounded-lg shadow w-60 max-w-md mr-20">
-                                    <div class="p-3 bg-gray-100">
-                                        <div class="relative flex justify-between">
-                                            <h5 class="">
-                                                <span>Notifications</span>
-                                            </h5>
-                                            @if ($unreadNotificationsCount)
-                                                <a href="javascript:void(0);" id="mark-all"
-                                                    class="text-slate-400 text-xs mt-0.5 h-0 hover:underline hover:text-green-700">
-                                                    Mark all as read
-                                                </a>
-                                            @endif
+                                <div id="dropdownSearch" class="row-col-xs-1 z-10 hidden border border-gray-500 bg-gray-50 shadow" style="width: 500px;">
+                                    <div class="col-xs-1">
+                                        <div class="p-3 bg-gray-100">
+                                            <div class="relative flex justify-between">
+                                                <h5 class="">
+                                                    <span class="">Notifications</span>
+                                                </h5>
+                                                @if ($unreadNotificationsCount)
+                                                    <a href="javascript:void(0);" id="mark-all"
+                                                        class="text-slate-400 text-xs mt-0.5 h-0">
+                                                        Mark all as read
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <ul class="p-0 overflow-y-auto overflow-x-hidden text-sm border border-gray-100 left-8 text-gray-700 dark:text-slate-200"
@@ -655,7 +635,7 @@
                                     @if ($unreadNotificationsCount > 0)
                                         <div class="bg-gray-100">
                                             <a href="#"
-                                                class="hover:text-slate-400 pointer-events-none flex justify-center p-3 text-sm font-medium text-slate-400 border border-gray-200 rounded-b-lg bg-gray-100">
+                                                class="hover:text-slate-400 pointer-events-none flex justify-center p-3 text-sm font-medium text-slate-400 border border-gray-200 bg-gray-100">
                                                 <span
                                                     class="pointer-events-auto hover:bg-gray-100 hover:text-green-700 hover:underline">See
                                                     all notification</span>
@@ -722,128 +702,162 @@
                         </ul>
                     </div>
                 </nav>
+
                 <!-- / Navbar -->
 
-                @yield('content')
-                <div class="overlay"></div>
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    @yield('content')
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl">
+                            <div
+                                class="footer-container d-flex align-items-center justify-center py-3 flex-md-row flex-column">
+                                <div class="text-body mb-2 mb-md-0">
+                                    ©
+                                    <script>
+                                        document.write(new Date().getFullYear());
+                                    </script>, made with <span class="text-danger"><i
+                                            class="tf-icons mdi mdi-heart"></i></span> by
+                                    <a href="https://themeselection.com" target="_blank"
+                                        class="footer-link fw-medium">GodesQ Team</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
             </div>
+            <!-- / Layout page -->
+        </div>
 
-            <!-- Core JS -->
-            <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
-            <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="{{ URL::asset('assets/vendor/js/bootstrap.js') }}"></script>
-            <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-            <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-            <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
 
-            <!-- endbuild -->
-            <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <!-- Core JS -->
+    <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ URL::asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+    <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
 
-            <!-- Vendors JS -->
-            <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <!-- endbuild -->
+    <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.6.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
-            <!-- Main JS -->
-            <script src="{{ URL::asset('assets/js/main.js') }}"></script>
+    <!-- Vendors JS -->
+    <script src="{{ URL::asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
-            <!-- Page JS -->
-            <script src="{{ URL::asset('assets/js/dashboards-analytics.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ URL::asset('assets/js/main.js') }}"></script>
 
-            <!-- Datatables -->
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
-            <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Page JS -->
+    <script src="{{ URL::asset('assets/js/dashboards-analytics.js') }}"></script>
 
-            <!-- Alert -->
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- Datatables -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-            <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+    <!-- Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-            <!-- Calendar -->
-            @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
 
-            <script>
-                $(document).ready(function() {
+    <!-- Calendar -->
+    @stack('scripts')
 
-                    var Toast = Swal.mixin({
-                        toast: true,
-                        animation: true,
-                        position: 'top-right',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                    });
+    <script>
+        $(document).ready(function() {
 
-                    const bell = document.getElementById('bell');
+            var Toast = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
 
-                    bell.addEventListener('click', function() {
-                        bell.classList.toggle('text-green-600');
-                    });
+            const bell = document.getElementById('bell');
 
-                    function sendMarkRequest(id = null) {
-                        let csrfToken = $('meta[name="csrf-token"]').attr('content');
-                        return $.ajax("{{ route('mark.notification') }}", {
-                            method: 'POST',
-                            data: {
-                                _token: csrfToken,
-                                id
-                            }
-                        });
+            bell.addEventListener('click', function() {
+                bell.classList.toggle('text-green-600');
+            });
+
+            function sendMarkRequest(id = null) {
+                let csrfToken = $('meta[name="csrf-token"]').attr('content');
+                return $.ajax("{{ route('mark.notification') }}", {
+                    method: 'POST',
+                    data: {
+                        _token: csrfToken,
+                        id
                     }
+                });
+            }
 
-                    $(function() {
-                        $('#mark-all').click(function() {
-                            let request = sendMarkRequest();
+            $(function() {
+                $('#mark-all').click(function() {
+                    let request = sendMarkRequest();
 
-                            request.done(() => {
-                                $('li.notify').remove(); // Remove all notification list items
-                                window.location.reload();
-                            });
-                        });
-
-                        $('.user_notification').click(function() {
-                            let request = sendMarkRequest($(this).data('id'));
-
-                            request.done(() => {
-                                $('a.user_notification')
-                                    .remove(); // Remove all notification list items
-
-                            });
-                        });
-
-                        $('.admin_notification').click(function() {
-                            let request = sendMarkRequest($(this).data('id'));
-
-                            request.done(() => {
-                                $('a.admin_notification')
-                                    .remove(); // Remove all notification list items
-                            });
-                        });
-                    });
-
-                    $(function() {
-                        $('#refresh-btn').click(function() {
-                            $.ajax({
-                                url: window.location.href, // The current page URL
-                                type: 'GET', // HTTP method
-                                success: function(response) {
-                                    var updatedContent = $(response).find('#container').html();
-                                    $('#container').html(updatedContent);
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error('Error:', error);
-                                }
-                            });
-                        });
+                    request.done(() => {
+                        $('li.notify').remove(); // Remove all notification list items
+                        window.location.reload();
                     });
                 });
-            </script>
+
+                $('.user_notification').click(function() {
+                    let request = sendMarkRequest($(this).data('id'));
+
+                    request.done(() => {
+                        $('a.user_notification')
+                            .remove(); // Remove all notification list items
+
+                    });
+                });
+
+                $('.admin_notification').click(function() {
+                    let request = sendMarkRequest($(this).data('id'));
+
+                    request.done(() => {
+                        $('a.admin_notification')
+                            .remove(); // Remove all notification list items
+                    });
+                });
+            });
+
+            $(function() {
+                $('#refresh-btn').click(function() {
+                    $.ajax({
+                        url: window.location.href, // The current page URL
+                        type: 'GET', // HTTP method
+                        success: function(response) {
+                            var updatedContent = $(response).find('#container').html();
+                            $('#container').html(updatedContent);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

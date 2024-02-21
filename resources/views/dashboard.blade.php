@@ -73,225 +73,237 @@
             --tw-bg-opacity: 0.3;
             background-color: rgb(134 239 172 / var(--tw-bg-opacity));
         }
+
+        div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4{
+            padding-right: 0 !important;
+            padding-left: 0 !important;
+            margin-left: 0 !important;
+        }
     </style>
 @endsection
 
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold py-3 mb-4">Dashboard</h4>
-        </div>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            <div class="col mb-4">
-                <div class="card h-100">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                        <span>Users</span>
-                                    </p>
-                                    <h5 class="font-weight-bolder">{{ $userCount }}</h5>
-                                    <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">0%</span>
-                                        Lorem ipsum dolor sit
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-primary text-center rounded-circle">
-                                    <i class="mdi mdi-account text-lg opacity-100 pb-2" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row gy-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold py-3 mb-4">Dashboard</h4>
             </div>
-            <div class="col mb-4">
-                <div class="card h-100">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                        Upcoming Events
-                                    </p>
-                                    <h5 class="font-weight-bolder">{{ $events }}</h5>
-                                    <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                        Lorem Ipsum
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                    <i class="ni ni-world text-lg opacity-100" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card h-100">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                        Tithes
-                                    </p>
-                                    <h5 class="font-weight-bolder">{{ $tithes }}</h5>
-                                    <p class="mb-0">
-                                        <span class="text-danger text-sm font-weight-bolder">10%</span>
-                                        Lorem ipsum dolor sit amet.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                    <i class="ni ni-paper-diploma text-lg opacity-100" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card h-100">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                        Active Users
-                                    </p>
-                                    <h5 class="font-weight-bolder">{{ $activeUsers }}</h5>
-                                    <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+5%</span>
-                                        Lorem, ipsum dolor.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-4">
-            <div class="flex justify-between gap-10">
-                <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card z-index-2 h-96">
-                        <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Ministry Activities {{ now()->subYear()->year }}</h6>
-                            {{-- <p class="text-sm mb-0">
-                                <i class="fa fa-arrow-up text-success"></i>
-                                <span class="font-weight-bold">4% more</span> in 2021
-                            </p> --}}
-                        </div>
-                        <div class="card-body p-3 pb-4">
-                            <div class="chart">
-                                <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-7 mb-lg-0 mb-4">
-                    <div class="card z-index-2 w-8/12">
-                        <div class="card-header bg-green-300"></div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                <div class="col mb-4">
+                    <div class="card h-100">
                         <div class="card-body">
-                            <div class="flex justify-center">
-                                <div class="border" style="width:98%;"></div>
-                            </div>
-                            <strong>
-                                <h5 class="mt-2 font-bold">Hi! {{ $user->name }}</h5>
-                            </strong>
-                            <div class="mt-8 flex justify-center">
-                                <img src="http://127.0.0.1:8000/assets/img/avatars/1.png" alt="user-avatar"
-                                    class="d-block w-px-120 h-px-120 rounded-full">
-                            </div>
-
-                            <div class="mt-2 flex justify-center">
-                                <p class="opacity-50">{{ $role->name }}</p>
-                            </div>
-
-                            <div class="mb-3 flex justify-center">
-                                <div class="d-flex flex-col">
-                                    <div class="flex-grow-1">
-                                        <span id="bioContent" style="text-align:center">{{ $bio }}</span>
-                                        <button id="editBio" class="btn-link ml-0.5"><i id="pencil"
-                                                class="fa fa-pencil fa-sm"></i></button>
-                                        <textarea name="bio" class="form-control d-none w-100" style="resize: horizontal; margin-right:150px;"
-                                            id="bio" name="bio" rows="4">{{ $bio }} </textarea>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                            <span>Users</span>
+                                        </p>
+                                        <h5 class="font-weight-bolder">{{ $userCount }}</h5>
+                                        <p class="mb-0">
+                                            <span class="text-success text-sm font-weight-bolder">0%</span>
+                                            Lorem ipsum dolor sit
+                                        </p>
                                     </div>
-                                    <div class="d-none mt-2 flex justify-center gap-1" id="saveCancelButtons">
-                                        <button class="btn btn-success" id="saveBio">Save</button>
-                                        <button class="btn btn-secondary" id="cancelEditBio">Cancel</button>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div class="icon icon-shape bg-gradient-primary text-center rounded-circle">
+                                        <i class="mdi mdi-account text-lg opacity-100 pb-2" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row row-cols-lg-1 mb-8 pb-4 gy-4">
-                                <div class="col">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text" style="border: none;"><i
-                                                class="mdi mdi-email-outline"></i></span>
-                                        <input value="{{ $user->email }}" readonly type="text" class="form-control"
-                                            id="email" style="border: none;" autocomplete="email" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                            Upcoming Events
+                                        </p>
+                                        <h5 class="font-weight-bolder">{{ $events }}</h5>
+                                        <p class="mb-0">
+                                            <span class="text-success text-sm font-weight-bolder">+3%</span>
+                                            Lorem Ipsum
+                                        </p>
                                     </div>
                                 </div>
-
-                                <div class="col">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text" style="border: none;">@</span>
-                                        <input value="{{ $user->username }}" readonly type="text"
-                                            class="form-control" id="username" style="border: none;"
-                                            autocomplete="username" />
+                                <div class="col-4 text-end">
+                                    <div
+                                        class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                                        <i class="ni ni-world text-lg opacity-100" aria-hidden="true"></i>
                                     </div>
                                 </div>
-
-                                <div class="col">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text" style="border: none;"><i
-                                                class="mdi mdi-phone-outline"></i></span>
-                                        <input value="{{ $user->contact_number }}" readonly type="text"
-                                            class="form-control" id="contact_number" style="border: none;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                            Tithes
+                                        </p>
+                                        <h5 class="font-weight-bolder">{{ $tithes }}</h5>
+                                        <p class="mb-0">
+                                            <span class="text-danger text-sm font-weight-bolder">10%</span>
+                                            Lorem ipsum dolor sit amet.
+                                        </p>
                                     </div>
                                 </div>
-
-                                <div class="col mt-4 mx-auto py-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
-                                    style="width: 90%">
-                                    <strong class="text-slate-800">
-                                        Upcoming Events
-                                    </strong>
-                                    @foreach ($upcomingEvents as $upcomingEvent)
-                                        <div class="mt-1 ml-4 px-4 py-1 flex justify-between">
-                                            <li class="text-slate-600" style="max-width: 70%;">
-                                                <span>{{ $eventTitle = $upcomingEvent->title }}</span>
-                                            </li>
-
-                                            <span>
-                                                <button id="seeMore_{{ $upcomingEvent->id }}" class="btn-link">
-                                                    <i class="fa fa-ellipsis text-slate-500"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                    @endforeach
+                                <div class="col-4 text-end">
+                                    <div
+                                        class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                        <i class="ni ni-paper-diploma text-lg opacity-100" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="numbers">
+                                        <p class="text-sm mb-0 text-uppercase font-weight-bold">
+                                            Active Users
+                                        </p>
+                                        <h5 class="font-weight-bolder">{{ $activeUsers }}</h5>
+                                        <p class="mb-0">
+                                            <span class="text-success text-sm font-weight-bolder">+5%</span>
+                                            Lorem, ipsum dolor.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <div
+                                        class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                        <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Ministry Activities -->
+            <div class="col-lg-8 mb-4">
+                <div class="card h-100">
+                    <div class="card-body row g-2">
+                        <div class="col-12 pe-0 pe-md-3">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                                <h5 class="m-0 me-2">Ministry Activities {{ now()->subYear()->year }}</h5>
+                                <a class="fw-medium" href="javascript:void(0);">View all</a>
+                            </div>
+                        </div>
+                        <div class="chart">
+                            <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Profile Dashboard --}}
+            <div class="col-xl-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex flex-wrap justify-center">
+                            <div class="border" style="width:98%;"></div>
+                        </div>
+                        <strong>
+                            <h5 class="mt-2 font-bold">Hi! {{ $user->name }}</h5>
+                        </strong>
+                        <div class="mt-8 flex justify-center">
+                            <img src="http://127.0.0.1:8000/assets/img/avatars/1.png" alt="user-avatar"
+                                class="d-block w-px-120 h-px-120 rounded-full">
+                        </div>
+
+                        <div class="mt-2 flex justify-center">
+                            <p class="opacity-50">{{ $role->name }}</p>
+                        </div>
+
+                        <div class="mb-3 flex justify-center">
+                            <div class="d-flex flex-col">
+                                <div class="flex-grow-1">
+                                    <span id="bioContent" style="text-align:center">{{ $bio }}</span>
+                                    <button id="editBio" class="btn-link ml-0.5"><i id="pencil"
+                                            class="fa fa-pencil fa-sm"></i></button>
+                                    <textarea name="bio" class="form-control d-none w-100" style="resize: horizontal; margin-right:150px;"
+                                        id="bio" name="bio" rows="4">{{ $bio }} </textarea>
+                                </div>
+                                <div class="d-none mt-2 flex justify-center gap-1" id="saveCancelButtons">
+                                    <button class="btn btn-success" id="saveBio">Save</button>
+                                    <button class="btn btn-secondary" id="cancelEditBio">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center ">
+                            <div class="d-flex align-items-center">
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text" style="border: none;"><i
+                                            class="mdi mdi-email-outline"></i></span>
+                                    <input value="{{ $user->email }}" readonly type="text" class="form-control"
+                                        id="email" style="border: none;" autocomplete="email" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center ">
+                            <div class="d-flex align-items-center">
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text" style="border: none;">@</span>
+                                    <input value="{{ $user->username }}" readonly type="text" class="form-control"
+                                        id="username" style="border: none;" autocomplete="username" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap justify-content-between align-items-center ">
+                            <div class="d-flex align-items-center">
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text" style="border: none;"><i
+                                            class="mdi mdi-phone-outline"></i></span>
+                                    <input value="{{ $user->contact_number }}" readonly type="text"
+                                        class="form-control" id="contact_number" style="border: none;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mt-4 mx-auto p-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
+                            style="width: 100%">
+                            <strong class="text-slate-800">
+                                Upcoming Events
+                            </strong>
+                            @foreach ($upcomingEvents as $upcomingEvent)
+                                <div class="mt-1 ml-4 px-4 py-1 flex justify-between">
+                                    <li class="text-slate-600" style="max-width: 70%;">
+                                        <span>{{ $eventTitle = $upcomingEvent->title }}</span>
+                                    </li>
+
+                                    <span>
+                                        <button id="seeMore_{{ $upcomingEvent->id }}" class="btn-link">
+                                            <i class="fa fa-ellipsis text-slate-500"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!--/ Sales by Countries -->
+    </div>
     </div>
 @endsection
 
