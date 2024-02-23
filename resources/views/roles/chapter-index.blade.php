@@ -116,9 +116,26 @@
 
         <style>
             button#offcanvasbtn {
-                width: 122%;
+                width: 150%;
                 position: relative;
-                right: 45px;
+                right: 103px;
+            }
+
+            @media (max-width: 768px) {
+                button#offcanvasbtn {
+                    width: 100% !important;
+                    right: 0 !important;
+                    font-size: 0.75rem !important;
+                    margin-top: 1rem !important;
+                }
+
+                h2.fw-bold {
+                    font-size: 1.25rem !important;
+                }
+
+                div#createCanvas, div#showCanvas{
+                    width: 80%!important;
+                }
             }
         </style>
 
@@ -128,7 +145,6 @@
                 <div class="card-body">
                     <form id="createForm" action="{{ route('chapter.store') }}" method="POST">
                         @csrf
-                        @method('PUT')
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                                 @php
@@ -173,7 +189,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
-                            <button type="button" id="create_btn" class="btn btn-success">Create</button>
+                            <button type="submit" id="create_btn" class="btn btn-success">Create</button>
                         </div>
                     </form>
                 </div>
@@ -183,7 +199,7 @@
         <div class="col-lg-3 col-md-6">
             <div class="mt-3">
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel"
-                    style="width: 26% !important;">
+                    style="width: 27%">
                     <div class="offcanvas-header">
                         <h5 id="showCanvasLabel" class="offcanvas-title">Chapter Servant Details</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"

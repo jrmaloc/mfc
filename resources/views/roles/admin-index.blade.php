@@ -77,6 +77,22 @@
         h2 {
             margin-bottom: 0 !important;
         }
+
+        @media (max-width: 768px) {
+            button#offcanvasbtn {
+                font-size: 0.75rem !important;
+                margin-top: 1rem !important;
+            }
+
+            h2.fw-bold {
+                font-size: 1.25rem !important;
+            }
+
+            div#createCanvas,
+            div#showCanvas {
+                width: 80% !important;
+            }
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" />
@@ -172,7 +188,7 @@
         <div class="col-lg-3 col-md-6">
             <div class="mt-3">
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel"
-                    style="width: 26% !important;">
+                    style="width: 27%">
                     <div class="offcanvas-header">
                         <h5 id="showCanvasLabel" class="offcanvas-title">Admin Details</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -470,7 +486,7 @@
                 responsive: true,
                 serverSide: true,
                 scrollX: false,
-                scrollY: 550,
+                scrollY: 450,
                 ajax: {
                     url: "{{ route('admin.index') }}"
                 },
