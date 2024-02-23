@@ -31,19 +31,52 @@
             pointer-events: none;
             text-transform: capitalize !important;
         }
+
+        button.btn.btn-primary.waves-effect.waves-light{
+            border-color: #fff !important;
+        }
+
+        @media (max-width: 768px) {
+            div.modal-footer {
+                width: 110% !important;
+                margin-top: 45px;
+            }
+
+            button.btn.btn-primary.waves-effect.waves-light,
+            button.btn.btn-secondary.waves-effect.waves-light {
+                font-size: x-small;
+            }
+        }
     </style>
 @endsection
 
 @section('content')
-    <!-- @if ($errors->any())
-    <ul class="alert alert-danger mr-2 mt-4">
-                                        @foreach ($errors->all() as $error)
-    <li class="mb-2 text-sm">
-                                            {{ $error }}
-                                        </li>
-    @endforeach
-                                    </ul>
-    @endif -->
+    @if ($errors->any())
+        <style>
+            .toast-container {
+                z-index: 9999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const error = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            // Iterate over each error message and display it using SweetAlert2
+            @foreach ($errors->all() as $error)
+                error.fire({
+                    icon: 'error',
+                    title: '{{ $error }}',
+                });
+            @endforeach
+        </script>
+    @endif
 
     <!-- Modal for adding permission -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="permissionModalLabel"
@@ -112,7 +145,7 @@
                         @endforeach
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Close</button>
-                            <button type="submit" class=" btn btn-primary editPermissionBtn" style="background: #1b661b;"
+                            <button type="submit" class="btn btn-primary editPermissionBtn" style="background: #1b661b;"
                                 {{-- data-permission-id="{{ $id }}"> --}}>
                                 Save changes
                             </button>
@@ -123,10 +156,11 @@
         </div>
     </div>
 
-
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold py-3 mb-4">Permissions List</h4>
+            <h4 class="fw-bold">Permissions List</h4>
+        </div>
+        <div class="flex justify-end mb-4">
             <a href="#" id="addPermissionBtn" class="btn btn-success">Add Permissions<i
                     class="tf-icons mdi mdi-plus ml-1"></i></a>
         </div>
