@@ -60,7 +60,7 @@ class ChapterServantController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|numeric',
+            'name' => 'required|numeric'
         ], [
             'name.required' => 'Please Choose a User to give a role',
             'name.numeric' => 'Please Choose a User to give a role',
@@ -68,16 +68,14 @@ class ChapterServantController extends Controller
 
         $id = $data['name'];
         $user = User::findOrFail($id);
-        $info = $user->assignRole('Area Servant');
+        $info = $user->assignRole('Chapter Servant');
 
         if ($info) {
             $user->role_id = 4;
             $user->save();
         }
 
-        return response()->json([
-            'success' => 'Successfully created'
-        ]);
+        return redirect()->route('chapter.index')->with('success', 'Successfully added');
     }
 
     /**

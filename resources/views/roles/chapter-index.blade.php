@@ -81,15 +81,31 @@
 @endsection
 
 @section('content')
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input:<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    @if ($errors->any())
+        <style>
+            .toast-container {
+                z-index: 9999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const error = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            // Iterate over each error message and display it using SweetAlert2
+            @foreach ($errors->all() as $error)
+                error.fire({
+                    icon: 'error',
+                    title: '{{ $error }}',
+                });
+            @endforeach
+        </script>
     @endif
 
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -107,15 +123,16 @@
         </style>
 
         <div class="flex justify-end">
-            <x-off-canvas class="mb-2" title="Create a new Area Servant" btn_name="create area servant" id="createCanvas">
+            <x-off-canvas class="mb-2" title="Create a new Chapter Servant" btn_name="create chapter servant"
+                id="createCanvas">
                 <div class="card-body">
-                    <form id="createForm" action="" method="POST">
+                    <form id="createForm" action="{{ route('chapter.store') }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                                 @php
-                                    $users = \App\Models\User::where('role_id', '<>', 3)->pluck('name', 'id')->toArray();
+                                    $users = \App\Models\User::where('role_id', '<>', 4)->pluck('name', 'id')->toArray();
                                 @endphp
 
                                 <x-form.select-field name="name" selected="old('name')"
@@ -168,7 +185,7 @@
                 <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel"
                     style="width: 26% !important;">
                     <div class="offcanvas-header">
-                        <h5 id="showCanvasLabel" class="offcanvas-title">Area Servant Details</h5>
+                        <h5 id="showCanvasLabel" class="offcanvas-title">Chapter Servant Details</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Close"></button>
                     </div>
@@ -199,7 +216,8 @@
                                                         id="permission_{{ $loop->index }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot />
+                                                        @endcannot
+                                                        disabled />
                                                     <label class="form-check-label"
                                                         for="permission_{{ $loop->index }}">{{ $value->name }}</label>
                                                 </div>
@@ -213,7 +231,8 @@
                                                         id="epermission_{{ $value->id }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot />
+                                                        @endcannot
+                                                        disabled />
                                                     <label class="form-check-label"
                                                         for="epermission_{{ $value->id }}">{{ $value->name }}</label>
                                                 </div>
@@ -222,12 +241,12 @@
                                     </div>
                                 </div>
                             </div>
-                            @can('edit-role')
+                            {{-- @can('edit-role')
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
                                     <button type="reset" class="btn btn-outline-info">Reset</button>
                                     <button type="submit" class="btn btn-success">Save Changes</button>
                                 </div>
-                            @endcan
+                            @endcan --}}
                         </form>
                     </div>
                 </div>
@@ -249,43 +268,72 @@
             </div>
         </div>
     </div>
+
+    @if (session('success'))
+        <style>
+            .toast-container {
+                z-index: 99999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+
+            Toast.fire({
+                icon: 'success',
+                title: "{{ session('success') }}",
+
+            });
+            console.log("{{ session('success') }}");
+        </script>
+    @elseif (session('delete'))
+        <style>
+            .toast-container {
+                z-index: 9999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const x = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            x.fire({
+                icon: 'success',
+                title: "{{ session('delete') }}",
+
+            });
+        </script>
+    @endif
 @endsection
 
 @push('scripts')
     <script>
         $(document).ready(function() {
-            // $('#create_btn').click(function() {
-            //     $.ajax({
-            //         url: "{{ route('chapter.store') }}",
-            //         type: 'POST',
-            //         dataType: 'json',
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         data: {
-            //             "name": $('#name').val()
-            //         },
-            //         success: function(data) {
-            //             console.log(data);
-            //             location.reload();
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error(xhr.responseText);
-            //         }
-            //     });
-            // });
-
             $(document).on("click", ".remove-btn", function(e) {
                 let id = $(this).attr("id");
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove area servant from list",
+                    text: "Demote to a Member?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, remove it!'
+                    confirmButtonText: 'Yes, demote it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({

@@ -83,15 +83,31 @@
 @endsection
 
 @section('content')
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input:<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    @if ($errors->any())
+        <style>
+            .toast-container {
+                z-index: 9999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const error = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            // Iterate over each error message and display it using SweetAlert2
+            @foreach ($errors->all() as $error)
+                error.fire({
+                    icon: 'error',
+                    title: '{{ $error }}',
+                });
+            @endforeach
+        </script>
     @endif
 
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -187,7 +203,7 @@
                                                     <input name="permission[]" value="{{ $value->id }}"
                                                         class="form-check-input" type="checkbox"
                                                         id="permission_{{ $loop->index }}"
-                                                        @cannot('edit-role') disabled @endcannot />
+                                                        @cannot('edit-role') disabled @endcannot disabled />
                                                     <label class="form-check-label"
                                                         for="permission_{{ $loop->index }}">{{ $value->name }}</label>
                                                 </div>
@@ -199,7 +215,7 @@
                                                     <input name="permission[]" value="{{ $value->id }}"
                                                         class="form-check-input" type="checkbox"
                                                         id="epermission_{{ $value->id }}"
-                                                        @cannot('edit-role') disabled @endcannot />
+                                                        @cannot('edit-role') disabled @endcannot disabled />
                                                     <label class="form-check-label"
                                                         for="epermission_{{ $value->id }}">{{ $value->name }}</label>
                                                 </div>
@@ -208,12 +224,12 @@
                                     </div>
                                 </div>
                             </div>
-                            @cannot('edit-role')
+                            {{-- @can('edit-role')
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
                                     <button type="reset" class="btn btn-outline-info">Reset</button>
                                     <button type="submit" class="btn btn-success">Save Changes</button>
                                 </div>
-                            @endcannot
+                            @endcan --}}
                         </form>
                     </div>
                 </div>
@@ -246,16 +262,11 @@
         <script>
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top-end',
-                iconColor: 'white',
+                animation: true,
+                position: 'top-right',
                 showConfirmButton: false,
                 timer: 3000,
-                showTimer: true,
-                showCloseButton: false,
-                customClass: {
-                    popup: 'colored-toast',
-                    container: 'toast-container',
-                },
+                timerProgressBar: true,
             });
 
 
@@ -276,15 +287,11 @@
         <script>
             const x = Swal.mixin({
                 toast: true,
-                position: 'top-end',
-                iconColor: 'white',
-                customClass: {
-                    popup: 'colored-toast',
-                    container: 'toast-container',
-                },
+                animation: true,
+                position: 'top-right',
                 showConfirmButton: false,
                 timer: 3000,
-                showCloseButton: true,
+                timerProgressBar: true,
             });
 
             x.fire({
@@ -305,12 +312,12 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove admin from list",
+                    text: "Demote to a Member?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, remove it!'
+                    confirmButtonText: 'Yes, demote it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({

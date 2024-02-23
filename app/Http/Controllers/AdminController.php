@@ -55,6 +55,7 @@ class AdminController extends Controller
         $data = $request->validate([
             'name' => 'required|numeric'
         ], [
+            'name.required' => 'Please Choose a User to give a role',
             'name.numeric' => 'Please Choose a User to give a role',
         ]);
 

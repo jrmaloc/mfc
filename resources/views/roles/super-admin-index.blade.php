@@ -65,15 +65,31 @@
 @endsection
 
 @section('content')
-    @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input:<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    @if ($errors->any())
+        <style>
+            .toast-container {
+                z-index: 9999;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const error = Swal.mixin({
+                toast: true,
+                animation: true,
+                position: 'top-right',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            // Iterate over each error message and display it using SweetAlert2
+            @foreach ($errors->all() as $error)
+                error.fire({
+                    icon: 'error',
+                    title: '{{ $error }}',
+                });
+            @endforeach
+        </script>
     @endif
 
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -93,7 +109,7 @@
                     </div>
 
                     <div class="offcanvas-body">
-                        <form id="editForm" method="PUT">
+                        <form id="editForm" {{-- action=" route('roles.update', ['role' => ]) " }}" --}} method="PUT">
                             @csrf
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
@@ -115,7 +131,7 @@
                                                     <input name="permission[]" value="{{ $value->id }}"
                                                         class="form-check-input" type="checkbox"
                                                         id="permission_{{ $loop->index }}"
-                                                        @cannot('edit_role') disabled @endcannot />
+                                                        @cannot('edit_role') disabled @endcannot disabled />
                                                     <label class="form-check-label"
                                                         for="permission_{{ $loop->index }}">{{ $value->name }}</label>
                                                 </div>
@@ -127,7 +143,7 @@
                                                     <input name="permission[]" value="{{ $value->id }}"
                                                         class="form-check-input" type="checkbox"
                                                         id="epermission_{{ $value->id }}"
-                                                        @cannot('edit_role') disabled @endcannot />
+                                                        @cannot('edit_role') disabled @endcannot disabled />
                                                     <label class="form-check-label"
                                                         for="epermission_{{ $value->id }}">{{ $value->name }}</label>
                                                 </div>
@@ -136,12 +152,12 @@
                                     </div>
                                 </div>
                             </div>
-                            @can('edit_role')
+                            {{-- @can('edit_role')
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
                                     <button type="reset" class="btn btn-outline-info">Reset</button>
                                     <button type="submit" class="btn btn-success">Save Changes</button>
                                 </div>
-                            @endcan
+                            @endcan --}}
                         </form>
                     </div>
                 </div>
@@ -163,64 +179,6 @@
             </div>
         </div>
     </div>
-
-    @if (session('success'))
-        <style>
-            .toast-container {
-                z-index: 99999;
-            }
-        </style>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-        <script>
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                iconColor: 'white',
-                showConfirmButton: false,
-                timer: 3000,
-                showCloseButton: true,
-                customClass: {
-                    popup: 'colored-toast',
-                    container: 'toast-container',
-                },
-            });
-
-
-            Toast.fire({
-                icon: 'success',
-                title: "{{ session('success') }}",
-
-            });
-            console.log("{{ session('success') }}");
-        </script>
-    @elseif (session('delete'))
-        <style>
-            .toast-container {
-                z-index: 9999;
-            }
-        </style>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-        <script>
-            const x = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                iconColor: 'white',
-                customClass: {
-                    popup: 'colored-toast',
-                    container: 'toast-container',
-                },
-                showConfirmButton: false,
-                timer: 3000,
-                showCloseButton: true,
-            });
-
-            x.fire({
-                icon: 'success',
-                title: "{{ session('delete') }}",
-
-            });
-        </script>
-    @endif
 @endsection
 
 @push('scripts')

@@ -76,9 +76,7 @@ class AreaServantController extends Controller
             $user->save();
         }
 
-        return response()->json([
-            'success' => 'Successfully created',
-        ]);
+        return redirect()->route('area.index')->with('success', 'Successfully added');
     }
 
     /**

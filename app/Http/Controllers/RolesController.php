@@ -177,7 +177,7 @@ class RolesController extends Controller
             if ($remove) {
                 return response([
                     'status' => true,
-                    'message' => 'User demoted to member role'
+                    'delete' => 'User demoted to member role'
                 ]);
             } else {
                 return response([

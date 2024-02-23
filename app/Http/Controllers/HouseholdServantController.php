@@ -33,7 +33,7 @@ class HouseholdServantController extends Controller
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
                     return '<div class="flex gap-1">
-                    <a href="javascript:void(0);" onclick="showForm(' . $data['id'] . ')" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>
+                    <a href="javascript:void(0);" id="' . $data->id . '" class="btn btn-outline-primary show-btn btn-sm" data-bs-toggle="offcanvas" data-bs-target="#showCanvas" aria-controls="showCanvas"><i class="tf-icons mdi mdi-eye"></i></a>
                     <a href="javascript:void(0);" id="' . $data->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>
                     </div>';
                 })
@@ -68,16 +68,14 @@ class HouseholdServantController extends Controller
 
         $id = $data['name'];
         $user = User::findOrFail($id);
-        $info = $user->assignRole('Area Servant');
+        $info = $user->assignRole('Household Servant');
 
         if ($info) {
             $user->role_id = 6;
             $user->save();
         }
 
-        return response()->json([
-            'success' => 'Successfully created',
-        ]);
+        return redirect()->route('household.index')->with('success', 'Successfully added');
     }
 
     /**

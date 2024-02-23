@@ -300,6 +300,10 @@
             font-size: 2rem;
         }
 
+        .offcanvas-body {
+            overflow-x: hidden;
+        }
+
         @media(max-width:780px) {
             a.nav-item.nav-link.px-0.me-xl-4 {
                 margin-top: 16px;
