@@ -31,7 +31,7 @@ class RolesController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
-                    return '<a href="javascript:void(0);" onclick="showForm(' . $data['id'] . ')" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
+                    return '<a href="javascript:void(0);" id="' . $data->id . '" class="btn btn-outline-primary btn-sm show-btn" data-bs-toggle="offcanvas" data-bs-target="#showCanvas" aria-controls="showCanvas"><i class="tf-icons mdi mdi-eye"></i></a>';
                 })
                 ->rawColumns(['roles', 'actions'])
                 ->make(true);
@@ -70,7 +70,7 @@ class RolesController extends Controller
 
             if (!$role) {
                 // Handle the case when the role is not found
-                return response()->json(['error' => 'Role not found'], 404);
+                return response()->json(['error' => 'Error retrieving important data'], 404);
             }
 
             $permissions = Role::where('id', $role_id)->with('permissions')
@@ -130,6 +130,7 @@ class RolesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        dd($request->all());
         // Validate the request data
         // $data = $request->validate([
         //     'name' => 'required',

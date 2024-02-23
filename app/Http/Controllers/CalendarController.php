@@ -141,7 +141,9 @@ class CalendarController extends Controller
                 $events[] = $event;
             }
         }
-        return view('activities.calendar')->with('events', $events);
+        return view('activities.calendar', [
+            'role' => $role,
+        ])->with('events', $events);
     }
 
     /**

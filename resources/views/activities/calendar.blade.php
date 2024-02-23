@@ -1,5 +1,10 @@
 @extends('layout.layout')
 
+@section('title')
+    <link href="{{ URL::asset('css/mobiscroll.javascript.min.css') }}" rel="stylesheet" />
+    <script src="{{ URL::asset('js/mobiscroll.javascript.min.js') }}"></script>
+@endsection
+
 @section('head')
     <title>Calendar</title>
     <style>
@@ -107,6 +112,63 @@
 
         .activity-checkbox:checked+label:after {
             content: "✔️";
+        }
+
+        @media (max-width: 1040px) {
+            div#calendar {
+                width: 100% !important;
+                height: 488px !important;
+            }
+
+            body {
+                overflow: hidden !important;
+            }
+
+            div.card.px-16.py-10.mb-20 {
+                padding: 20px 20px !important;
+                width: 100% !important;
+                position: relative;
+            }
+
+            h2#fc-dom-1 {
+                display: flex !important;
+                justify-items: center !important;
+                font-size: 2rem !important;
+                text-align: center;
+                padding: 0px 30px;
+            }
+
+            div.fc-toolbar-chunk {
+                display: flex;
+                width: 520%;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+
+            div.content {
+                width: 100% !important;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+                flex-direction: column;
+                width: 25%;
+                margin: 0 auto;
+            }
+
+            div#wrap {
+                margin-right: 20px;
+                margin-left: 20px;
+            }
+
+            div#back_btn {
+                display: none;
+            }
+
+            div#create_btn {
+                display: flex !important;
+            }
         }
     </style>
 @endsection
@@ -244,15 +306,25 @@
         </div>
     @endcan
 
-    <div id='wrap' class=" w-70 mx-16 ">
+    <div id='wrap' class="w-70 mx-16">
         <!-- Set data attribute on an HTML element -->
 
 
-        <div class="flex justify-end mb-2 mt-3"> <a href="{{ route('activity.list') }}" class="my-4 btn btn-dark">See
+        <div id="back_btn" class="flex justify-end mb-2 mt-3"> <a href="{{ route('activity.list') }}"
+                class="my-4 btn btn-dark">See
                 List of Events
                 <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a>
         </div>
-        <div class="content mx-15">
+        @can('create-activity')
+            <div id="create_btn" class="d-none justify-end mt-3">
+                <a href="#" class="my-4 btn btn-success">
+                    Create Event
+                    <i class="tf-icons mdi mdi-plus ml-2"></i>
+                </a>
+            </div>
+        @endcan
+
+        <div class="content">
             <div class="card px-16 py-10 mb-20">
                 <div id='calendar' class=""></div>
             </div>
@@ -316,14 +388,95 @@
                 });
             @endcan
 
+
+            $(document).on('click', '#create_btn', function(e) {
+                $('#activityModal').modal('toggle');
+
+                $('#activityModal').on('hidden.bs.modal', function() {
+                    $(this).find(
+                        'input[type="text"], input[type="number"], input[type="datetime-local"], textarea'
+                    ).val('');
+                });
+
+                var start_Date = moment(start_date.start).add(8, 'hour').format('LL @ LT');
+                $('.startDate').val(start_Date);
+                var end_Date = moment(start_date.start).add(9, 'hour').format(
+                    'LL @ LT');
+                $('.endDate').val(end_Date);
+
+                $('#createBtn').off('click').on('click', function() {
+                    var title = $('#title').val();
+                    var description = $('#description').val();
+                    var location = $('#location').val();
+                    var start = $('#start_date').val();
+                    var start_date = moment(start).format('YYYY-MM-DD HH:mm:ss');
+                    var end = $('#end_date').val();
+                    var end_date = moment(end).format('YYYY-MM-DD HH:mm:ss');
+                    var reg_fee = $('#reg_fee').val();
+                    var selectedValues = $('.activity-checkbox:checked').map(function() {
+                        return $(this).val();
+                    }).get();
+
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content')
+                        },
+                        url: "{{ route('calendar.store') }}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            title,
+                            description,
+                            location,
+                            start_date,
+                            end_date,
+                            reg_fee,
+                            selectedValues
+                        },
+
+                        success: function(response) {
+                            $('#activityModal').modal('hide');
+                            calendar.addEvent('event', {
+                                'title': response.title,
+                                'description': response.description,
+                                'location': response.location,
+                                'reg_fee': response.reg_fee,
+                                'start': response.start_date,
+                                'end': response.end_date,
+                            });
+
+                            Toast.fire({
+                                icon: "success",
+                                title: "Event Created Successfully. Reloading...",
+                            });
+
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
+                        },
+
+                        error: function(error) {
+                            if (error.responseJSON.errors) {
+                                console.log(error.responseJSON.errors);
+                            } else {
+                                console.log("Unexpected error response:", error
+                                    .responseJSON);
+                            }
+                        },
+                    });
+                });
+            });
+
+
             var events = @json($events);
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
+                initialView: 'listWeek',
                 headerToolbar: {
-                    left: 'prev,today,next', // will normally be on the left. if RTL, will be on the right
-                    center: 'title',
-                    right: 'dayGridMonth,dayGridDay,listWeek,multiMonthYear',
+                    right: 'prev,today,next', // will normally be on the left. if RTL, will be on the right
+                    left: 'title',
+                    center: 'listWeek,dayGridMonth,dayGridDay,multiMonthYear',
                 },
 
                 editable: true,
@@ -398,9 +551,9 @@
                         var description = $('#description').val();
                         var location = $('#location').val();
                         var start = $('#start_date').val();
-                        var start_date = moment(start). format('YYYY-MM-DD HH:mm:ss');
+                        var start_date = moment(start).format('YYYY-MM-DD HH:mm:ss');
                         var end = $('#end_date').val();
-                        var end_date = moment(end). format('YYYY-MM-DD HH:mm:ss');
+                        var end_date = moment(end).format('YYYY-MM-DD HH:mm:ss');
                         var reg_fee = $('#reg_fee').val();
                         var selectedValues = $('.activity-checkbox:checked').map(function() {
                             return $(this).val();
@@ -470,7 +623,6 @@
                     window.location.href = url;
                 },
             });
-
             calendar.render();
         });
     </script>

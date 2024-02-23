@@ -3,8 +3,22 @@
     'action' => '',
 ])
 
+<style>
+    @media (max-width: 768px) {
+
+        label.btn,
+        div.col {
+            width: 100% !important;
+        }
+
+        div.input-group, div.form-password-toggle {
+            width: 100%;
+        }
+    }
+</style>
+
 <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="flex justify-end"> <a href="{{ route($back) }}" class="my-4 btn btn-dark">Back to List<i
+    <div class="flex justify-end"> <a href="#" id="back" class="my-4 btn btn-dark">Back<i
                 class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a> </div>
     <div class="card mb-4">
         <h4 class="card-header font-semibold mt-4 ml-2">{{ $slot }}</h4> <!-- Account -->
@@ -18,16 +32,12 @@
                             class="d-block w-px-120 h-px-120 rounded" id="uploadedAvatar" />
                         <div class="button-wrapper">
                             <label for="upload" class=" btn btn-success me-2 mb-3" tabindex="0">
-                                <span class="d-none d-sm-block">
-                                    Upload new photo
-                                </span>
+                                <span class="d-none d-sm-block">Upload new photo</span>
                                 <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
                                 <input type="file" id="upload" name="avatar" class="account-file-input" hidden
                                     accept="image/png, image/jpeg" />
                             </label>
-
                             <div class="text-muted small">Allowed JPG, GIF or PNG. Max size of 800K</div>
-
                         </div>
                     </div>
                 </div>

@@ -30,11 +30,8 @@ class YouthController extends Controller
                     $deleteButton = '<a href="javascript:void(0);" id="' . $info->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>';
                     $viewButton = '<a href="youth/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
                     // Check user role before adding edit and delete buttons
-                    if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Super Admin') {
-                        return '<div class="dropdown">' . $editButton . $deleteButton . '</div>';
-                    } elseif (Auth::user()->role == 'editor' && $info->editableByEditor()) {
-                        // Additional check if the user has permission to edit this specific item
-                        return '<div class="dropdown">' . $editButton . '</div>';
+                    if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1') {
+                        return '<div class="dropdown flex gap-2">'. $viewButton . $editButton . $deleteButton . '</div>';
                     } else {
                         // Default case for users with no edit/delete permissions
                         return '<div class="dropdown">' . $viewButton . '</div>';

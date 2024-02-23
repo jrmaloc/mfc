@@ -27,7 +27,9 @@
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="d-flex justify-content-between align-items-center">
-        <h4 class="fw-bold py-3 mb-4">Tithes and Offerings List</h4>
+        <h2 id="nb" class="fw-bold py-3">Tithes and Offerings List</h2>
+    </div>
+    <div class="flex justify-end mb-4">
         <a href="{{route('tithes.create')}}" class="btn btn-success">
             Give Tithes
             <i class="tf-icons mdi mdi-plus ml-1"></i>
@@ -68,7 +70,7 @@
             responsive: true,
             serverSide: true,
             scrollX: true,
-            scrollY: 700,
+            scrollY: 460,
             ajax: {
                 url: "{{ route('tithes.list') }}"
             },

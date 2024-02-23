@@ -57,8 +57,10 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold py-3 mb-4">Servants Members List</h4>
+        <div id="nb" class="d-flex justify-content-between align-items-center">
+            <h4 class="fw-bold py-3">Servants Members List</h4>
+        </div>
+        <div class="flex justify-end mb-4">
             @can('view-rol')
                 <a href="{{ route('servants.create') }}" class="btn btn-success">
                     Add a User

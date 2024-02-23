@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed layout-compact" dir="ltr" data-theme="theme-default"
-    data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed layout-compact scroll-smooth" dir="ltr"
+    data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
@@ -296,7 +296,15 @@
             z-index: 9999 !important;
         }
 
+        h4#nb {
+            font-size: 2rem;
+        }
+
         @media(max-width:780px) {
+            a.nav-item.nav-link.px-0.me-xl-4 {
+                margin-top: 16px;
+            }
+
             h4#nb {
                 font-size: 1.25rem;
             }
@@ -320,6 +328,14 @@
             ul.pagination {
                 margin-bottom: 20px !important;
             }
+
+            ul.menu-inner.overflow-auto {
+                overflow-x: hidden !important;
+            }
+        }
+
+        ul.menu-inner {
+            scroll-behavior: smooth;
         }
     </style>
 
@@ -354,7 +370,7 @@
                     </a>
                 </div>
 
-                <ul class="menu-inner py-1">
+                <ul class="menu-inner py-1 overflow-x-hidden">
                     <div class="menu-inner-shadow"></div>
                     <!-- Dashboard -->
                     @can('view-role')

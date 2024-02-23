@@ -132,9 +132,7 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold py-3 mb-4">Activity/Events List</h4>
-            <a href="{{ route('calendar.list') }}" class="btn btn-success">Go To Calendar<i
-                    class="tf-icons mdi mdi-calendar ml-2"></i></a>
+            <h4 id="nb" class="fw-bold py-3">Activity/Events List</h4>
         </div>
 
         <div class="card">

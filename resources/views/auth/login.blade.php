@@ -130,8 +130,8 @@
                                 <input type="text" class="form-control mb-1" id="email_or_username"
                                     name="email_or_username" placeholder="Enter your email or username" autofocus
                                     :value="old('email_or_username')" />
-                                <label for="email_or_username" class="flex ">Email or Username <p
-                                        class="text-danger ml-1">*</p></label>
+                                <label for="email_or_username" class="flex ">Email or Username<span
+                                        class="text-danger ml-1">*</span></label>
                                 @error('email')
                                     <span class="text-danger">This email doesn't exist in our records.</span>
                                 @enderror
@@ -148,9 +148,9 @@
                                                 name="password"
                                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                                 aria-describedby="password" />
-                                            <label for="password" class="flex">Password <p
+                                            <label for="password" class="flex">Password<span
                                                     class="text-danger ml-1">*
-                                                </p></label>
+                                                </span></label>
                                         </div>
                                         <span class="input-group-text cursor-pointer eye">
                                             <i class="fa-solid fa-eye"></i></span>

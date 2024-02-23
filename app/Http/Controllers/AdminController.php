@@ -26,7 +26,7 @@ class AdminController extends Controller
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
                     return '<div class="flex gap-1">
-                    <a href="javascript:void(0);" onclick="showForm(' . $data['id'] . ')" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>
+                    <a href="javascript:void(0);" id="' . $data->id . '" class="btn btn-outline-primary show-btn btn-sm" data-bs-toggle="offcanvas" data-bs-target="#showCanvas" aria-controls="showCanvas"><i class="tf-icons mdi mdi-eye"></i></a>
                     <a href="javascript:void(0);" id="' . $data->id . '" class="btn btn-outline-danger remove-btn btn-sm"><i class="tf-icons mdi mdi-trash-can"></i></a>
                     </div>';
                 })
@@ -67,9 +67,7 @@ class AdminController extends Controller
             $user->save();
         }
 
-        return response()->json([
-            'success' => 'Successfully created'
-        ]);
+        return redirect()->route('admin.index')->with('success', 'Successfully added');
     }
 
     /**

@@ -17,7 +17,18 @@
             @endif
         @endcannot
 
+        <style>
+            @media (max-width:768px) {
+                div#arrow{
+                    display: block !important;
+                }
+            }
+        </style>
+
         <div class="card">
+            <div id="arrow" class="d-none mx-3 mt-3">
+                <span id="back" class="mdi mdi-arrow-left mdi-24px"></span>
+            </div>
             <div class="card-header">
                 <h4>
                     {{ $activity->title }}

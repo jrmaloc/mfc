@@ -10,19 +10,13 @@
     'opParam' => '',
 ])
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
-
 <div {{ $attributes->class(['col']) }}>
     <label for="{{ $name }}" class="form-label">{{ $slot }}<i class="text-danger">*</i></label>
     <select id="{{ $name }}" name="{{ $name }}"
-        class="select2 form-select form-control @if ($error) select-is-invalid @endif"
-        {{ $param }}>
+        class="form-select form-control @if ($error) select-is-invalid @endif" {{ $param }}>
         <option {{ $opParam }}>{{ $placeholder }}</option>
         @foreach ($options as $optionKey => $optionValue)
-            <option value="{{ $optionKey }}" {{ $selected === $optionKey ? 'selected' : '' }}>
+            <option value="{{ $optionKey }}" {{ $selected == $optionKey ? 'selected' : '' }}>
                 {{ $optionValue }}
             </option>
         @endforeach
