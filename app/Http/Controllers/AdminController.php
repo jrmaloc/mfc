@@ -53,7 +53,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|numeric'
+            'name' => 'required|numeric',
         ], [
             'name.required' => 'Please Choose a User to give a role',
             'name.numeric' => 'Please Choose a User to give a role',
@@ -137,12 +137,12 @@ class AdminController extends Controller
             if ($remove) {
                 return response([
                     'status' => true,
-                    'message' => 'User demoted to member role'
+                    'message' => 'User demoted to member role',
                 ]);
             } else {
                 return response([
                     'error' => true,
-                    'message' => 'Failed to change user role'
+                    'message' => 'Failed to change user role',
                 ]);
             }
         }

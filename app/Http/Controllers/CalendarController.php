@@ -234,6 +234,10 @@ class CalendarController extends Controller
      */
     public function show(Request $request, string $id)
     {
+        if ($request->ajax()) {
+            return response()->json(['redirect' => route('calendar.show', ['id' => $id])]);
+        }
+
         $activity = Activity::findOrFail($id);
         $user = Auth::user();
 
@@ -284,10 +288,6 @@ class CalendarController extends Controller
                 'activity' => $activity,
             ]);
         }
-
-        if ($request->ajax()) {
-            return response()->json(['redirect' => route('calendar.show', ['id' => $id])]);
-        };
     }
 
     /**

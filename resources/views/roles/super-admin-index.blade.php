@@ -110,8 +110,7 @@
 
         <div class="col-lg-3 col-md-6">
             <div class="mt-3">
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel"
-                    style="width: 27%">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel">
                     <div class="offcanvas-header">
                         <h5 id="showCanvasLabel" class="offcanvas-title">Super Admin Details</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModelHasPermissions;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
@@ -98,24 +98,21 @@ class RolesController extends Controller
     {
         try {
             // Fetch role ID
-            $role = User::find($id);
+            $user = User::find($id);
 
-            $role_id = $role->role_id;
-
-            if (!$role) {
+            if (!$user) {
                 // Handle the case when the role is not found
                 return response()->json(['error' => 'Role not found'], 404);
             }
 
-            $permissions = Role::where('id', $role_id)->with('permissions')
-                ->whereHas('permissions', function ($q) use ($role_id) {
-                    $q->where('role_id', $role_id);
-                })->get();
+            $permissions = ModelHasPermissions::where('model_type', 'App\Models\User') // Adjust 'App\Models\User' to your actual model class
+                ->where('model_id', $id)
+                ->get();
 
             // Return the permission details along with roles as JSON response
             return response()->json([
                 'permissions' => $permissions,
-                'role' => $role,
+                'user' => $user,
             ]);
 
         } catch (\Exception $e) {
@@ -130,36 +127,17 @@ class RolesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
-        // Validate the request data
-        // $data = $request->validate([
-        //     'name' => 'required',
-        //     'permission' => 'required|array', // Assuming permissions are submitted as an array
-        // ]);
+        $user = User::findOrFail($id);
 
-        // // Find the role by ID
-        // $role = User::findOrFail($id);
+        $permissions = [];
+        foreach ($request->permission as $permissionId) {
+            $permissions[$permissionId] = ['model_type' => User::class];
+        }
 
-        // // Update the role name
-        // $role->name = $data['name'];
+        $user->permissions()->sync($permissions);
 
-        // // Sync permissions for the role
-        // if (isset($data['permission'])) {
-        //     $permissions = Permission::whereIn('id', $data['permission'])->get();
-        //     $role->syncPermissions($permissions);
-        // } else {
-        //     // If no permissions are selected, you might want to handle this case accordingly
-        //     // For example, removing all permissions for the role
-        //     return redirect()->back()->with('error', 'There is no permissions selected');
-        // }
-
-        // // Save the changes to the role
-        // $role->save();
-
-        // // Optionally, redirect to the roles index or wherever is appropriate
-        // return redirect()->route('roles.index')->with('success', 'Role updated successfully!');
+        return redirect()->back()->with('success', 'Permissions updated successfully.');
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -177,12 +155,12 @@ class RolesController extends Controller
             if ($remove) {
                 return response([
                     'status' => true,
-                    'delete' => 'User demoted to member role'
+                    'delete' => 'User demoted to member role',
                 ]);
             } else {
                 return response([
                     'error' => true,
-                    'message' => 'Failed to change user role'
+                    'message' => 'Failed to change user role',
                 ]);
             }
         }

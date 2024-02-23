@@ -116,9 +116,7 @@
 
         <style>
             button#offcanvasbtn {
-                width: 150%;
-                position: relative;
-                right: 103px;
+                width: max-content;
             }
 
             @media (max-width: 768px) {
@@ -133,8 +131,9 @@
                     font-size: 1.25rem !important;
                 }
 
-                div#createCanvas, div#showCanvas{
-                    width: 80%!important;
+                div#createCanvas,
+                div#showCanvas {
+                    width: 80% !important;
                 }
             }
         </style>
@@ -198,8 +197,7 @@
 
         <div class="col-lg-3 col-md-6">
             <div class="mt-3">
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel"
-                    style="width: 27%">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="showCanvas" aria-labelledby="showCanvasLabel">
                     <div class="offcanvas-header">
                         <h5 id="showCanvasLabel" class="offcanvas-title">Chapter Servant Details</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -232,8 +230,7 @@
                                                         id="permission_{{ $loop->index }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot
-                                                        disabled />
+                                                        @endcannot />
                                                     <label class="form-check-label"
                                                         for="permission_{{ $loop->index }}">{{ $value->name }}</label>
                                                 </div>
@@ -247,8 +244,7 @@
                                                         id="epermission_{{ $value->id }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot
-                                                        disabled />
+                                                        @endcannot />
                                                     <label class="form-check-label"
                                                         for="epermission_{{ $value->id }}">{{ $value->name }}</label>
                                                 </div>
@@ -257,12 +253,12 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- @can('edit-role')
+                            @can('edit-role')
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
                                     <button type="reset" class="btn btn-outline-info">Reset</button>
                                     <button type="submit" class="btn btn-success">Save Changes</button>
                                 </div>
-                            @endcan --}}
+                            @endcan
                         </form>
                     </div>
                 </div>
@@ -308,7 +304,6 @@
                 title: "{{ session('success') }}",
 
             });
-            console.log("{{ session('success') }}");
         </script>
     @elseif (session('delete'))
         <style>
@@ -428,38 +423,37 @@
             });
 
             // show Canvas
-            var showCanvas = document.getElementById('showCanvas')
+            var showCanvas = document.getElementById('showCanvas');
             showCanvas.addEventListener('show.bs.offcanvas', function() {
                 var id = $('.show-btn').attr('id');
 
+                $('#editForm').attr('action', '{{ route('roles.update', [':id']) }}'.replace(':id', id));
+
                 $.ajax({
-                    url: '{{ route('area.edit', ['area' => ':id']) }}'.replace(':id', id),
+                    url: '{{ route('roles.edit', [':id']) }}'.replace(':id', id),
                     type: 'GET',
 
                     success: function(response) {
                         var permissions = response.permissions;
-                        var role = response.role;
+                        var name = response.user.name;
                         // Populate form fields in the edit modal with permission details
-                        if (role && role.name) {
+                        if (name && permissions) {
                             // Populate form fields in the edit modal with permission details
-                            $('#editForm input[name="name"]').val(role.name);
+                            $('#editForm input[name="name"]').val(name);
 
                             $(document).ready(function() {
                                 // Sample condition: preselect checkboxes for roles with IDs 1 and 3
                                 permissions.forEach(function(permission) {
-                                    var data = permission.permissions;
+                                    var id = permission.permission_id;
 
-                                    data.forEach(function(permissionId) {
-                                        var checkboxId = 'permission_' +
-                                            (
-                                                permissionId.id - 1
-                                            ); // Adjust the ID to match checkbox IDs
-                                        $('#' + checkboxId).prop(
-                                            'checked', true);
-                                        $('#epermission_' + permissionId
-                                            .id).prop('checked',
-                                            true);
-                                    });
+                                    var checkboxId = 'permission_' +
+                                        (
+                                            id - 1
+                                        );
+                                    $('#' + checkboxId).prop(
+                                        'checked', true);
+                                    $('#epermission_' + id).prop('checked',
+                                        true);
                                 });
                             });
                         } else {

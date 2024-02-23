@@ -114,7 +114,7 @@
             content: "✔️";
         }
 
-        @media (max-width: 1040px) {
+        @media (max-width: 1199px) {
             div#calendar {
                 width: 100% !important;
                 height: 488px !important;

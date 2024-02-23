@@ -74,11 +74,26 @@
             background-color: rgb(134 239 172 / var(--tw-bg-opacity));
         }
 
-        div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4{
+        div.row.row-cols-1.row-cols-md-2.row-cols-lg-4.g-4 {
             padding-right: 0 !important;
             padding-left: 0 !important;
             margin-left: 0 !important;
         }
+
+        /* @media (min-width: 768px) {
+            .col-md-6 {
+                flex: 0 0 auto;
+                width: 50%;
+                margin-top: 1.50rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .row.row-cols-1.row-cols-md-2.row-cols-lg-4,
+            .col-lg-8.mb-4 {
+                margin: 0 auto !important;
+            }
+        } */
     </style>
 @endsection
 
@@ -89,7 +104,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="fw-bold py-3 mb-4">Dashboard</h4>
             </div>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+            <div class="row mx-auto row-cols-1 row-cols-md-2 row-cols-lg-4">
                 <div class="col mb-4">
                     <div class="card h-100">
                         <div class="card-body">
@@ -196,7 +211,7 @@
             </div>
 
             <!-- Ministry Activities -->
-            <div class="col-lg-8 mb-4">
+            <div class="col-lg-8 col-md-8 mb-4">
                 <div class="card h-100">
                     <div class="card-body row g-2">
                         <div class="col-12 pe-0 pe-md-3">
@@ -213,9 +228,9 @@
             </div>
 
             {{-- Profile Dashboard --}}
-            <div class="col-xl-4 col-md-6">
+            <div class="col-lg-4 col-md-4">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header">
                         <div class="flex flex-wrap justify-center">
                             <div class="border" style="width:98%;"></div>
                         </div>
@@ -246,7 +261,8 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between align-items-center ">
                             <div class="d-flex align-items-center">
                                 <div class="input-group input-group-merge">
@@ -279,19 +295,19 @@
                             </div>
                         </div>
 
-                        <div class="col mt-4 mx-auto p-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
+                        <div class="p-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
                             style="width: 100%">
                             <strong class="text-slate-800">
                                 Upcoming Events
                             </strong>
                             @foreach ($upcomingEvents as $upcomingEvent)
-                                <div class="mt-1 ml-4 px-4 py-1 flex justify-between">
-                                    <li class="text-slate-600" style="max-width: 70%;">
+                                <div class="mt-1 ml-4 mr-2 py-1 flex justify-between">
+                                    <li class="text-slate-600" style="max-width: max-content;">
                                         <span>{{ $eventTitle = $upcomingEvent->title }}</span>
                                     </li>
 
                                     <span>
-                                        <button id="seeMore_{{ $upcomingEvent->id }}" class="btn-link">
+                                        <button id="{{ $upcomingEvent->id }}" class="btn-link">
                                             <i class="fa fa-ellipsis text-slate-500"></i>
                                         </button>
                                     </span>
@@ -313,30 +329,29 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            @foreach ($upcomingEvents as $upcomingEvent)
-                $('#seeMore_{{ $upcomingEvent->id }}').click(function() {
-                    $.ajax({
-                        url: "{{ route('calendar.show', $upcomingEvent->id) }}",
-                        type: "GET",
-                        data: {
-                            id: {{ $upcomingEvent->id }}
-                        },
-                        success: function(data) {
-                            // Check if the response contains a redirect property
-                            if (data.redirect) {
-                                // Redirect to the specified URL
-                                window.location.href = data.redirect;
-                            } else {
-                                // Handle other responses as needed
-                                console.log('Unexpected response:', data);
-                            }
-                        },
-                        error: function(data) {
-                            console.log('Error:', data);
+
+            $(document).on('click', '.btn-link', function(e) {
+                var id = $(this).attr('id');
+
+                $.ajax({
+                    url: '{{ route('calendar.show', [':id']) }}'.replace(':id', id),
+                    type: "GET",
+                    success: function(data) {
+                        console.log(data);
+                        // Check if the response contains a redirect property
+                        if (data.redirect) {
+                            // Redirect to the specified URL
+                            window.location.href = data.redirect;
+                        } else {
+                            // Handle other responses as needed
+                            console.log('Unexpected response:', data);
                         }
-                    });
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                    }
                 });
-            @endforeach
+            });
 
             const bioContent = document.getElementById('bioContent');
             const bioTextarea = document.getElementById('bio');

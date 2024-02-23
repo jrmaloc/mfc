@@ -18,7 +18,7 @@
         @endcannot
 
         <style>
-            @media (max-width:768px) {
+            @media (max-width:1199px) {
                 div#arrow{
                     display: block !important;
                 }

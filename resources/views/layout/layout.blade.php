@@ -78,6 +78,17 @@
     <title>MFC Portal</title>
 
     <style>
+        button#offcanvasbtn,
+        div.offcanvas.offcanvas-end {
+            width: max-content;
+        }
+
+        @media (min-width: 768px) {
+            div.offcanvas.offcanvas-end {
+                width: max-content;
+            }
+        }
+
         .menu-item {
             padding-right: 5px;
         }

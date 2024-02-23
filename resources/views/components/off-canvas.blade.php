@@ -6,11 +6,6 @@
 ])
 
 <!-- End Offcanvas -->
-<style>
-    div#createCanvas{
-        width: 27%;
-    }
-</style>
 <div class="col-xl-2 col-lg-2 col-md-6 flex justify-end">
     <div class="mt-3">
         <button id="offcanvasbtn" class="btn btn-primary {{ $class }}" type="button" data-bs-toggle="offcanvas" data-bs-target="#{{ $id }}"
