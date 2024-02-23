@@ -232,6 +232,7 @@
 
         body {
             overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .input-group-text.is-invalid {

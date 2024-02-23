@@ -117,17 +117,16 @@
         @media (max-width: 1199px) {
             div#calendar {
                 width: 100% !important;
-                height: 488px !important;
+                height: 496px !important;
             }
 
             body {
-                overflow: hidden !important;
+                overflow: auto !important;
             }
 
-            div.card.px-16.py-10.mb-20 {
+            div.content {
                 padding: 20px 20px !important;
-                width: 100% !important;
-                position: relative;
+                width: 161% !important;
             }
 
             h2#fc-dom-1 {
@@ -145,12 +144,6 @@
                 margin-bottom: 20px;
             }
 
-            div.content {
-                width: 100% !important;
-                margin-left: 0;
-                margin-right: 0;
-            }
-
             .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
                 flex-direction: column;
                 width: 25%;
@@ -166,7 +159,7 @@
                 display: none;
             }
 
-            div#create_btn {
+            div#btn_container {
                 display: flex !important;
             }
         }
@@ -309,22 +302,21 @@
     <div id='wrap' class="w-70 mx-16">
         <!-- Set data attribute on an HTML element -->
 
-
-        <div id="back_btn" class="flex justify-end mb-2 mt-3"> <a href="{{ route('activity.list') }}"
-                class="my-4 btn btn-dark">See
-                List of Events
-                <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a>
-        </div>
-        @can('create-activity')
-            <div id="create_btn" class="d-none justify-end mt-3">
-                <a href="#" class="my-4 btn btn-success">
-                    Create Event
-                    <i class="tf-icons mdi mdi-plus ml-2"></i>
-                </a>
-            </div>
-        @endcan
-
         <div class="content">
+            <div id="back_btn" class="flex justify-end mb-2 mt-3"> <a href="{{ route('activity.list') }}"
+                    class="my-4 btn btn-dark">See
+                    List of Events
+                    <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a>
+            </div>
+            @can('create-activity')
+                <div id="btn_container" class="d-none justify-end mt-3">
+                    <a href="#" id="create_btn" class="my-4 btn btn-success">
+                        Create Event
+                        <i class="tf-icons mdi mdi-plus ml-2"></i>
+                    </a>
+                </div>
+            @endcan
+
             <div class="card px-16 py-10 mb-20">
                 <div id='calendar' class=""></div>
             </div>
@@ -472,11 +464,11 @@
             var events = @json($events);
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'listWeek',
+                initialView: 'dayGridMonth',
                 headerToolbar: {
                     right: 'prev,today,next', // will normally be on the left. if RTL, will be on the right
                     left: 'title',
-                    center: 'listWeek,dayGridMonth,dayGridDay,multiMonthYear',
+                    center: 'dayGridMonth,listWeek,dayGridDay,multiMonthYear',
                 },
 
                 editable: true,
