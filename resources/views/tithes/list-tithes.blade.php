@@ -48,10 +48,7 @@
                             <th>Contact Number</th>
                             <th>Transaction Number</th>
                             <th>Amount</th>
-                            <!-- <th>Household Servant</th> -->
-                            <th>Mode of Payment</th>
                             <th>Date/Time</th>
-                            <!-- <th>Actions</th> -->
                         </tr>
                     </thead>
                 </table>
@@ -79,19 +76,28 @@
                 name: 'id'
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'users',
+                name: 'name',
+                render: function(data, type, full, meta) {
+                    return data ? data.name : '';
+                }
             },
             {
-                data: 'email',
-                name: 'email'
+                data: 'users',
+                name: 'email',
+                render: function(data, type, full, meta) {
+                    return data ? data.email : '';
+                }
             },
             {
-                data: 'contact_number',
-                name: 'contact_number'
+                data: 'users',
+                name: 'contact_number',
+                render: function(data, type, full, meta) {
+                    return data ? data.contact_number : '';
+                }
             },
             {
-                data: 'transaction_number',
+                data: 'transaction_id',
                 name: 'transaction_number'
             },
             {
@@ -102,14 +108,6 @@
                         'en-US'); // Add the pesos sign to the amount
                 }
             },
-            // {
-            //     data: 'household_servant',
-            //     name: 'household_servant'
-            // },
-            {
-                data: 'mop',
-                name: 'mop'
-            },
             {
                 data: 'created_at',
                 name: 'created_at',
@@ -118,16 +116,8 @@
                     var formattedDate = moment(data).format('YYYY-MM-DD HH:mm:ss');
                     return formattedDate;
                 }
-            },
-                // {
-                //     data: 'actions',
-                //     name: 'actions'
-                // },
-            ],
-            columnDefs: [{
-                targets: 7, // Index of the column you want to disable sorting for
-                orderable: false
             }],
+
             order: [
                 [0, 'desc'] // Sort by the first column (index 0) in descending order
             ]

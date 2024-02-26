@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tithe;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasRelationships;
@@ -108,6 +109,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function events(): HasMany
     {
         return $this->hasMany(Activity::class, 'user_ids');
+    }
+
+    public function tithes(): HasMany
+    {
+        return $this->hasMany(Tithe::class);
     }
 
     public function isAdmin()

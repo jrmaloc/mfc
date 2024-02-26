@@ -1,9 +1,5 @@
 @extends('layout.layout')
 
-@section('head')
-    <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap-datepicker.css') }}">
-@endsection
-
 @section('content')
     <x-layout>
         @cannot('view-role')
@@ -131,8 +127,8 @@
                 </div>
             </form>
 
-            <div class="offcanvas offcanvas-end" style="min-width: 550px;" tabindex="-1" id="regField"
-                aria-labelledby="regFieldLabel">
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="regField"
+                aria-labelledby="regFieldLabel" style="width: 500px;">
                 <div class="offcanvas-header mt-12">
                     <h5 id="regFieldLabel" class="offcanvas-title uppercase font-bold">
                         {{ $activity->title }} Registration</h5>

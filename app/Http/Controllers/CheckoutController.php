@@ -13,6 +13,7 @@ use App\Libraries\PayMaya\User as PayMayaUser;
 use App\Mail\EventRegistration\Success;
 use App\Models\Activity;
 use App\Models\Registration;
+use App\Models\Tithe;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,34 +21,13 @@ use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
-    public function customizeMerchantPage(Request $request)
-    {
-        PayMayaSDK::getInstance()->initCheckout(
-            config('paymaya.public_key'),
-            config('paymaya.secret_key'),
-            (app()->environment('production') ? 'PRODUCTION' : 'SANDBOX')
-        );
-
-        $shopCustomization = new Customization();
-        $shopCustomization->get();
-
-        $shopCustomization->logoUrl = asset('favicon-96x96.png');
-        $shopCustomization->iconUrl = asset('favicon-32x32.png');
-        $shopCustomization->appleTouchIconUrl = asset('apple-touch-icon.png');
-        $shopCustomization->customTitle = 'PayMaya Payment Gateway';
-        $shopCustomization->colorScheme = '#f3dc2a';
-
-        $shopCustomization->set();
-
-        return $shopCustomization;
-    }
-
     public function initiateCheckout(Request $request)
     {
 
         $activity = Activity::find($request->id);
         $user = User::where('email', $request->email)->first();
         $reg_fee = $request->reg_fee;
+
         $prefix = 'payment_';
         $requestReferenceNumber = uniqid($prefix);
 
@@ -124,9 +104,12 @@ class CheckoutController extends Controller
                     $itemCheckout->totalAmount = $itemAmount;
                     $itemCheckout->requestReferenceNumber = $reference_number;
                     $itemCheckout->redirectUrl = array(
-                        "success" => route('checkout.success', ['id' => $activity->id]),
+                        "success" => route('checkout.success', [
+                            'id' => $activity->id,
+                            'name' => 'activity-payment',
+                        ]),
                         "failure" => route('checkout.failure'),
-                        "cancel" => url('/paymaya/checkout/cancel'),
+                        "cancel" => route('checkout.cancel'),
                     );
 
                     if ($itemCheckout->execute() === false) {
@@ -146,11 +129,85 @@ class CheckoutController extends Controller
         return back()->with('error', 'Registration Failed');
     }
 
+    public function tithesCheckout(Request $request)
+    {
+
+        $servant = User::where('email', $request->email)->first();
+        $reg_fee = $request->amount;
+
+        $prefix = 'tithes_';
+        $requestReferenceNumber = uniqid($prefix);
+
+        if ($servant) {
+            // Initialize PayMaya SDK for checkout
+            PayMayaSDK::getInstance()->initCheckout(
+                config('paymaya.public_key'),
+                config('paymaya.secret_key'),
+                app()->environment('production') ? 'PRODUCTION' : 'SANDBOX'
+            );
+
+            $item_name = $request->name;
+            $total_price = $reg_fee;
+
+            $servant_phone = $servant->contact_number;
+            $servant_email = $servant->email;
+
+            $reference_number = $requestReferenceNumber;
+
+            // Item
+            $itemAmountDetails = new ItemAmountDetails();
+            $itemAmountDetails->tax = "0.00";
+            $itemAmountDetails->subtotal = number_format($total_price, 2, '.', '');
+            $itemAmount = new ItemAmount();
+            $itemAmount->currency = "PHP";
+            $itemAmount->value = $itemAmountDetails->subtotal;
+            $itemAmount->details = $itemAmountDetails;
+            $item = new Item();
+            $item->name = $item_name;
+            $item->amount = $itemAmount;
+            $item->totalAmount = $itemAmount;
+
+            // Checkout
+            $itemCheckout = new Checkout();
+
+            $user = new PayMayaUser();
+            $user->contact->phone = $servant->phone;
+            $user->contact->email = $servant->email;
+
+            $itemCheckout->buyer = $user->buyerInfo();
+            $itemCheckout->items = array($item);
+            $itemCheckout->totalAmount = $itemAmount;
+            $itemCheckout->requestReferenceNumber = $reference_number;
+            $itemCheckout->redirectUrl = array(
+                "success" => route('checkout.success', [
+                    'id' => $servant->id,
+                    'name' => 'tithes-payment',
+                ]),
+                "failure" => route('checkout.failure'),
+                "cancel" => route('checkout.cancel'),
+            );
+
+            if ($itemCheckout->execute() === false) {
+                $error = $itemCheckout::getError();
+                return back()->with('error', ['message' => $error]);
+            }
+
+            if ($itemCheckout->retrieve() === false) {
+                $error = $itemCheckout::getError();
+                // return redirect()->back()->withErrors(['message' => $error]);
+                return back()->with('error', ['message' => $error]);
+            }
+
+            return redirect()->to($itemCheckout->url)->with('data', $itemCheckout->retrieve());
+        }
+        return back()->with('error', 'Registration Failed');
+    }
+
     public function checkoutSuccess(Request $request, string $id)
     {
-        $activity = Activity::find($id);
-        $data = $request->session()->get('data');
+        $query = $request->query->all()['name'];
 
+        $data = $request->session()->get('data');
         $transaction_id = $data['id'];
 
         PayMayaSDK::getInstance()->initCheckout(
@@ -173,42 +230,76 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['message' => $error]);
         }
 
-        $payment_status = $checkout['paymentStatus'];
+        if ($query == 'activity-payment') {
+            $activity = Activity::find($id);
 
-        if ($payment_status === "PAYMENT_SUCCESS") {
-            $receipt_number = $checkout['receiptNumber'];
-            $email = $data['buyer']['contact']['email'];
+            $payment_status = $checkout['paymentStatus'];
 
-            $activity_id = $activity->id;
-            $start_date = $activity->start_date;
-            $end_date = $activity->end_date;
+            if ($payment_status === "PAYMENT_SUCCESS") {
+                $receipt_number = $checkout['receiptNumber'];
+                $email = $data['buyer']['contact']['email'];
 
-            $user = User::where('email', $email)->first();
-            $registrations = Registration::where('activity_id', $id)->where('user_id', $user->id)->get();
+                $activity_id = $activity->id;
+                $start_date = $activity->start_date;
+                $end_date = $activity->end_date;
 
-            $data = [
-                'receipt_number' => $receipt_number,
-                'payment_status' => 'Paid',
-            ];
+                $user = User::where('email', $email)->first();
+                $registrations = Registration::where('activity_id', $id)->where('user_id', $user->id)->get();
 
-            foreach ($registrations as $registration) {
-                $registered = $registration->update($data);
+                $data = [
+                    'receipt_number' => $receipt_number,
+                    'payment_status' => 'Paid',
+                ];
 
-                if ($registered) {
-                    $start = Carbon::parse($start_date)->format('F d, Y \\@ h:i A');
-                    $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
-                    Mail::to($email)->send(new Success($activity, $start, $end));
+                foreach ($registrations as $registration) {
+                    $registered = $registration->update($data);
+
+                    if ($registered) {
+                        $start = Carbon::parse($start_date)->format('F d, Y \\@ h:i A');
+                        $end = Carbon::parse($end_date)->format('F d, Y \\@ h:i A \\(l\\)');
+                        Mail::to($email)->send(new Success($activity, $start, $end));
+                    }
+                }
+            }
+
+            return view('payments.success', [
+                'id' => $activity_id,
+            ]);
+
+        } else if ($query == 'tithes-payment') {
+            $payment_status = $checkout['paymentStatus'];
+
+            if ($payment_status === "PAYMENT_SUCCESS") {
+                $receipt_number = $checkout['receiptNumber'];
+                $transaction_id = $checkout['requestReferenceNumber'];
+                $email = $data['buyer']['contact']['email'];
+                $amount = $data['items'][0]['amount']['value'];
+
+                // Find the user by email
+                $user = User::where('email', $email)->first();
+
+                if ($user) {
+                    $user_id = $user->id;
+
+                    $newTithe = Tithe::create([
+                        'user_id' => $user_id,
+                        'amount' => $amount,
+                        'transaction_id' => $transaction_id,
+                        'receipt_number' => $receipt_number,
+                    ]);
+
+                    if ($newTithe) {
+                        // Mail::to($email)->send(new TitheSuccess($newTithe));
+                        return view('tithes.success');
+                    }
                 }
             }
         }
-
-        return view('payments.success', [
-            'id' => $activity_id,
-        ]);
     }
 
     public function checkoutFailure(Request $request)
     {
+        $query = $request->query->all()['name'];
         $data = $request->session()->get('data');
 
         $transaction_id = $data['id'];
@@ -233,17 +324,21 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['message' => $error]);
         }
 
-        $title = $checkout['items']['0']['name'];
+        if ($query = 'activity-payment') {
+            $title = $checkout['items']['0']['name'];
+            $activity = Activity::where('title', $title)->first();
 
-        $activity = Activity::where('title', $title)->first();
-
-        return view('payments.failed', [
-            'id' => $activity->id,
-        ]);
+            return view('payments.failed', [
+                'id' => $activity->id,
+            ]);
+        } else if ($query = 'tithes-payment') {
+            return view('tithes.failed');
+        }
     }
 
     public function checkoutCancel(Request $request)
     {
+        $query = $request->query->all()['name'];
         $data = $request->session()->get('data');
 
         $transaction_id = $data['id'];
@@ -268,11 +363,15 @@ class CheckoutController extends Controller
             return redirect()->back()->withErrors(['message' => $error]);
         }
 
-        $title = $checkout['items']['0']['name'];
-        $activity = Activity::where('title', $title)->first();
+        if ($query = 'activity-payment') {
+            $title = $checkout['items']['0']['name'];
+            $activity = Activity::where('title', $title)->first();
 
-        return view('payments.cancelled', [
-            'id' => $activity->id,
-        ]);
+            return view('payments.cancelled', [
+                'id' => $activity->id,
+            ]);
+        } else if ($query = 'tithes-payment') {
+            return view('tithes.cancelled');
+        }
     }
 }

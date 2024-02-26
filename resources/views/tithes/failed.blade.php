@@ -60,7 +60,7 @@
             <i class="checkmark">!</i>
         </div>
         <h1>Failed</h1>
-        <p>Payment Failed!<br />Please check your balance and <a href="{{ route('calendar.show', ['id' => $id]) }}" class="try-again">try again.</a></p>
+        <p>Payment Failed!<br />Please check your balance and <a href="{{ route('tithes.create') }}" class="try-again">try again.</a></p>
     </div>
 </body>
 

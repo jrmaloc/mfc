@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('activity.list');
+        return redirect()->route('announcements.index');
     }
     return view('auth.login');
 });
@@ -146,6 +146,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::post('registration/payment', [RegistrationController::class, 'payment'])->name('registration.payment');
 
     Route::post('/paymaya/checkout', [CheckoutController::class, 'initiateCheckout'])->name('initiate.checkout');
+    Route::post('/tithes/checkout', [CheckoutController::class, 'tithesCheckout'])->name('tithes.checkout');
     Route::post('/paymaya/customize', [CheckoutController::class, 'customizeMerchantPage'])->name('customize.checkout');
 
 });

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Mail\EventRegistration;
+namespace App\Mail\TitheRegistration;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -12,16 +13,14 @@ class Success extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $data, $start, $end;
+    protected $data;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data, $start, $end)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->start = $start;
-        $this->end = $end;
     }
 
     /**
@@ -30,7 +29,7 @@ class Success extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Event Registration Mail',
+            subject: 'Tithes Registration Success',
         );
     }
 
@@ -40,11 +39,9 @@ class Success extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.eventRegistration.success',
+            view: 'titheRegistration.success',
             with: [
                 'data' => $this->data,
-                'start' => $this->start,
-                'end' => $this->end,
             ]
         );
     }

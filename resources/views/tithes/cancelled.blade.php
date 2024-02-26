@@ -11,7 +11,7 @@
     }
 
     h1 {
-        color: #4b83b0;
+        color: #b04b4b;
         font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
         font-weight: 900;
         font-size: 40px;
@@ -19,14 +19,14 @@
     }
 
     p {
-        color: #40455e;
+        color: #404F5E;
         font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
         font-size: 20px;
         margin: 0;
     }
 
     i {
-        color: #0e53d4;
+        color: #bc6666;
         font-size: 100px;
         line-height: 200px;
         margin-left: -15px;
@@ -42,25 +42,18 @@
     }
 
     .try-again{
-        color: #30772a;
+        color: #772a2a;
 
-    }
-
-    .checkmark {
-        color: #a3aef0;
-        font-size: 180px;
-        line-height: 200px;
-        margin-left: -15px;
     }
 </style>
 
 <body>
     <div class="card">
-        <div style="border-radius:200px; height:200px; width:200px; background: #f5f7fa; margin:0 auto;">
-            <i class="checkmark">!</i>
+        <div style="border-radius:200px; height:200px; width:200px; background: #faf5f5; margin:0 auto;">
+            <i class="checkmark">✖</i>
         </div>
-        <h1>Failed</h1>
-        <p>Payment Failed!<br />Please check your balance and <a href="{{ route('calendar.show', ['id' => $id]) }}" class="try-again">try again.</a></p>
+        <h1>Cancelled</h1>
+        <p>Payment Cancelled!<br /><a href="{{ route('tithes.create') }}" class="try-again">Go Back to the Portal</a></p>
     </div>
 </body>
 
