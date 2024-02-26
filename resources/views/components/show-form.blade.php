@@ -5,6 +5,11 @@
     'model' => '',
 ])
 <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="flex justify-start h-0.25">
+        <h4 id="nb" class="fw-bold pt-3">
+            View User
+        </h4>
+    </div>
     <div class="flex justify-end">
         <button id="back" type="button" class="my-4 btn btn-dark">
             Back

@@ -69,7 +69,7 @@ Route::get('/verify-email-message', function (Request $request) {
 Route::post('password', [PasswordController::class, 'update'])->middleware('guest')->name('password.update');
 
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
-    // Route::middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard/{id}', [DashboardController::class, 'bio'])->name('dashboard.bio');
 
@@ -133,13 +133,16 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
     Route::put('/permissions/{$permission}', [PermissionsController::class, 'update'])->name('permission.update');
 
-    Route::resource('/roles', RolesController::class);
-    Route::resource('/admin', AdminController::class);
-    Route::resource('/area', AreaServantController::class);
-    Route::resource('/chapter', ChapterServantController::class);
-    Route::resource('/unit', UnitServantController::class);
-    Route::resource('/household', HouseholdServantController::class);
-    Route::resource('/permissions', PermissionsController::class);
+    Route::group(['middleware' => ['permission:create-role']], function () {
+        Route::resource('/roles', RolesController::class);
+        Route::resource('/admin', AdminController::class);
+        Route::resource('/area', AreaServantController::class);
+        Route::resource('/chapter', ChapterServantController::class);
+        Route::resource('/unit', UnitServantController::class);
+        Route::resource('/household', HouseholdServantController::class);
+        Route::resource('/permissions', PermissionsController::class);
+    });
+
     Route::resource('/attendance', AttendanceController::class);
     Route::resource('/registration', RegistrationController::class);
 

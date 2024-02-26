@@ -11,17 +11,24 @@ use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('permission:view-dashboard|create-dashboard|edit-dashboard|delete-dashboard', ['only' => ['index']]);
+    //     $this->middleware('permission:create-admin', ['only' => ['create', 'store']]);
+    //     $this->middleware('permission:edit-dashboard', ['only' => ['edit', 'update']]);
+    //     $this->middleware('permission:delete-dashboard', ['only' => ['destroy']]);
+    // }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $roles = User::where('role_id', 2)->get();
+        $user = User::where('role_id', 2)->get();
 
         $permissions = Permission::all();
 
         if ($request->ajax()) {
-            $data = $roles;
+            $data = $user;
 
             return DataTables::of($data)
                 ->addColumn('actions', function ($data) {
@@ -61,14 +68,22 @@ class AdminController extends Controller
 
         $id = $data['name'];
         $user = User::findOrFail($id);
-        $info = $user->assignRole('Admin');
 
-        if ($info) {
-            $user->role_id = 2;
-            $user->save();
+        $role_id = $user->role_id;
+        $role = Role::findOrFail($role_id);
+
+        $remove = $user->removeRole($role->name);
+
+        if ($remove) {
+            $info = $user->assignRole('Admin');
+
+            if ($info) {
+                $user->role_id = 2;
+                $user->save();
+            }
+
+            return redirect()->route('admin.index')->with('success', 'Successfully added');
         }
-
-        return redirect()->route('admin.index')->with('success', 'Successfully added');
     }
 
     /**

@@ -118,7 +118,7 @@
                     </div>
 
                     <div class="offcanvas-body">
-                        <form id="editForm" {{-- action=" route('roles.update', ['role' => ]) " }}" --}} method="PUT">
+                        <form id="editForm" method="PUT">
                             @csrf
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
@@ -161,12 +161,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- @can('edit_role')
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 mt-12 pb-4">
-                                    <button type="reset" class="btn btn-outline-info">Reset</button>
-                                    <button type="submit" class="btn btn-success">Save Changes</button>
-                                </div>
-                            @endcan --}}
                         </form>
                     </div>
                 </div>
@@ -180,7 +174,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <!-- Add other columns here -->
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -193,21 +186,20 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            var showCanvas = document.getElementById('showCanvas')
-            showCanvas.addEventListener('show.bs.offcanvas', function() {
-                var id = $('.show-btn').attr('id');
+            $(document).on('click', '.show-btn', function(e) {
+                var id = $(this).attr('id');
 
                 $.ajax({
-                    url: '{{ route('roles.edit', ['role' => ':id']) }}'.replace(':id', id),
+                    url: '{{ route('roles.show', ['role' => ':id']) }}'.replace(':id', id),
                     type: 'GET',
 
                     success: function(response) {
                         var permissions = response.permissions;
-                        var role = response.role;
+                        var user = response.role;
                         // Populate form fields in the edit modal with permission details
-                        if (role && role.name) {
+                        if (user && user.name) {
                             // Populate form fields in the edit modal with permission details
-                            $('#editForm input[name="name"]').val(role.name);
+                            $('#editForm input[name="name"]').val(user.name);
 
                             $(document).ready(function() {
                                 // Sample condition: preselect checkboxes for roles with IDs 1 and 3
@@ -215,8 +207,8 @@
                                     var data = permission.permissions;
 
                                     data.forEach(function(permissionId) {
-                                        var checkboxId = 'permission_' +
-                                            (
+                                        var checkboxId =
+                                            'permission_' + (
                                                 permissionId.id - 1
                                             ); // Adjust the ID to match checkbox IDs
                                         $('#' + checkboxId).prop(
@@ -228,7 +220,7 @@
                                 });
                             });
                         } else {
-                            console.log('Role Not Found');
+                            console.log('Not Found');
                         }
                     },
                     error: function(error, xhr) {

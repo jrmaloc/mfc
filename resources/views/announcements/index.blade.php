@@ -442,7 +442,7 @@
                 {
                     data: 'title',
                     name: 'title',
-
+                    width: '70%'
                 },
                 {
                     data: 'created_at',
