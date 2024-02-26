@@ -419,10 +419,8 @@
             });
 
             // show Canvas
-            var showCanvas = document.getElementById('showCanvas')
-            showCanvas.addEventListener('show.bs.offcanvas', function() {
-                var id = $('.show-btn').attr('id');
-
+            $(document).on('click', '.show-btn', function(e) {
+                var id = $(this).attr('id');
                 $('#editForm').attr('action', '{{ route('roles.update', [':id']) }}'.replace(':id', id));
 
                 $.ajax({

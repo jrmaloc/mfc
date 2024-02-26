@@ -131,8 +131,9 @@
                     font-size: 1.25rem !important;
                 }
 
-                div#createCanvas, div#showCanvas{
-                    width: 80%!important;
+                div#createCanvas,
+                div#showCanvas {
+                    width: 80% !important;
                 }
             }
         </style>
@@ -228,7 +229,7 @@
                                                         id="permission_{{ $loop->index }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot/>
+                                                        @endcannot />
                                                     <label class="form-check-label"
                                                         for="permission_{{ $loop->index }}">{{ $value->name }}</label>
                                                 </div>
@@ -242,7 +243,7 @@
                                                         id="epermission_{{ $value->id }}"
                                                         @cannot('edit-role')
                                                             disabled
-                                                        @endcannot/>
+                                                        @endcannot />
                                                     <label class="form-check-label"
                                                         for="epermission_{{ $value->id }}">{{ $value->name }}</label>
                                                 </div>
@@ -422,11 +423,8 @@
             });
 
             // show Canvas
-            var showCanvas = document.getElementById('showCanvas')
-            showCanvas.addEventListener('show.bs.offcanvas', function() {
-                var id = $('.show-btn').attr('id');
-                console.log(id);
-
+            $(document).on('click', '.show-btn', function(e) {
+                var id = $(this).attr('id');
                 $('#editForm').attr('action', '{{ route('roles.update', [':id']) }}'.replace(':id', id));
 
                 $.ajax({

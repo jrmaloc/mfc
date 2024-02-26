@@ -158,7 +158,7 @@
                                     @foreach ($permission->slice(0, $permission->count() / 2) as $value)
                                         <div class="form-check form-switch mb-2">
                                             <input name="permission[]" value="{{ $value->id }}" class="form-check-input"
-                                                type="checkbox" id="apermission_{{ $loop->index }}" disabled />
+                                                type="checkbox" id="apermission_{{ $loop->index }}"/>
                                             <label class="form-check-label"
                                                 for="apermission_{{ $loop->index }}">{{ $value->name }}</label>
                                         </div>
@@ -168,7 +168,7 @@
                                     @foreach ($permission->slice($permission->count() / 2) as $value)
                                         <div class="form-check form-switch mb-2">
                                             <input name="permission[]" value="{{ $value->id }}" class="form-check-input"
-                                                type="checkbox" id="bpermission_{{ $value->id }}" disabled />
+                                                type="checkbox" id="bpermission_{{ $value->id }}"/>
                                             <label class="form-check-label"
                                                 for="bpermission_{{ $value->id }}">{{ $value->name }}</label>
                                         </div>
@@ -387,7 +387,7 @@
                                             ); // Adjust the ID to match checkbox IDs
                                         $('#' + checkboxId).prop(
                                             'checked', true);
-                                        $('#epermission_' + permissionId
+                                        $('#bpermission_' + permissionId
                                             .id).prop('checked',
                                             true);
                                     });
@@ -410,9 +410,8 @@
                 createForm.reset();
             });
 
-            var showCanvas = document.getElementById('showCanvas');
-            showCanvas.addEventListener('show.bs.offcanvas', function() {
-                var id = $('.show-btn').attr('id');
+            $(document).on('click', '.show-btn', function(e) {
+                var id = $(this).attr('id');
                 $('#editForm').attr('action', '{{ route('roles.update', [':id']) }}'.replace(':id', id));
 
                 $.ajax({
@@ -455,8 +454,8 @@
 
             var showCanvas = document.getElementById('showCanvas');
             showCanvas.addEventListener('hidden.bs.offcanvas', function() {
-                var createForm = document.getElementById('createForm');
-                createForm.reset();
+                var editForm = document.getElementById('editForm');
+                editForm.reset();
             });
         });
 

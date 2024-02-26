@@ -14,7 +14,7 @@
     <label for="{{ $name }}" class="form-label">{{ $slot }}<i class="text-danger">*</i></label>
     <select id="{{ $name }}" name="{{ $name }}"
         class="form-select form-control @if ($error) select-is-invalid @endif" {{ $param }}>
-        <option {{ $opParam }}>{{ $placeholder }}</option>
+        <option {{ $opParam }} disabled>{{ $placeholder }}</option>
         @foreach ($options as $optionKey => $optionValue)
             <option value="{{ $optionKey }}" {{ $selected == $optionKey ? 'selected' : '' }}>
                 {{ $optionValue }}

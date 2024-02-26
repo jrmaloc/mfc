@@ -61,6 +61,7 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|numeric',
+            'permission' => 'required',
         ], [
             'name.required' => 'Please Choose a User to give a role',
             'name.numeric' => 'Please Choose a User to give a role',
@@ -81,6 +82,13 @@ class AdminController extends Controller
                 $user->role_id = 2;
                 $user->save();
             }
+
+            $permissions = [];
+            foreach ($request->permission as $permissionId) {
+                $permissions[$permissionId] = ['model_type' => User::class];
+            }
+
+            $user->permissions()->sync($permissions);
 
             return redirect()->route('admin.index')->with('success', 'Successfully added');
         }
