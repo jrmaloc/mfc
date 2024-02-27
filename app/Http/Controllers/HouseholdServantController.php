@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class HouseholdServantController extends Controller
@@ -68,14 +69,33 @@ class HouseholdServantController extends Controller
 
         $id = $data['name'];
         $user = User::findOrFail($id);
-        $info = $user->assignRole('Household Servant');
 
-        if ($info) {
-            $user->role_id = 6;
-            $user->save();
+        $role_id = $user->role_id;
+        $role = Role::findOrFail($role_id);
+
+        $remove = $user->removeRole($role->name);
+
+        if ($remove) {
+            $info = $user->assignRole('Household Servant');
+
+            if ($info) {
+                $user->role_id = 6;
+                $user->save();
+            }
+
+            $role = Role::find(6);
+
+            $permission = $role->permissions;
+
+            $permissions = [];
+            foreach ($permission as $permissionId) {
+                $permissions[$permissionId->id] = ['model_type' => User::class];
+            }
+
+            $user->permissions()->sync($permissions);
+
+            return redirect()->route('household.index')->with('success', 'Successfully added');
         }
-
-        return redirect()->route('household.index')->with('success', 'Successfully added');
     }
 
     /**

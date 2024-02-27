@@ -69,14 +69,33 @@ class AreaServantController extends Controller
 
         $id = $data['name'];
         $user = User::findOrFail($id);
-        $info = $user->assignRole('Area Servant');
 
-        if ($info) {
-            $user->role_id = 3;
-            $user->save();
+        $role_id = $user->role_id;
+        $role = Role::findOrFail($role_id);
+
+        $remove = $user->removeRole($role->name);
+
+        if ($remove) {
+            $info = $user->assignRole('Area Servant');
+
+            if ($info) {
+                $user->role_id = 3;
+                $user->save();
+            }
+
+            $role = Role::find(3);
+
+            $permission = $role->permissions;
+
+            $permissions = [];
+            foreach ($permission as $permissionId) {
+                $permissions[$permissionId->id] = ['model_type' => User::class];
+            }
+
+            $user->permissions()->sync($permissions);
+
+            return redirect()->route('area.index')->with('success', 'Successfully added');
         }
-
-        return redirect()->route('area.index')->with('success', 'Successfully added');
     }
 
     /**
@@ -92,33 +111,7 @@ class AreaServantController extends Controller
      */
     public function edit(string $id)
     {
-        try {
-            // Fetch role ID
-            $role = User::find($id);
-
-            $role_id = $role->role_id;
-
-            if (!$role) {
-                // Handle the case when the role is not found
-                return response()->json(['error' => 'Role not found'], 404);
-            }
-
-            $permissions = Role::where('id', $role_id)->with('permissions')
-                ->whereHas('permissions', function ($q) use ($role_id) {
-                    $q->where('role_id', $role_id);
-                })->get();
-
-            // Return the permission details along with roles as JSON response
-            return response()->json([
-                'permissions' => $permissions,
-                'role' => $role,
-            ]);
-
-        } catch (\Exception $e) {
-            // Handle any exceptions or errors that occur
-            // You can log the error, return a specific error message, or respond with a specific HTTP status code
-            return response()->json(['error' => 'Role not found'], 404);
-        }
+        //
     }
 
     /**

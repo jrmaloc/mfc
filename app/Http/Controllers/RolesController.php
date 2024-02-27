@@ -146,16 +146,32 @@ class RolesController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $data = $user->assignRole('Member');
+        $role_id = $user->role_id;
 
-        if ($data) {
+        $role = Role::findOrFail($role_id);
+
+        $remove = $user->removeRole($role->name);
+
+        if ($remove) {
+            $role = Role::find(7);
+
+            $permission = $role->permissions;
+
+            $permissions = [];
+            foreach ($permission as $permissionId) {
+                $permissions[$permissionId->id] = ['model_type' => User::class];
+            }
+
+            $user->permissions()->sync($permissions);
+
+            $user->assignRole('Member');
             $user->role_id = 7;
-            $remove = $user->save();
+            $save = $user->save();
 
-            if ($remove) {
+            if ($save) {
                 return response([
                     'status' => true,
-                    'delete' => 'User demoted to member role',
+                    'message' => 'User demoted to member role',
                 ]);
             } else {
                 return response([

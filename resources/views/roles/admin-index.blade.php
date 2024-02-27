@@ -158,7 +158,7 @@
                                     @foreach ($permission->slice(0, $permission->count() / 2) as $value)
                                         <div class="form-check form-switch mb-2">
                                             <input name="permission[]" value="{{ $value->id }}" class="form-check-input"
-                                                type="checkbox" id="apermission_{{ $loop->index }}"/>
+                                                type="checkbox" id="apermission_{{ $loop->index }}" disabled/>
                                             <label class="form-check-label"
                                                 for="apermission_{{ $loop->index }}">{{ $value->name }}</label>
                                         </div>
@@ -168,7 +168,7 @@
                                     @foreach ($permission->slice($permission->count() / 2) as $value)
                                         <div class="form-check form-switch mb-2">
                                             <input name="permission[]" value="{{ $value->id }}" class="form-check-input"
-                                                type="checkbox" id="bpermission_{{ $value->id }}"/>
+                                                type="checkbox" id="bpermission_{{ $value->id }}" disabled/>
                                             <label class="form-check-label"
                                                 for="bpermission_{{ $value->id }}">{{ $value->name }}</label>
                                         </div>

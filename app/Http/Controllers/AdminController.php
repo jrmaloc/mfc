@@ -61,7 +61,6 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|numeric',
-            'permission' => 'required',
         ], [
             'name.required' => 'Please Choose a User to give a role',
             'name.numeric' => 'Please Choose a User to give a role',
@@ -83,9 +82,13 @@ class AdminController extends Controller
                 $user->save();
             }
 
+            $role = Role::find(2);
+
+            $permission = $role->permissions;
+
             $permissions = [];
-            foreach ($request->permission as $permissionId) {
-                $permissions[$permissionId] = ['model_type' => User::class];
+            foreach ($permission as $permissionId) {
+                $permissions[$permissionId->id] = ['model_type' => User::class];
             }
 
             $user->permissions()->sync($permissions);
@@ -107,33 +110,7 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        try {
-            // Fetch role ID
-            $role = User::find($id);
-
-            $role_id = $role->role_id;
-
-            if (!$role) {
-                // Handle the case when the role is not found
-                return response()->json(['error' => 'Role not found'], 404);
-            }
-
-            $permissions = Role::where('id', $role_id)->with('permissions')
-                ->whereHas('permissions', function ($q) use ($role_id) {
-                    $q->where('role_id', $role_id);
-                })->get();
-
-            // Return the permission details along with roles as JSON response
-            return response()->json([
-                'permissions' => $permissions,
-                'role' => $role,
-            ]);
-
-        } catch (\Exception $e) {
-            // Handle any exceptions or errors that occur
-            // You can log the error, return a specific error message, or respond with a specific HTTP status code
-            return response()->json(['error' => 'Role not found'], 404);
-        }
+        //
     }
 
     /**
@@ -149,25 +126,6 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
-
-        $data = $user->assignRole('Member');
-
-        if ($data) {
-            $user->role_id = 7;
-            $remove = $user->save();
-
-            if ($remove) {
-                return response([
-                    'status' => true,
-                    'message' => 'User demoted to member role',
-                ]);
-            } else {
-                return response([
-                    'error' => true,
-                    'message' => 'Failed to change user role',
-                ]);
-            }
-        }
+        //
     }
 }
