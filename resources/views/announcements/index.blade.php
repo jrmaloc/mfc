@@ -208,6 +208,20 @@
                         .offcanvas-header {
                             align-items: flex-start;
                         }
+
+                        @media(max-width: 768px) {
+                            div#offcanvasEnd{
+                                width: 80%;
+                            }
+
+                            button.btn.btn-success{
+                                font-size: xx-small;
+                            }
+
+                            button.btn.btn-outline-info{
+                                font-size: x-small;
+                            }
+                        }
                     </style>
                     <div class="offcanvas-header">
                         <h5 id="offcanvasEndLabel" class="offcanvas-title fw-bold text-2xl pt-4">Create Announcement</h5>
@@ -413,7 +427,6 @@
                         "user_ids": selectedValues,
                     },
                     success: function(data) {
-                        hide();
                         Toast.fire({
                             icon: "success",
                             timer: 3000,

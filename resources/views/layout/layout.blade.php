@@ -323,10 +323,10 @@
 
             ul.dropdown-menu.dropdown-menu-end.mt-3.py-2.show {
                 position: absolute;
-                top: 55px;
-                left: 90px;
+                top: 51px;
+                left: 64px;
                 min-width: auto;
-                width: 60%;
+                width: 70%;
             }
 
             h4#nb {
@@ -603,11 +603,6 @@
                             <li class="w-50">
                                 <style>
                                     @media (max-width: 440px) {
-                                        div#dropdownSearch {
-                                            width: 260px !important;
-                                            margin-left: 10px !important;
-                                        }
-
                                         #noti {
                                             font-size: 1.2rem;
                                         }
@@ -618,10 +613,10 @@
                                         }
                                     }
                                 </style>
-                                <button class="ml-4 mr-2 my-auto" id="dropdownSearchButton"
-                                    data-dropdown-toggle="dropdownSearch" data-dropdown-offset-distance="-5"
-                                    data-dropdown-placement="bottom" data-dropdown-offset-skidding="-250"
-                                    class="btn-link" type="button">
+
+                                <button id="dropdownUsersButton" data-dropdown-toggle="dropdownUsers"
+                                    data-dropdown-toggle="arrow" data-dropdown-placement="bottom"
+                                    data-dropdown-offset-distance="-5" class="hover:text-green-700">
                                     <div class="flex align-items-start">
                                         <span id="bell" class="fa-stack"
                                             data-count="{{ $unreadNotificationsCount }}">
@@ -629,51 +624,123 @@
                                         </span>
                                     </div>
                                 </button>
+                                <style>
+                                    .arrow-up {
+                                        width: 0;
+                                        height: 0;
+                                        border-left: 12px solid transparent;
+                                        border-right: 12px solid transparent;
+                                        border-bottom: 12px solid black;
+                                        position: absolute;
+                                        right: 86px;
+                                        top: 55px;
+                                    }
 
-                                <!-- Dropdown menu -->
-                                <div id="dropdownSearch" onShow="bellColor()"
-                                    class="row-col-xs-1 z-10 hidden border border-gray-500 bg-gray-50 shadow"
-                                    style="width: 500px;">
-                                    <div class="col-xs-1 bg-violet-300">
-                                        <div class="p-3">
-                                            <div id="noticon" class="relative flex justify-between">
-                                                <h5 class="">
-                                                    <span id="noti" class="">Notifications</span>
-                                                </h5>
-                                                @if ($unreadNotificationsCount)
-                                                    <a href="javascript:void(0);" id="mark-all"
-                                                        class="text-slate-400 text-xs mt-0.5 h-0">
-                                                        Mark all as read
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
+                                    @media (min-width: 600px) {
+                                        div#dropdownUsers {
+                                            border-radius: 0.7rem;
+                                            width: 40% !important;
+                                            position: absolute;
+                                            inset: 7px auto auto -109px !important;
+                                            margin: 0px;
+                                            transform: translate(791px, 60px);
+                                        }
+
+                                        p.mt-2.text-truncate {
+                                            font-size: 0.75rem !important;
+                                        }
+
+                                        h6.mb-1.text-truncate strong {
+                                            font-size: 1rem;
+                                        }
+                                    }
+
+                                    @media (max-width: 599px) {
+                                        div#dropdownUsers {
+                                            width: 70% !important;
+                                            border-radius: 0.7rem;
+                                            position: absolute;
+                                            inset: 0px auto auto -110px !important;
+                                            margin: 0px;
+                                            transform: translate(791px, 60px);
+                                        }
+
+                                        div.flex a.text-xl.uppercase {
+                                            font-size: 1rem !important;
+                                        }
+
+                                        i.fa-3x {
+                                            font-size: 1.5rem;
+                                        }
+
+                                        .pb-4.overflow-hidden.w-px-250.flex.flex-col.align-items-center.text-center {
+                                            padding-bottom: 0px !important;
+                                        }
+
+                                        p.mt-2.text-truncate.text-slate-400 {
+                                            font-size: 0.8rem;
+                                        }
+
+                                        li.list-group-item.list-group-item-action.dropdown-notifications-item.waves-effect {
+                                            padding-top: 0px !important;
+                                        }
+
+                                        span.text-sm {
+                                            font-size: 0.675rem;
+                                        }
+
+                                        a div.flex {
+                                            flex-direction: column;
+                                            padding-bottom: 10px;
+                                        }
+                                    }
+                                </style>
+
+                                <div class="arrow-up hidden"></div>
+                                <script>
+                                    $()
+                                </script>
+                                <div id="dropdownUsers" class="z-10 hidden bg-white shadow w-40 dark:bg-gray-700"
+                                    style="border: 1px solid #8080802e; border-top-right-radius: 0px;">
+                                    <div
+                                        class="flex justify-center items-center p-3 font-medium hover:bg-gray-100 border-t border-gray-200 bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500">
+                                        <a href="#"
+                                            class="text-xl uppercase font-bold text-gray-700 pointer-events-none">
+                                            Notifications
+                                        </a>
                                     </div>
-                                    <ul class="p-0 overflow-y-auto overflow-x-hidden text-sm border border-gray-100 left-8 text-gray-700 dark:text-slate-200"
-                                        aria-labelledby="dropdownSearchButton" id="style-15"
+                                    <ul class="pt-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                                        aria-labelledby="dropdownUsersButton" id="style-15"
+                                        style="padding-left: 0; max-height:450px;"
                                         @if ($unreadNotificationsCount > 0) style="max-height: 600px;" @endif>
 
                                         @forelse ($unreadNotifications as $notification)
-                                            <div class="hover:bg-green-100">
+                                            <div class="hover:bg-green-100"
+                                                style="border-bottom: 1px groove #8080802e;">
                                                 <li
                                                     class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
-                                                    <div class="divide-y divide-blue-200 ">
-                                                        <div
-                                                            class="d-flex justify-center align-items-center gap-2 pb-2">
+                                                    <div class="divide-dashed divide-y-2">
+                                                        <div class="d-flex justify-center align-items-center gap-2">
                                                             <a href="{{ $notification->data['url'] }}"
                                                                 data-id="{{ $notification->id }}"
                                                                 class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
-                                                                <h6 class="mb-1 text-truncate">
-                                                                    @if ($notification->type === 'App\Notifications\TitheNotification')
-                                                                        <strong><span>₱ </span></strong>
-                                                                    @endif
-                                                                    <strong>{{ $notification->data['name'] }}</strong>
-                                                                    <p class="mt-2 overflow-hidden overflow-ellipsis">
-                                                                        {{ $notification->data['message'] }}</p>
-                                                                </h6>
-                                                                <!-- You can access other notification data similarly -->
-                                                                <small
-                                                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
+                                                                <div class="flex justify-between">
+                                                                    <div style="max-width: 80%;">
+                                                                        <h6 class="mb-1 text-truncate">
+                                                                            @if ($notification->type === 'App\Notifications\TitheNotification')
+                                                                                <strong><span>₱ </span></strong>
+                                                                            @endif
+                                                                            <strong
+                                                                                class="text-gray-500">{{ $notification->data['name'] }}</strong>
+                                                                        </h6>
+                                                                        <p class="mt-2 text-truncate text-slate-400">
+                                                                            {{ $notification->data['message'] }}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    <small class="text-body"
+                                                                        style="font-size: 0.7rem; line-height: 1rem;">{{ $notification->created_at->diffForHumans() }}</small>
+                                                                </div>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -697,7 +764,9 @@
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    <div class="dropdown-menu-footer border-top p-3 bg-gray-100">
+
+                                                    <div class="p-3 text-sm font-medium hover:bg-gray-100 text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                                        style="border-bottom: 9px solid #9055fdad;">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"
                                                             id="refresh-btn">
@@ -708,20 +777,19 @@
                                             </li>
                                         @endforelse
                                     </ul>
-
-                                    @if ($unreadNotificationsCount > 0)
-                                        <div class="bg-gray-100">
-                                            <a href="#"
-                                                class="hover:text-slate-400 pointer-events-none flex justify-center p-3 text-sm font-medium text-slate-400 border border-gray-200 bg-gray-100">
-                                                <span
-                                                    class="pointer-events-auto hover:bg-gray-100 hover:text-green-700 hover:underline">See
-                                                    all notification</span>
+                                    @if ($unreadNotificationsCount)
+                                        <div class="flex justify-center items-center p-3 text-sm font-medium hover:bg-gray-100 text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                            style="border-bottom: 9px solid #9055fdad;">
+                                            <a href="javascript:void(0);" id="mark-all"
+                                                class="hover:bg-gray-100 hover:underline">
+                                                Mark all as read
                                             </a>
                                         </div>
                                     @endif
                                 </div>
                             </li>
 
+                            {{-- User --}}
 
                             <li class="nav-item navbar-dropdown dropdown-user dropdown ml-2">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
