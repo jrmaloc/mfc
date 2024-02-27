@@ -137,7 +137,7 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                            Upcoming Events
+                                            Events
                                         </p>
                                         <h5 class="font-weight-bolder">{{ $events }}</h5>
                                         <p class="mb-0">
@@ -156,8 +156,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col mb-4">
-                    <div class="card h-100">
+                <div class="col mb-4" style="pointer-events: auto !important;">
+                    <div class="card h-100" id="tithes">
                         <div class="card-body p-3">
                             <div class="row">
                                 <div class="col-8">
@@ -165,7 +165,7 @@
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">
                                             Tithes
                                         </p>
-                                        <h5 class="font-weight-bolder">{{ $tithes }}</h5>
+                                        <h5 class="font-weight-bolder">₱{{ $amount }}</h5>
                                         <p class="mb-0">
                                             <span class="text-danger text-sm font-weight-bolder">10%</span>
                                             Lorem ipsum dolor sit amet.
@@ -189,9 +189,9 @@
                                 <div class="col-8">
                                     <div class="numbers">
                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">
-                                            Active Users
+                                            Announcements
                                         </p>
-                                        <h5 class="font-weight-bolder">{{ $activeUsers }}</h5>
+                                        <h5 class="font-weight-bolder">{{ $announcementCount }}</h5>
                                         <p class="mb-0">
                                             <span class="text-success text-sm font-weight-bolder">+5%</span>
                                             Lorem, ipsum dolor.
@@ -296,7 +296,7 @@
                         </div>
 
                         <div class="p-2 bg-green-100 rounded-md drop-shadow-md overflow-y-auto"
-                            style="width: 100%">
+                            style="width: 100%; background-color: #e2cafcff;">
                             <strong class="text-slate-800">
                                 Upcoming Events
                             </strong>

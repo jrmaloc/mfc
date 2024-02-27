@@ -123,6 +123,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::get('tithes/list', [TithesController::class, 'index'])->name('tithes.list');
     Route::get('tithes/create', [TithesController::class, 'create'])->name('tithes.create');
     Route::post('tithes', [TithesController::class, 'store'])->name('tithes.store');
+    Route::get('tithes/redirect', [TithesController::class, 'view'])->name('tithes.redirect');
 
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::post('notification', [DashboardController::class, 'markNotification'])->name('mark.notification');

@@ -67,7 +67,8 @@
                 font-size: 1.25rem !important;
             }
 
-            div#createCanvas {
+            div#createCanvas,
+            div#showCanvas {
                 width: 80% !important;
             }
         }

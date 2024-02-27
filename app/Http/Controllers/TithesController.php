@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tithe;
-use App\Models\User;
 use App\Services\PaymongoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -31,6 +30,13 @@ class TithesController extends Controller
         }
 
         return view('tithes.list-tithes');
+    }
+
+    public function view(Request $request)
+    {
+        if($request->ajax()) {
+            return redirect()->route('tithes.list');
+        }
     }
 
     /**

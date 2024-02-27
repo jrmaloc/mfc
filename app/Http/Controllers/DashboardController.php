@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Announcement;
 use App\Models\Tithe;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class DashboardController extends Controller
     public function index()
     {
         $oneHourAgo = now()->subHour();
-        $activeUsers = User::where('status', 'Active')->count();
-        $userCount = User::count(); // Total users
+        $userCount = User::where('status', 'Active')->count();
+        $announcementCount = Announcement::count();
         $adminCount = User::role('Admin', 'web')->count(); // Count of users with the admin role
         $tithes = Tithe::count(); // Total
         $events = Activity::where('start_date', '>=', now())->count();
@@ -39,6 +40,8 @@ class DashboardController extends Controller
 
         $role = Role::findOrFail($id);
 
+        $amount = Tithe::sum('amount');
+
         return view('dashboard', compact(
             'userCount',
             'events',
@@ -46,8 +49,9 @@ class DashboardController extends Controller
             'tithes',
             'newUsersCount',
             'role',
-            'activeUsers',
-            'bio'
+            'announcementCount',
+            'bio',
+            'amount'
         ), [
             'user' => $user,
             'id' => $userID,

@@ -321,6 +321,14 @@
                 margin-top: 16px;
             }
 
+            ul.dropdown-menu.dropdown-menu-end.mt-3.py-2.show {
+                position: absolute;
+                top: 55px;
+                left: 90px;
+                min-width: auto;
+                width: 60%;
+            }
+
             h4#nb {
                 font-size: 1.25rem;
             }
@@ -596,8 +604,17 @@
                                 <style>
                                     @media (max-width: 440px) {
                                         div#dropdownSearch {
-                                            width: 300px !important;
+                                            width: 260px !important;
                                             margin-left: 10px !important;
+                                        }
+
+                                        #noti {
+                                            font-size: 1.2rem;
+                                        }
+
+                                        #mark-all {
+                                            font-size: 0.7rem;
+                                            margin-top: 0.25rem;
                                         }
                                     }
                                 </style>
@@ -617,11 +634,11 @@
                                 <div id="dropdownSearch" onShow="bellColor()"
                                     class="row-col-xs-1 z-10 hidden border border-gray-500 bg-gray-50 shadow"
                                     style="width: 500px;">
-                                    <div class="col-xs-1">
-                                        <div class="p-3 bg-gray-100">
-                                            <div class="relative flex justify-between">
+                                    <div class="col-xs-1 bg-violet-300">
+                                        <div class="p-3">
+                                            <div id="noticon" class="relative flex justify-between">
                                                 <h5 class="">
-                                                    <span class="">Notifications</span>
+                                                    <span id="noti" class="">Notifications</span>
                                                 </h5>
                                                 @if ($unreadNotificationsCount)
                                                     <a href="javascript:void(0);" id="mark-all"
