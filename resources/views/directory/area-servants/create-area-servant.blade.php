@@ -202,7 +202,7 @@
                         @enderror
                     </div>
                 </div>
-                
+
                 <div class="my-4 flex justify-end">
                     <button type="submit" class="btn btn-success me-2">Register</button>
                     <button type="reset" class="btn btn-outline-info">Reset</button>
@@ -222,7 +222,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const errorInputs = document.querySelectorAll('span.text-danger');
         if (errorInputs.length > 0) {
-            const firstErrorInput = errorInputs[0].closest('.col').querySelector('.form-control');
+            const firstErrorInput = errorInputs[0].closest('.col');
             if (firstErrorInput) {
                 firstErrorInput.focus();
             }
