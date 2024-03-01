@@ -7,6 +7,7 @@ use App\Models\Youth;
 use App\Notifications\MemberNotification;
 use App\Notifications\YouthNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -195,10 +196,11 @@ class YouthController extends Controller
      */
     public function destroy(Request $request)
     {
-        $youth = User::findOrFail($request->id);
-        $remove = $youth->delete();
+        $data = User::findOrFail($request->id);
+        $remove = $data->delete();
 
         if ($remove) {
+            DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
                 'message' => 'Profile deleted successfully'

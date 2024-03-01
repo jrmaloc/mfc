@@ -161,4 +161,6 @@ Route::match(['get', 'post', 'put', 'patch'], '/paymaya/checkout/success/{id}', 
 Route::match(['get', 'post'], '/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
 Route::match(['get', 'post'], '/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
 
+Route::view('/test', 'kids.show2');
+
 require __DIR__ . '/auth.php';

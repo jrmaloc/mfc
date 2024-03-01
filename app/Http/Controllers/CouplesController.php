@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Couples;
 use App\Models\User;
 use App\Notifications\CouplesNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -30,7 +30,7 @@ class CouplesController extends Controller
                     $viewButton = '<a href="couples/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
                     // Check user role before adding edit and delete buttons
                     if (Auth::user()->role_id == '1' || Auth::user()->role_id == '2') {
-                        return '<div class="dropdown flex gap-2">'. $viewButton . $editButton . $deleteButton . '</div>';
+                        return '<div class="dropdown flex gap-2">' . $viewButton . $editButton . $deleteButton . '</div>';
                     } else {
                         // Default case for users with no edit/delete permissions
                         return '<div class="dropdown">' . $viewButton . '</div>';
@@ -181,7 +181,6 @@ class CouplesController extends Controller
             return redirect()->back()
                 ->with('success', 'Password updated successfully!');
 
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             // If validation fails, handle the exception here
             session()->flash('error', 'There was an error in the form submission.');
@@ -197,14 +196,15 @@ class CouplesController extends Controller
         $remove = $data->delete();
 
         if ($remove) {
+            DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
-                'message' => 'Profile deleted successfully'
+                'message' => 'Profile deleted successfully',
             ]);
         } else {
             return response([
                 'error' => true,
-                'message' => 'Failed to delete Profile'
+                'message' => 'Failed to delete Profile',
             ]);
         }
     }

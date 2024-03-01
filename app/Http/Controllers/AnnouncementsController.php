@@ -6,6 +6,7 @@ use App\Models\Announcement;
 use App\Models\User;
 use App\Notifications\AnnouncementNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Yajra\DataTables\DataTables;
@@ -98,38 +99,44 @@ class AnnouncementsController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->ajax()) {
-            $data = $request->validate([
-                'title' => 'required',
-                'description' => 'required',
-            ]);
-
-            $announcement = Announcement::findOrFail($id);
-            $announcement->update($data);
-
-            if ($announcement){
-                return response()->json([
-                    'data' => $data,
-                    'succeed' => true,
-                    'message' => 'Announcement updated successfully',
+            if ($request->from == 'index') {
+                $data = $request->validate([
+                    'title' => 'required',
+                    'description' => 'required',
                 ]);
+
+                $announcement = Announcement::findOrFail($id);
+                $announcement->update($data);
+
+                if ($announcement) {
+                    return redirect(route('announcements.index'))->with('success', 'Announcement updated successfully');
+                };
+            };
+
+            if ($request->from == 'show') {
+                $data = $request->validate([
+                    'title' => 'required',
+                    'description' => 'required',
+                ]);
+
+                $announcement = Announcement::findOrFail($request->id);
+                $announcement->update($data);
+
+                if ($announcement) {
+                    // $admins = User::whereHas('roles', function ($query) {
+                    //     $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7]); // Use whereIn for multiple IDs
+                    // })->get();
+
+                    // Notification::send($admins, new AnnouncementNotification($announcement, 'An announcement has been updated! Check it now.'));
+
+
+                    return response([
+                        'data' => $data,
+                        'success' => 'Announcement updated successfully',
+                    ]);
+                };
             };
         };
-
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
-
-        $announcement = Announcement::findOrFail($id);
-        $announcement->update($data);
-
-        $admins = User::whereHas('roles', function ($query) {
-            $query->whereIn('id', [1, 2, 3, 4, 5, 6, 7]); // Use whereIn for multiple IDs
-        })->get();
-
-        Notification::send($admins, new AnnouncementNotification($announcement, 'An announcement has been updated! Check it now.'));
-
-        return redirect(route('announcements.index'))->with('success', 'Announcement edited successfully');
     }
 
     public function destroy(string $id)
@@ -138,6 +145,9 @@ class AnnouncementsController extends Controller
         $remove = $data->delete();
 
         if ($remove) {
+
+            DatabaseNotification::where('data->name', $data->title)->delete();
+
             return response([
                 'status' => true,
                 'message' => 'Announcement deleted successfully',

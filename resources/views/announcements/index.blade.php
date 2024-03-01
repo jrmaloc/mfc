@@ -210,15 +210,15 @@
                         }
 
                         @media(max-width: 768px) {
-                            div#offcanvasEnd{
+                            div#offcanvasEnd {
                                 width: 80%;
                             }
 
-                            button.btn.btn-success{
+                            button.btn.btn-success {
                                 font-size: xx-small;
                             }
 
-                            button.btn.btn-outline-info{
+                            button.btn.btn-outline-info {
                                 font-size: x-small;
                             }
                         }
@@ -304,8 +304,8 @@
         <!-- Edit -->
         <div class="col-lg-3 col-md-6">
             <div class="mt-3">
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="editForm"
-                    aria-labelledby="offcanvasEndLabel">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="editForm" aria-labelledby="offcanvasEndLabel"
+                    style="width: 25%;">
                     <div class="offcanvas-header">
                         <h5 id="offcanvasEndLabel" class="offcanvas-title fw-bold text-2xl pt-4">Edit Announcement</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -313,14 +313,15 @@
                     </div>
 
                     <div class="offcanvas-body mx-0 flex-grow-0">
-                        <form id="editForm" action="" method="POST">
+                        <form id="editForm" action="" method="PUT">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 mb-3">
                                     <div class="form-floating form-floating-outline mt-3">
                                         <input name="title" type="text" class="form-control" value=""
-                                            id="edittitle" value="" placeholder="Title of your Announcement" required>
+                                            id="edittitle" value="" placeholder="Title of your Announcement"
+                                            required>
                                         <label for="edittitle">Title<span class="text-danger">*</span></label>
                                     </div>
                                 </div>
@@ -337,7 +338,7 @@
 
                             <div class="col-xs-12 col-sm-12 col-md-12 text-center flex justify-end gap-2 my-4 pb-4">
                                 <button type="reset" class="btn btn-outline-info">Reset</button>
-                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <button type="submit" class="save-btn btn btn-success">Save Changes</button>
                             </div>
                         </form>
                     </div>
@@ -380,14 +381,13 @@
             textAreas.value = '';
         }
 
-        $(document).on("click", ".edit-btn", function(e){
+        $(document).on("click", ".edit-btn", function(e) {
             var id = $(this).attr('id');
 
             $.ajax({
                 url: '{{ route('announcements.edit', ['announcement' => ':id']) }}'.replace(':id', id),
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
                     // Update the form fields with fetched data
                     $('#edittitle').attr('value', response.title);
                     var textarea = document.getElementById('editdescription');
@@ -396,6 +396,49 @@
                 error: function(error) {
                     console.error('Error fetching data:', error);
                 }
+            });
+
+            $('.save-btn').click(function(e) {
+                $.ajax({
+                    url: '{{ route('announcements.update', ['announcement' => ':id']) }}'.replace(
+                        ':id', id),
+                    type: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        request: 'index',
+                        title: $('#edittitle').val(),
+                        description: $('#editdescription').val()
+                    },
+                    success: function(response) {
+
+                        // $('#editForm').offcanvas('hide');
+                        var Toast = Swal.mixin({
+                            toast: true,
+                            icon: 'success',
+                            title: 'General Title',
+                            animation: true,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: response.success,
+                        });
+
+                        setTimeout(function(e){
+                            location.reload();
+                        },2000);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                })
             });
         });
 

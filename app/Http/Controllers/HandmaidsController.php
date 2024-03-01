@@ -6,6 +6,7 @@ use App\Models\Handmaids;
 use App\Models\User;
 use App\Notifications\HandmaidsNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -198,6 +199,7 @@ class HandmaidsController extends Controller
         $remove = $data->delete();
 
         if ($remove) {
+            DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
                 'message' => 'Profile deleted successfully'

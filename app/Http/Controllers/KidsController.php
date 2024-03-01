@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Registration;
+use App\Models\Tithe;
 use App\Models\User;
 use App\Notifications\KidsNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class KidsController extends Controller
@@ -40,7 +45,7 @@ class KidsController extends Controller
                         return '<div class="dropdown">' . $viewButton . $editButton . $deleteButton . '</div>';
                     } elseif (Auth::user()->role == 'editor' && $info->editableByEditor()) {
                         // Additional check if the user has permission to edit this specific item
-                        return '<div class="dropdown">' . $viewButton . $editButton .'</div>';
+                        return '<div class="dropdown">' . $viewButton . $editButton . '</div>';
                     } else {
                         // Default case for users with no edit/delete permissions
                         return '<div class="dropdown">' . $viewButton . '</div>';
@@ -114,7 +119,24 @@ class KidsController extends Controller
     public function show(string $id)
     {
         $kid = User::find($id);
-        return view('kids.show', ['kid' => $kid]);
+
+        $dateOfBirth = $kid->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $kid->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('kids.show', [
+            'id' => $id,
+            'kid' => $kid,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -123,7 +145,24 @@ class KidsController extends Controller
     public function edit(string $id)
     {
         $kid = User::find($id);
-        return view('kids.edit', ['kid' => $kid]);
+
+        $dateOfBirth = $kid->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $kid->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('kids.edit', [
+            'id' => $kid->id,
+            'kid' => $kid,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -131,10 +170,42 @@ class KidsController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        dd($request->all());
+
+        if ($request->ajax()) {
+            $data = $request->validate([
+                'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'email' => 'required',
+                'nickname' => 'nullable',
+                'username' => 'required',
+                'address' => 'required',
+                'bio' => 'required',
+                'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
+                'gender' => 'required',
+                'area' => 'required',
+                'chapter' => 'required',
+                'avatar' => 'nullable',
+            ]);
+
+            $user = User::findOrFail($id);
+
+            $update = $user->update($data);
+
+            if ($update) {
+                return redirect()->back()->with('success', 'Save successfully');
+            } else {
+                return redirect()->back()->with('error', 'Failed')->setStatusCode(404);
+            }
+
+        }
+
         $data = $request->validate([
             'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
             'email' => 'required',
+            'nickname' => 'nullable',
             'username' => 'required',
+            'address' => 'required',
+            'bio' => 'required',
             'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
             'gender' => 'required',
             'area' => 'required',
@@ -166,9 +237,7 @@ class KidsController extends Controller
             }
         }
 
-        return redirect()->route('kids.edit', [
-            'kid' => $kid->id,
-        ])->with('success', 'Profile updated successfully');
+        return redirect(route('kids.edit', ['kid' => $kid->id]))->with('success', 'Profile updated successfully');
     }
 
     public function updatePassword(Request $request, string $id)
@@ -208,10 +277,11 @@ class KidsController extends Controller
      */
     public function destroy(Request $request)
     {
-        $kid = User::findOrFail($request->id);
-        $remove = $kid->delete();
+        $data = User::findOrFail($request->id);
+        $remove = $data->delete();
 
         if ($remove) {
+            DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
                 'message' => 'Profile deleted successfully',

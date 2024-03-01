@@ -109,13 +109,15 @@
             }
         });
 
-        save.addEventListener('click', function() {
+        save.addEventListener('click', function(e) {
+
             $.ajax({
                 url: `{{ route('announcements.update', ['announcement' => $data->id]) }}`,
                 method: "PUT",
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: {{ $data->id }},
+                    from: 'show',
                     description: editTextArea.value,
                     title: titleInput.value,
                 },
@@ -145,7 +147,7 @@
 
                     Toast.fire({
                         icon: 'success',
-                        title: response.message,
+                        title: response.success,
                     });
                 },
                 error: function(error) {

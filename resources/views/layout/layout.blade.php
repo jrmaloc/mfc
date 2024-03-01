@@ -109,10 +109,6 @@
             background-color: #ffff !important;
         }
 
-        .form-check-input:active {
-            border-color: #56ca00;
-        }
-
         .colored-toast {
             margin-top: 25px;
         }
@@ -203,11 +199,6 @@
             pointer-events: none !important;
         }
 
-        .form-check-input:checked {
-            background-color: #1b8362;
-            border-color: #1b661b;
-        }
-
         .form-floating-outline .form-control:focus,
         .form-floating-outline .form-select:focus {
             border-color: #1b661b !important;
@@ -268,9 +259,9 @@
             background-image: -webkit-gradient(linear,
                     40% 0%,
                     75% 84%,
-                    from(#4D9C41),
-                    to(#19911D),
-                    color-stop(.6, #54DE5D))
+                    from(#8b8e94ff),
+                    to(rgb(171, 175, 182)),
+                    color-stop(.6, rgb(181, 186, 197)))
         }
 
         h4.fw-bold.py-3.mb-4 {
@@ -665,6 +656,10 @@
                                             transform: translate(791px, 60px);
                                         }
 
+                                        div#dropdownUsers ul {
+                                            max-height: 275px !important;
+                                        }
+
                                         div.flex a.text-xl.uppercase {
                                             font-size: 1rem !important;
                                         }
@@ -697,13 +692,11 @@
                                 </style>
 
                                 <div class="arrow-up hidden"></div>
-                                <script>
-                                    $()
-                                </script>
+                                <script></script>
                                 <div id="dropdownUsers" class="z-10 hidden bg-white shadow w-40 dark:bg-gray-700"
-                                    style="border: 1px solid #8080802e; border-top-right-radius: 0px;">
-                                    <div
-                                        class="flex justify-center items-center p-3 font-medium hover:bg-gray-100 border-t border-gray-200 bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500">
+                                    style="border: 1px solid #8080802e;">
+                                    <div class="flex justify-center items-center p-3 font-medium border-t border-gray-200 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                        style="border-bottom: 1px groove #8080802e;">
                                         <a href="#"
                                             class="text-xl uppercase font-bold text-gray-700 pointer-events-none">
                                             Notifications
@@ -715,7 +708,7 @@
                                         @if ($unreadNotificationsCount > 0) style="max-height: 600px;" @endif>
 
                                         @forelse ($unreadNotifications as $notification)
-                                            <div class="hover:bg-green-100"
+                                            <div class="hover:bg-gray-100"
                                                 style="border-bottom: 1px groove #8080802e;">
                                                 <li
                                                     class="px-3 pt-3 notify list-group-item list-group-item-action dropdown-notifications-item">
@@ -778,10 +771,10 @@
                                         @endforelse
                                     </ul>
                                     @if ($unreadNotificationsCount)
-                                        <div class="flex justify-center items-center p-3 text-sm font-medium hover:bg-gray-100 text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
-                                            style="border-bottom: 9px solid #9055fdad;">
-                                            <a href="javascript:void(0);" id="mark-all"
-                                                class="hover:bg-gray-100 hover:underline">
+                                        <div class="flex justify-center items-center p-3 text-sm font-medium border-t border-gray-200 rounded-b-lg dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                            style="border-bottom: 9px solid #9359ffff; border-top: 1px groove #8080802e;">
+                                            <a href="javascript:void(0);" id="mark-all" class="hover:underline"
+                                                style="color: #374152ff;">
                                                 Mark all as read
                                             </a>
                                         </div>
@@ -857,11 +850,11 @@
                     <!-- / Content -->
 
                     <!-- Footer -->
-                    <footer class="content-footer footer bg-footer-theme">
+                    <footer class="content-footer footer bg-footer-theme mt-8">
                         <div class="container-xxl">
                             <div
                                 class="footer-container d-flex align-items-center justify-center py-3 flex-md-row flex-column">
-                                <div class="text-body mb-2 mb-md-0">
+                                <div class="text-body mb-2 mb-md-0 flex">
                                     ©
                                     <script>
                                         document.write(new Date().getFullYear());
@@ -891,6 +884,7 @@
     <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ URL::asset('assets/vendor/js/bootstrap.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
