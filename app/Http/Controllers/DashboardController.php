@@ -8,6 +8,7 @@ use App\Models\Tithe;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
@@ -21,6 +22,24 @@ class DashboardController extends Controller
         $this->middleware('permission:edit-dashboard', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-dashboard', ['only' => ['destroy']]);
     }
+
+    // public function sample() {
+    //     $response = Http::post('https://oauth.e.gov.ph/api/token', [
+    //         'partner_code' => 'YOUR_PARTNER_CODE',
+    //         'partner_secret' => 'YOUR_PARTNER_SECRET',
+    //         'scope' => 'SSO_AUTHENTICATION',
+    //         'exchange_code' => 'GENERATED_EXCHANGE_CODE',
+    //     ]);
+
+    //     if ($response->successful()) {
+    //         $accessToken = $response['access_token'];
+    //         // Handle successful authentication
+    //     } else {
+    //         // Handle authentication failure
+    //         $error = $response->json()['errors'];
+    //         dd($error);
+    //     }
+    // }
 
     public function index()
     {

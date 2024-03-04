@@ -1,14 +1,3 @@
-@props([
-    'section' => '',
-    'tithes' => '',
-    'age' => '',
-    'role' => '',
-    'events' => '',
-    'id' => '',
-    'updateRoute' => '',
-
-])
-
 @extends('layout.layout')
 
 @section('head')
@@ -1012,6 +1001,7 @@
 
         .text-center {
             text-align: center !important;
+            margin-top: 130px;
         }
 
         .text-uppercase {
@@ -1122,7 +1112,11 @@
         .card-profile-image img {
             position: absolute;
             left: 50%;
-            max-width: 180px;
+            min-height: 200px;
+            max-height: 200px;
+            min-width: 200px;
+            max-width: 200px;
+            overflow: hidden;
             transition: all .15s ease;
             transform: translate(-50%, -30%);
             border-radius: .375rem;
@@ -1311,92 +1305,11 @@
             style="min-height: 600px; background-size: cover; background-position: center top;">
             <!-- Mask -->
             <span class="mask bg-gradient-default opacity-8 rounded-top"></span>
-            <div class="container-fluid d-flex align-items-center justify-end" style="position: absolute; bottom: 20%;">
-                <div class="row">
-                    <div class="col-lg-7 col-md-10">
-                        <a href="#" id="passModal" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#passwordModal">Edit password
-                            <!-- https://feathericons.dev/?search=edit&iconset=feather -->
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"
-                                class="main-grid-item-icon ml-2" fill="none" stroke="currentColor" stroke-linecap="round"
-                                stroke-linejoin="round" stroke-width="2">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                            </svg>
-                        </a>
-                    </div>
-
-                    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="passwordModalLabel">Change Password</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    </button>
-                                </div>
-                                <form id="change-pass" method="PUT" action="">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-body">
-                                        <div class="pl-lg-4">
-                                            <div class="row">
-                                                <div class="col-lg-11">
-                                                    <div class="form-group focused">
-                                                        <label class="form-control-label" for="current-password">
-                                                            Current password<span class="text-danger">*</span>
-                                                        </label>
-                                                        <input autofocus type="password" id="current-password" name="current_password"
-                                                            autocomplete="current-password"
-                                                            class="form-control form-control-alternative"
-                                                            placeholder="***********" autofocus>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-11">
-                                                    <div class="form-group focused">
-                                                        <label class="form-control-label" for="new-password">
-                                                            New password<span class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="password" id="new-password" name="new_password"
-                                                            autocomplete="new-password"
-                                                            class="form-control form-control-alternative"
-                                                            placeholder="***********">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-11">
-                                                    <div class="form-group focused">
-                                                        <label class="form-control-label" for="confirm-password">
-                                                            Confirm password<span class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="password" id="confirm-password"
-                                                            name="confirm_password" autocomplete="new-password"
-                                                            class="form-control form-control-alternative"
-                                                            placeholder="***********">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" id="save-pass" class="btn btn-primary">Save
-                                            changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <!-- Page content -->
         <div class="container-fluid mt-7">
-            <form id="editForm" method="PUT">
+            <form id="createForm" action="{{ $slot }}" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="row">
                     <div class="col-xl-4 order-xl-1 mb-5 mb-xl-0">
                         <div class="card card-profile shadow">
@@ -1404,67 +1317,55 @@
                                 <div class="col-lg-3 order-lg-2">
                                     <div class="card-profile-image">
                                         <label href="#" for="upload" id="profilePicture">
-                                            @isset($section->avatar)
-                                            <img src="{{ URL::asset($section->avatar) }}" id="avatar"
-                                            class="rounded-circle">
-                                            @else
                                             <img src="{{ URL::asset('assets/img/avatars/3.png') }}" id="avatar"
                                                 class="rounded-circle">
-                                            @endisset
-                                            <input type="file" id="upload" name="avatar"
-                                                class="account-file-input" hidden accept="image/png, image/jpeg" />
+                                            <input type="file" id="upload" name="avatar" class="account-file-input"
+                                                hidden accept="image/png, image/jpeg, image/jpg " />
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4"></div>
                             <div class="card-body pt-0 pt-md-4">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                                            <div>
-                                                <span class="heading">{{ $tithes }}</span>
-                                                <span class="description">Tithes</span>
-                                            </div>
-                                            <div>
-                                                <span class="heading">{{ $events }}</span>
-                                                <span class="description">Events</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="text-center">
-                                    <div class="col-lg-12 mx-auto" style="margin-top: 40px;">
-                                        <div class="form-group focused flex flex-col align-items-start">
-                                            <label class="form-control-label" for="input-nickname">Nickname<span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" id="input-nickname" name="nickname"
-                                                autocomplete="name" value="{{ $section->nickname }}" class="form-control form-control-alternative"
-                                                placeholder="nickname">
+                                    <h3 class="capitalize">
+                                        <div class="col-lg-12 mx-auto" style="margin-top: 40px;">
+                                            <div class="form-group focused flex flex-col align-items-start">
+                                                <label class="form-control-label" for="input-nickname">Nickname</label>
+                                                <input type="text" id="input-nickname" name="nickname"
+                                                    autocomplete="name" class="form-control form-control-alternative"
+                                                    placeholder="nickname" value="{{ old('nickname') }}">
+                                                @error('nickname')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        nickname.</span>
+                                                @enderror
+                                            </div>
+                                            <div class="form-group focused flex flex-col align-items-start">
+                                                <label class="form-control-label" for="input-nickname">Birthday</label>
+                                                <input type="text" id="input-dob" name="birthday"
+                                                    placeholder="Happy Birthday..." autocomplete="birthdate"
+                                                    class="form-control form-control-alternative"
+                                                    value="{{ old('birthday') }}">
+                                                @error('birthday')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        birthdate.</span>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div class="form-group focused flex flex-col align-items-start">
-                                            <label class="form-control-label" for="input-nickname">Birthday<span
-                                                    class="text-danger">*</span></label>
-                                            <input type="text" id="input-dob" value="{{ $section->birthday }}" name="birthday" placeholder="Happy Birthday..."
-                                                autocomplete="birthdate" class="form-control form-control-alternative">
-                                        </div>
-                                    </div>
+                                    </h3>
                                     <div class="h3 font-weight-300">
-                                        <i class="ni location_pin mr-2"></i>{{ $role->name }}
+                                        <i class="ni location_pin mr-2"></i>Member
                                     </div>
                                     <hr class="my-4">
                                 </div>
                                 <div class="form-check form-switch mb-2">
-                                    <input value="Active" class="form-check-input form-control mr-2" name="status"
-                                        type="checkbox" style="width: 38px; height: 20px;" id="status"
-                                        @if ($section->status == 'Active') checked @endif
-                                        @if (auth()->user()->role_id != 1 && auth()->user()->role_id != 2) disabled @endif />
+                                    <input disabled value="Active" class="form-check-input form-control mr-2" name="status"
+                                        type="checkbox" checked style="width: 38px; height: 20px;" id="status" />
                                     <label class="form-check-label" for="status">is Active</label>
                                 </div>
                                 <div class="form-check form-switch mb-2">
-                                    <input value="Active" class="form-check-input form-control mr-2" name="verifyEmail"
-                                        type="checkbox" style="width: 38px; height: 20px;" id="verifyEmail"
-                                        @if ($section->email_verified_at) checked @endif />
+                                    <input disabled value="Active" class="form-check-input form-control mr-2"
+                                        name="verifyEmail" type="checkbox" style="width: 38px; height: 20px;"
+                                        id="verifyEmail" />
                                     <label class="form-check-label" for="verifyEmail">Email Verified</label>
                                 </div>
                             </div>
@@ -1487,11 +1388,13 @@
                                             <div class="form-group focused">
                                                 <label class="form-control-label" for="input-name">Full
                                                     name<span class="text-danger">*</span></label>
-                                                <input autofocus type="text" id="input-name" name="name" autocomplete="name"
-                                                    class="form-control form-control-alternative" placeholder="name"
-                                                    @if ($section->name) autofocus value="{{ $section->name }}"
-                                                        @else
-                                                            value="" @endif>
+                                                <input autofocus type="text" id="input-name" name="name"
+                                                    autocomplete="name" class="form-control form-control-alternative"
+                                                    placeholder="Juan Dela Cruz" value="{{ old('name') }}">
+                                                @error('name')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        name.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -1500,10 +1403,11 @@
                                                         class="text-danger">*</span></label>
                                                 <input type="email" id="input-email" name="email"
                                                     autocomplete="emaill" class="form-control form-control-alternative"
-                                                    placeholder="example@email.com"
-                                                    @if ($section->email) value="{{ $section->email }}"
-                                                        @else
-                                                            value="" @endif>
+                                                    placeholder="example@email.com" value="{{ old('email') }}">
+                                                @error('email')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        email.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1512,13 +1416,14 @@
                                             <div class="form-group focused">
                                                 <label class="form-control-label" for="input-username">Username<span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" id="input-username" name="username"
-                                                    id="input-username" class="form-control form-control-alternative"
-                                                    placeholder="@Username"
-                                                    @if ($section->username) value="{{ $section->username }}"
-                                                        @else
-                                                            value="" @endif
-                                                    autocomplete="username">
+                                                <input type="username" id="input-username" name="username"
+                                                    autocomplete="username" id="input-username"
+                                                    class="form-control form-control-alternative" placeholder="username"
+                                                    value="{{ old('username') }}">
+                                                @error('username')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        username.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -1528,21 +1433,18 @@
                                                 <select id="input-gender" name="gender"
                                                     class="form-control-alternative form-control form-select-lg"
                                                     style="border: none; background: #fff;">
-                                                    @if ($section->gender)
-                                                        <option value="Select User" disabled>Select Gender</option>
-                                                        <option value="brother"
-                                                            {{ $section->gender === 'Brother' ? 'selected' : '' }}>Brother
-                                                        </option>
-                                                        <option value="sister"
-                                                            {{ $section->gender === 'Sister' ? 'selected' : '' }}>Sister
-                                                        </option>
-                                                        <option value="others"
-                                                            {{ $section->gender === 'Others' ? 'selected' : '' }}>Others
-                                                        </option>
-                                                    @else
-                                                        <option value="" selected disabled>Select Gender</option>
-                                                    @endif
+                                                    <option value="Select User" selected disabled>Select Gender</option>
+                                                    <option value="Brother"
+                                                        {{ old('gender') == 'Brother' ? 'selected' : '' }}>Brother</option>
+                                                    <option value="Sister"
+                                                        {{ old('gender') == 'Sister' ? 'selected' : '' }}>Sister</option>
+                                                    <option value="Others"
+                                                        {{ old('gender') == 'Others' ? 'selected' : '' }}>Others</option>
                                                 </select>
+                                                @error('gender')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1558,8 +1460,12 @@
                                                         class="text-danger">*</span></label>
                                                 <input id="input-address"
                                                     class="form-control form-control-alternative @error('address') is-invalid @enderror"
-                                                    placeholder="Home Address" name="address" type="text"
-                                                    value="{{ $section->address ?? '' }}" autocomplete="address-level2">
+                                                    placeholder="Home Address" name="address" type="location"
+                                                    autocomplete="address-level2" value="{{ old('address') }}">
+                                                @error('address')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        address.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1570,10 +1476,11 @@
                                                     Number<span class="text-danger">*</span></label>
                                                 <input type="tel" id="input-phone" autocomplete="tel"
                                                     class="form-control form-control-alternative" name="contact_number"
-                                                    placeholder="09********"
-                                                    @if ($section->contact_number) value="{{ $section->contact_number }}"
-                                                        @else
-                                                            value="" @endif>
+                                                    placeholder="09********" value="{{ old('contact_number') }}">
+                                                @error('contact_number')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        contact number.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -1583,24 +1490,20 @@
                                                 <select id="input-area" name="area"
                                                     class="form-control-alternative form-control form-select-lg"
                                                     style="border: none; background: #fff;">
-                                                    @if ($section->area)
-                                                        <option value="Select User" disabled>Select Area</option>
-                                                        <option value="North"
-                                                            {{ $section->area === 'North' ? 'selected' : '' }}>North
-                                                        </option>
-                                                        <option value="East"
-                                                            {{ $section->area === 'East' ? 'selected' : '' }}>East
-                                                        </option>
-                                                        <option value="Central"
-                                                            {{ $section->area === 'Central' ? 'selected' : '' }}>Central
-                                                        </option>
-                                                        <option value="South"
-                                                            {{ $section->area === 'South' ? 'selected' : '' }}>South
-                                                        </option>
-                                                    @else
-                                                        <option value="" selected disabled>Select Area</option>
-                                                    @endif
+                                                    <option value="Select User" selected disabled>Select Area</option>
+                                                    <option value="North"
+                                                        {{ old('area') == 'North' ? 'selected' : '' }}>North</option>
+                                                    <option value="South"
+                                                        {{ old('area') == 'South' ? 'selected' : '' }}>South</option>
+                                                    <option value="East"
+                                                        {{ old('area') == 'East' ? 'selected' : '' }}>East</option>
+                                                    <option value="Central"
+                                                        {{ old('area') == 'Central' ? 'selected' : '' }}>Central</option>
                                                 </select>
+                                                @error('area')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -1610,38 +1513,30 @@
                                                 <select id="input-chapter" name="chapter"
                                                     class="form-control-alternative form-control form-select-lg"
                                                     style="border: none; background: #fff;">
-                                                    @if ($section->chapter)
-                                                        <option value="Select User" disabled>Select Chapter</option>
-                                                        <option value="Chapter 1"
-                                                            {{ $section->chapter === 'Chapter 1' ? 'selected' : '' }}>Chapter 1
-                                                        </option>
-                                                        <option value="Chapter 2"
-                                                            {{ $section->chapter === 'Chapter 2' ? 'selected' : '' }}>Chapter 2
-                                                        </option>
-                                                        <option value="Chapter 3"
-                                                            {{ $section->chapter === 'Chapter 3' ? 'selected' : '' }}>Chapter 3
-                                                        </option>
-                                                    @else
-                                                        <option value="" selected disabled>Select Chapter</option>
-                                                    @endif
+                                                    <option value="Select User" selected disabled>Select Chapter</option>
+                                                    <option value="Chapter 1"
+                                                        {{ old('chapter') == 'Chapter 1' ? 'selected' : '' }}>Chapter 1</option>
+                                                    <option value="Chapter 2"
+                                                        {{ old('chapter') == 'Chapter 2' ? 'selected' : '' }}>Chapter 2</option>
+                                                    <option value="Chapter 3"
+                                                        {{ old('chapter') == 'Chapter 3' ? 'selected' : '' }}>Chapter 3</option>
                                                 </select>
+                                                @error('chapter')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <hr class="my-4">
                                 <!-- Description -->
-                                <h6 class="heading-small text-muted mb-3">About me<span class="text-danger">*</span></h6>
+                                <h6 class="heading-small text-muted mb-3">About me</h6>
                                 <div class="pl-lg-4">
                                     <div class="form-group focused">
                                         <textarea rows="4" name="bio" id="input-bio" class="form-control form-control-alternative"
                                             placeholder="A few words about you ..." autocomplete="on"></textarea>
                                     </div>
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
-                                            document.getElementById('input-bio').value = '{{ $section->bio }}';
-                                        });
-                                    </script>
                                 </div>
                                 <div class="flex justify-end gap-3">
                                     <style>
@@ -1661,6 +1556,7 @@
                                     <button type="submit" id="save-btn" class="btn btn-primary"
                                         style="width: 15%;">Save</button>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -1669,78 +1565,57 @@
         </div>
     </div>
 
-    @if (session('success'))
-        <style>
-            div.swal2-container.swal2-top-right.swal2-backdrop-show {
-                z-index: 9999 !important;
-            }
-        </style>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {{-- TOASTS --}}
+
+
+
+    @if ($errors->any())
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script>
-            const Toast = Swal.mixin({
-                toast: true,
-                animation: true,
-                position: 'top-right',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
+            document.addEventListener("DOMContentLoaded", function() {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+
+                toastr.info('Please complete the form', 'Submission Failed');
             });
-
-
-            Toast.fire({
-                icon: 'success',
-                title: "{{ session('success') }}",
-
-            });
-            console.log("{{ session('success') }}");
         </script>
     @endif
 @endsection
 
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var Toast = Swal.mixin({
-                toast: true,
-                animation: true,
-                position: 'top-right',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-            });
 
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
+            var dob = $('#input-dob').flatpickr();
 
-            $('#input-dob').flatpickr();
-
-            const errorInputs = document.querySelectorAll('span.text-danger');
-            if (errorInputs.length > 0) {
-                const firstErrorInput = errorInputs[0].closest('.col');
-                if (firstErrorInput) {
-                    firstErrorInput.focus();
+            const errorSpan = document.querySelector('#error');
+            if (errorSpan) {
+                const inputField = errorSpan.closest('.form-group').querySelector('input');
+                if (inputField) {
+                    inputField.focus();
                 }
             }
 
             $('#upload').change(function(e) {
                 var file = e.target.files[0];
+
+                console.log(file);
 
                 if (file) {
                     var reader = new FileReader();
@@ -1751,80 +1626,7 @@
                 }
             });
 
-            var id = {{ $id }};
-
-            $('#save-pass').click(function(e) {
-                e.preventDefault();
-                var form = $('#change-pass').serialize();
-
-                $.ajax({
-                    url: "{{ $updateRoute }}",
-                    method: "PUT",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: form,
-
-                    success: function(response) {
-                        console.log(response);
-                        Toast.fire({
-                            icon: "success",
-                            title: "Password Changed Successfully"
-                        });
-                        $('#passwordModal').modal('hide');
-                    },
-
-                    error: function(error, status, xhr) {
-                        console.log(error);
-                    }
-                });
-            });
-
-            $('#editForm').submit(function(e) {
-                e.preventDefault();
-
-                var formData = new FormData(this); // Serialize the form data
-
-                // Append the file input to the FormData object
-                var fileInput = $('#upload')[0]; // Replace 'upload' with the ID of your file input
-                formData.append('file', fileInput.files[
-                0]); // 'file' should match the name of the file input field
-
-                // Send the AJAX request
-                $.ajax({
-                    url: "{{ $updateRoute }}",
-                    type: 'POST', // Change to POST if your backend route handles file uploads via POST method
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: formData,
-                    processData: false, // Important for handling file uploads
-                    contentType: false, // Important for handling file uploads
-                    success: function(data) {
-                        Toast.fire({
-                            icon: 'success',
-                            title: data.message,
-                        });
-                    },
-                    error: function(e, xhr, textStatus, errorThrown) {
-                        console.log(e, xhr, textStatus, errorThrown);
-                        if (e.responseJSON && e.responseJSON.errors) {
-                            var errors = e.responseJSON.errors;
-                            for (var field in errors) {
-                                if (errors.hasOwnProperty(field)) {
-                                    $('#input-' + field).after(
-                                        '<span class="text-danger text-xs"> This field is required.</span>'
-                                    );
-                                    $('#input-' + field).focus();
-
-                                    toastr.warning(errors[field], "Warning");
-                                }
-                            }
-                        }
-                    }
-                });
-            });
+            //
         });
     </script>
 @endpush
-

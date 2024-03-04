@@ -20,7 +20,7 @@
 
         .dataTables_scrollHead {
             margin-top: 10px;
-            background-color: #58d68d !important;
+            background-color: #9056fcff
         }
 
         td.dataTables_empty {
@@ -30,10 +30,10 @@
 
         th.sorting {
             width: 100px;
+            color: #fafafa;
         }
 
         th {
-            color: #ECF0F1 !important;
             font-size: 15px !important;
         }
 
@@ -62,7 +62,7 @@
         </div>
         <div class="flex justify-end mb-4">
             @can('view-role')
-                <a href="{{ route('kids.create') }}" class="btn btn-success">
+                <a href="{{ route('kids.create') }}" class="btn btn-primary">
                     Add a User
                     <i class="tf-icons mdi mdi-plus ml-1"></i>
                 </a>
@@ -175,7 +175,7 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "Remove servant from list",
+                    text: "Remove user from list",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -184,7 +184,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: `{{ route('kids.delete') }}`,
+                            url: "{{ route('kids.destroy', ['kid' => ':id']) }}".replace(':id', id),
                             method: "DELETE",
                             data: {
                                 _token: "{{ csrf_token() }}",

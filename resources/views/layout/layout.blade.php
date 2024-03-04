@@ -352,6 +352,39 @@
         ul.menu-inner {
             scroll-behavior: smooth;
         }
+
+        .dataTables_scrollHead {
+            margin-top: 10px !important;
+        }
+
+        thead,
+        .dataTables_scrollHead {
+            background-color: #9056fcff !important;
+        }
+
+        th.sorting,
+        th.sorting_disabled {
+            width: 100px;
+            color: #fafafa !important;
+        }
+
+        .card-profile-image img {
+            position: absolute;
+            left: 50%;
+            min-height: 200px;
+            max-height: 200px;
+            min-width: 200px;
+            max-width: 200px;
+            overflow: hidden;
+            transition: all .15s ease;
+            transform: translate(-50%, -30%);
+            border-radius: .375rem;
+        }
+
+        .form-check-input:checked {
+            background-color: #9055fd !important;
+            border-color: #9055fd !important;
+        }
     </style>
 
     @yield('head')

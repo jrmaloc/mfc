@@ -25,11 +25,13 @@ use App\Http\Controllers\ServantsController;
 use App\Http\Controllers\SinglesController;
 use App\Http\Controllers\TithesController;
 use App\Http\Controllers\UnitServantController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\YouthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -73,11 +75,12 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard/{id}', [DashboardController::class, 'bio'])->name('dashboard.bio');
 
+    // Route::get('sample', [DashboardController::class, 'sample'])->name('sample');
+
     Route::resource('/announcements', AnnouncementsController::class);
 
     Route::resource('/kids', KidsController::class);
     Route::post('/kids/update{kid}', [KidsController::class, 'updatePassword'])->name('kids.updatePassword');
-    Route::delete('/kids/delete', [KidsController::class, 'destroy'])->name('kids.delete');
 
     Route::resource('/youth', YouthController::class);
     Route::post('/youth/update{youth}', [YouthController::class, 'updatePassword'])->name('youth.updatePassword');

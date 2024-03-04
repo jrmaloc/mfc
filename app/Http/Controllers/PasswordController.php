@@ -9,6 +9,7 @@ class PasswordController extends Controller
 {
     public function updatePassword(Request $request)
     {
+        dd($request->all());
         $user = auth()->user();
         // Validate input
         $request->validate([

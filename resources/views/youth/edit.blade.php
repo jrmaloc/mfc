@@ -1295,7 +1295,7 @@
             <span class="mask bg-gradient-default opacity-8 rounded-top"></span>
         </div>
         <!-- Page content -->
-        <div class="container-fluid mt--7">
+        <div class="container-fluid mt-7">
             <div class="row">
                 <div class="col-xl-4 order-xl-1 mb-5 mb-xl-0">
                     <div class="card card-profile shadow">

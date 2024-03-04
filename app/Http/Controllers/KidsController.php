@@ -80,16 +80,18 @@ class KidsController extends Controller
             'gender' => 'required',
             'area' => 'required',
             'chapter' => 'required',
-            'password' => 'required',
-            'confirm_password' => 'required',
+            'password' => 'nullable',
             'avatar' => 'nullable',
+            'address' => 'required',
+            'bio' => 'nullable',
+            'nickname' => 'nullable',
+            'birthday' => 'nullable',
         ]);
 
         $data['status'] = 'Active';
-        $data['password'] = bcrypt($request->input('password'));
+        $data['password'] = bcrypt('MFCPortal123!');
 
         $kid = User::create(array_merge($data, ['section_id' => '1', 'role_id' => '7']))->assignRole('Member');
-        Member::create(['user_id' => $kid->id]);
 
         if ($request->hasFile('avatar')) {
             $filename = 'avatars/' . time() . '.' . $request->file('avatar')->getClientOriginalExtension();
@@ -98,15 +100,12 @@ class KidsController extends Controller
             $request->file('avatar')->move(public_path('avatars'), $filename);
         }
 
-        // Activities
-
         // Notification
+        // $target = User::whereHas('roles', function ($query) {
+        //     $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
+        // })->get();
 
-        $target = User::whereHas('roles', function ($query) {
-            $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
-        })->get();
-
-        Notification::send($target, new KidsNotification($kid, 'New Kids profile has been created!'));
+        // Notification::send($target, new KidsNotification($kid, 'New Kids profile has been created!'));
 
         return redirect()->route('kids.edit', [
             'kid' => $kid->id,
@@ -170,8 +169,6 @@ class KidsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        dd($request->all());
-
         if ($request->ajax()) {
             $data = $request->validate([
                 'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
@@ -184,17 +181,32 @@ class KidsController extends Controller
                 'gender' => 'required',
                 'area' => 'required',
                 'chapter' => 'required',
-                'avatar' => 'nullable',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $user = User::findOrFail($id);
-
             $update = $user->update($data);
 
+            $oldAvatarPath = $user->avatar;
+
+            if ($request->hasFile('avatar')) {
+                // Handle the new avatar upload as you've implemented
+                $avatar = $request->file('avatar');
+                $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
+                $avatar->move(public_path('avatars'), $filename);
+
+                // Update the newMember's avatar with the new file path
+                $user->avatar = $filename;
+                $user->save();
+
+                // Delete the old avatar file if it exists
+                if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
+                    unlink(public_path($oldAvatarPath));
+                }
+            }
+
             if ($update) {
-                return redirect()->back()->with('success', 'Save successfully');
-            } else {
-                return redirect()->back()->with('error', 'Failed')->setStatusCode(404);
+                return response()->json(['message' => 'Updated Successfully', 'data' => $data], 200);
             }
 
         }
@@ -262,8 +274,9 @@ class KidsController extends Controller
 
             $kid->update($data);
 
-            return redirect()->back()
-                ->with('success', 'Password updated successfully!');
+            return response()->json([
+                'success' => 'Password updated successfully',
+            ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // If validation fails, handle the exception here

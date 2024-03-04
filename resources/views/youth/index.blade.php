@@ -18,7 +18,6 @@
 
         .dataTables_scrollHead {
             margin-top: 10px;
-            background-color: #58d68d !important;
         }
 
         td.dataTables_empty {
