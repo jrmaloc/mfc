@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Registration;
+use App\Models\Tithe;
 use App\Models\User;
-use App\Models\Youth;
-use App\Notifications\MemberNotification;
-use App\Notifications\YouthNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class YouthController extends Controller
@@ -32,7 +32,7 @@ class YouthController extends Controller
                     $viewButton = '<a href="youth/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
                     // Check user role before adding edit and delete buttons
                     if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1') {
-                        return '<div class="dropdown flex gap-2">'. $viewButton . $editButton . $deleteButton . '</div>';
+                        return '<div class="dropdown flex gap-2">' . $viewButton . $editButton . $deleteButton . '</div>';
                     } else {
                         // Default case for users with no edit/delete permissions
                         return '<div class="dropdown">' . $viewButton . '</div>';
@@ -66,12 +66,16 @@ class YouthController extends Controller
             'gender' => 'required',
             'area' => 'required',
             'chapter' => 'required',
-            'password' => 'required',
+            'password' => 'nullable',
             'avatar' => 'nullable',
+            'address' => 'required',
+            'bio' => 'nullable',
+            'nickname' => 'nullable|regex:/^[A-Za-z\s\.\-]+$/',
+            'birthday' => 'nullable',
         ]);
 
         $data['status'] = 'Active';
-        $data['password'] = bcrypt($request->input('password'));
+        $data['password'] = bcrypt('MFCPortal123!');
 
         $youth = User::create(array_merge($data, ['section_id' => '2', 'role_id' => '7']))->assignRole('Member');
 
@@ -84,11 +88,11 @@ class YouthController extends Controller
 
         // Notification
 
-        $target = User::whereHas('roles', function ($query) {
-            $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
-        })->get();
+        // $target = User::whereHas('roles', function ($query) {
+        //     $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
+        // })->get();
 
-        Notification::send($target, new YouthNotification($youth, 'New Youth Profile has been created!'));
+        // Notification::send($target, new YouthNotification($youth, 'New Youth Profile has been created!'));
 
         return redirect()->route('youth.edit', [
             'youth' => $youth->id,
@@ -100,7 +104,24 @@ class YouthController extends Controller
     public function show(string $id)
     {
         $youth = User::find($id);
-        return view('youth.show', ['youth' => $youth]);
+
+        $dateOfBirth = $youth->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $youth->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('youth.show', [
+            'id' => $id,
+            'youth' => $youth,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -109,7 +130,24 @@ class YouthController extends Controller
     public function edit(string $id)
     {
         $youth = User::find($id);
-        return view('youth.edit', ['youth' => $youth]);
+
+        $dateOfBirth = $youth->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $youth->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('youth.edit', [
+            'id' => $id,
+            'youth' => $youth,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -117,77 +155,86 @@ class YouthController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
-            'email' => 'required',
-            'username' => 'required',
-            'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
-            'gender' => 'required',
-            'area' => 'required',
-            'chapter' => 'required',
-            'avatar' => 'nullable',
-        ]);
+        if ($request->ajax()) {
+            $data = $request->validate([
+                'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'email' => 'required',
+                'nickname' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'username' => 'required',
+                'address' => 'required',
+                'bio' => 'required',
+                'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
+                'gender' => 'required',
+                'area' => 'required',
+                'chapter' => 'required',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'birthday' => 'required',
+                'email_verified_at' => 'nullable',
+            ]);
 
-        $status = $request->has('status') ? 'Active' : 'Inactive';
-        $data['status'] = $status;
+            $data['email_verified_at'] = Carbon::now()->tz('Asia/Manila')->format('Y-m-d H:i:s');
 
-        $youth = User::find($id);
-        $youth->update($data);
+            $user = User::findOrFail($id);
+            $update = $user->update($data);
 
-        $oldAvatarPath = $youth->avatar; // Get the old avatar path before updating
+            $oldAvatarPath = $user->avatar;
 
-        if ($request->hasFile('avatar')) {
-            // Handle the new avatar upload as you've implemented
-            $avatar = $request->file('avatar');
-            $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('avatars'), $filename);
+            if ($request->hasFile('avatar')) {
+                // Handle the new avatar upload as you've implemented
+                $avatar = $request->file('avatar');
+                $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
+                $avatar->move(public_path('avatars'), $filename);
 
-            // Update the newMember's avatar with the new file path
-            $youth->avatar = $filename;
-            $youth->save();
+                // Update the newMember's avatar with the new file path
+                $user->avatar = $filename;
+                $user->save();
 
-            // Delete the old avatar file if it exists
-            if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
-                unlink(public_path($oldAvatarPath));
+                // Delete the old avatar file if it exists
+                if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
+                    unlink(public_path($oldAvatarPath));
+                }
             }
+
+            if ($update) {
+                return response()->json(['message' => 'Updated Successfully', 'data' => $data], 200);
+            }
+
         }
 
-        return redirect()->route('youth.edit', [
-            'youth' => $youth->id,
-        ])->with('success', 'Profile updated successfully');
+        abort(404);
     }
 
     public function updatePassword(Request $request, string $id)
     {
-        try {
+        if ($request->ajax()) {
             // Validate input
             $data = $request->validate([
-                'current_pass' => 'required',
-                'new_pass' => 'required|min:8|different:current_pass',
-                'confirm_pass' => 'required|same:new_pass',
+                'current_password' => 'required',
+                'new_password' => 'required|min:8',
+                'confirm_password' => 'required|same:new_password',
+            ], [
+                'current_password.required' => 'Current password is required',
+                'new_password.required' => 'New password is required',
+                'new_password.min' => 'New password must be at least 8 characters',
+                'new_password.different' => 'New password and confirm password must be different',
+                'confirm_password.required' => 'Confirm password is required',
+                'confirm_password.same' => 'New password and Confirm password must be the same',
             ]);
 
             // Check if the entered current password matches the user's actual password
             $youth = User::find($id);
 
-            if (!Hash::check($request->input('current_pass'), $youth->password)) {
-                return redirect()->back()->withErrors(['current_pass' => 'Credentials is incorrect.']);
+            if (!Hash::check($request->input('current_password'), $youth->password)) {
+                return response()->json(['message' => "Current Password doesn't match in our records."], 500);
             }
 
             // If the current password is correct, proceed to update the password
-            $youth->password = bcrypt($request->input('new_pass'));
-            $youth->user->password = bcrypt($request->input('new_pass'));
+            $youth->password = bcrypt($request->input('new_password'));
+            $youth->save();
 
-            $youth->update($data);
-
-            return redirect()->back()
-                ->with('success', 'Password updated successfully!');
-
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // If validation fails, handle the exception here
-            session()->flash('error', 'There was an error in the form submission.');
-            return redirect()->back()->withErrors($e->validator)->withInput();
+            return response()->json([
+                'message' => 'Password Updated Successfully'
+            ], 200);
         }
     }
 
@@ -203,12 +250,12 @@ class YouthController extends Controller
             DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
-                'message' => 'Profile deleted successfully'
+                'message' => 'Profile deleted successfully',
             ]);
         } else {
             return response([
                 'error' => true,
-                'message' => 'Failed to delete Profile'
+                'message' => 'Failed to delete Profile',
             ]);
         }
     }

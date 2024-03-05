@@ -59,7 +59,7 @@
         </div>
         <div class="flex justify-end mb-4">
             @can('view-role')
-                <a href="{{ route('youth.create') }}" class="btn btn-success">
+                <a href="{{ route('youth.create') }}" class="btn btn-primary">
                     Add a User
                     <i class="tf-icons mdi mdi-plus ml-1"></i>
                 </a>

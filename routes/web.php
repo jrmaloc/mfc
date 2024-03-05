@@ -80,26 +80,26 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::resource('/announcements', AnnouncementsController::class);
 
     Route::resource('/kids', KidsController::class);
-    Route::post('/kids/update{kid}', [KidsController::class, 'updatePassword'])->name('kids.updatePassword');
+    Route::post('/kids/update/{kid}', [KidsController::class, 'updatePassword'])->name('kids.updatePassword');
 
     Route::resource('/youth', YouthController::class);
-    Route::post('/youth/update{youth}', [YouthController::class, 'updatePassword'])->name('youth.updatePassword');
+    Route::put('/youth/change_password/{youth}', [YouthController::class, 'updatePassword'])->name('youth.updatePassword');
     Route::delete('/youth/delete', [YouthController::class, 'destroy'])->name('youth.delete');
 
     Route::resource('/singles', SinglesController::class);
-    Route::post('/singles/update{single}', [SinglesController::class, 'updatePassword'])->name('singles.updatePassword');
+    Route::post('/singles/update/{single}', [SinglesController::class, 'updatePassword'])->name('singles.updatePassword');
     Route::delete('/singles/delete', [SinglesController::class, 'destroy'])->name('singles.delete');
 
     Route::resource('/servants', ServantsController::class);
-    Route::post('/servants/update{servant}', [ServantsController::class, 'updatePassword'])->name('servants.updatePassword');
+    Route::post('/servants/update/{servant}', [ServantsController::class, 'updatePassword'])->name('servants.updatePassword');
     Route::delete('/servants/delete', [ServantsController::class, 'destroy'])->name('servants.delete');
 
     Route::resource('/handmaids', HandmaidsController::class);
-    Route::post('/handmaids/update{handmaid}', [HandmaidsController::class, 'updatePassword'])->name('handmaids.updatePassword');
+    Route::post('/handmaids/update/{handmaid}', [HandmaidsController::class, 'updatePassword'])->name('handmaids.updatePassword');
     Route::delete('/handmaids/delete', [HandmaidsController::class, 'destroy'])->name('handmaids.delete');
 
     Route::resource('/couples', CouplesController::class);
-    Route::post('/couples/update{couple}', [CouplesController::class, 'updatePassword'])->name('couples.updatePassword');
+    Route::post('/couples/update/{couple}', [CouplesController::class, 'updatePassword'])->name('couples.updatePassword');
     Route::delete('/couples/delete', [CouplesController::class, 'destroy'])->name('couples.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

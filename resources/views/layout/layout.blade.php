@@ -63,6 +63,8 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
+    <link rel="stylesheet" href="{{ URL::asset('assets/css/butterup.css') }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" />
 
@@ -922,6 +924,7 @@
     <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ URL::asset('assets/vendor/js/butterup.js') }}"></script>
 
     <!-- endbuild -->
     <script src="https://kit.fontawesome.com/b49bde7a10.js" crossorigin="anonymous"></script>

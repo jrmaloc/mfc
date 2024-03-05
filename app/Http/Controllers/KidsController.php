@@ -83,8 +83,8 @@ class KidsController extends Controller
             'password' => 'nullable',
             'avatar' => 'nullable',
             'address' => 'required',
-            'bio' => 'nullable',
-            'nickname' => 'nullable',
+            'bio' => 'nullable|regex:/^[0-9\s\-\+\(\)]+$/',
+            'nickname' => 'nullable|regex:/^[0-9\s\-\+\(\)]+$/',
             'birthday' => 'nullable',
         ]);
 
@@ -173,7 +173,7 @@ class KidsController extends Controller
             $data = $request->validate([
                 'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
                 'email' => 'required',
-                'nickname' => 'nullable',
+                'nickname' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
                 'username' => 'required',
                 'address' => 'required',
                 'bio' => 'required',
@@ -182,7 +182,11 @@ class KidsController extends Controller
                 'area' => 'required',
                 'chapter' => 'required',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'birthday' => 'required',
+                'email_verified_at' => 'nullable',
             ]);
+
+            $data['email_verified_at'] = Carbon::now()->tz('Asia/Manila')->format('Y-m-d H:i:s');
 
             $user = User::findOrFail($id);
             $update = $user->update($data);
@@ -211,77 +215,40 @@ class KidsController extends Controller
 
         }
 
-        $data = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
-            'email' => 'required',
-            'nickname' => 'nullable',
-            'username' => 'required',
-            'address' => 'required',
-            'bio' => 'required',
-            'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
-            'gender' => 'required',
-            'area' => 'required',
-            'chapter' => 'required',
-            'avatar' => 'nullable',
-        ]);
-
-        $status = $request->has('status') ? 'Active' : 'Inactive';
-        $data['status'] = $status;
-
-        $kid = User::find($id);
-        $kid->update($data);
-
-        $oldAvatarPath = $kid->avatar; // Get the old avatar path before updating
-
-        if ($request->hasFile('avatar')) {
-            // Handle the new avatar upload as you've implemented
-            $avatar = $request->file('avatar');
-            $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('avatars'), $filename);
-
-            // Update the newMember's avatar with the new file path
-            $kid->avatar = $filename;
-            $kid->save();
-
-            // Delete the old avatar file if it exists
-            if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
-                unlink(public_path($oldAvatarPath));
-            }
-        }
-
-        return redirect(route('kids.edit', ['kid' => $kid->id]))->with('success', 'Profile updated successfully');
+        abort(404);
     }
 
     public function updatePassword(Request $request, string $id)
     {
-        $kid = User::find($id);
-        try {
+        if ($request->ajax()) {
             // Validate input
             $data = $request->validate([
-                'current_pass' => 'required',
-                'new_pass' => 'required|min:8|different:current_pass',
-                'confirm_pass' => 'required|same:new_pass',
+                'current_password' => 'required',
+                'new_password' => 'required|min:8',
+                'confirm_password' => 'required|same:new_password',
+            ], [
+                'current_password.required' => 'Current password is required',
+                'new_password.required' => 'New password is required',
+                'new_password.min' => 'New password must be at least 8 characters',
+                'new_password.different' => 'New password and confirm password must be different',
+                'confirm_password.required' => 'Confirm password is required',
+                'confirm_password.same' => 'New password and Confirm password must be the same',
             ]);
 
             // Check if the entered current password matches the user's actual password
-            if (!Hash::check($request->input('current_pass'), $kid->password)) {
-                return redirect()->back()->withErrors(['current_pass' => 'Credentials is incorrect.']);
+            $kid = User::find($id);
+
+            if (!Hash::check($request->input('current_password'), $kid->password)) {
+                return response()->json(['message' => "Current Password doesn't match in our records."], 500);
             }
 
             // If the current password is correct, proceed to update the password
-            $kid->password = bcrypt($request->input('new_pass'));
-            $kid->user->password = bcrypt($request->input('new_pass'));
-
-            $kid->update($data);
+            $kid->password = bcrypt($request->input('new_password'));
+            $kid->save();
 
             return response()->json([
-                'success' => 'Password updated successfully',
-            ]);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // If validation fails, handle the exception here
-            session()->flash('error', 'There was an error in the form submission.');
-            return redirect()->back()->withErrors($e->validator)->withInput();
+                'message' => 'Password Updated Successfully'
+            ], 200);
         }
     }
 

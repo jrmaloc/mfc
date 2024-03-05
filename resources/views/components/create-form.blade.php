@@ -1334,10 +1334,6 @@
                                                 <input type="text" id="input-nickname" name="nickname"
                                                     autocomplete="name" class="form-control form-control-alternative"
                                                     placeholder="nickname" value="{{ old('nickname') }}">
-                                                @error('nickname')
-                                                    <span class="text-danger text-xs" id="error">Please enter a valid
-                                                        nickname.</span>
-                                                @enderror
                                             </div>
                                             <div class="form-group focused flex flex-col align-items-start">
                                                 <label class="form-control-label" for="input-nickname">Birthday</label>
@@ -1345,10 +1341,6 @@
                                                     placeholder="Happy Birthday..." autocomplete="birthdate"
                                                     class="form-control form-control-alternative"
                                                     value="{{ old('birthday') }}">
-                                                @error('birthday')
-                                                    <span class="text-danger text-xs" id="error">Please enter a valid
-                                                        birthdate.</span>
-                                                @enderror
                                             </div>
                                         </div>
                                     </h3>
@@ -1570,28 +1562,21 @@
 
 
     @if ($errors->any())
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                toastr.options = {
-                    "closeButton": true,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
+                var Toast = Swal.mixin({
+                            toast: true,
+                            animation: true,
+                            position: 'top-right',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true,
+                        });
 
-                toastr.info('Please complete the form', 'Submission Failed');
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Please complete the form below',
+                        });
             });
         </script>
     @endif
@@ -1604,7 +1589,7 @@
 
             var dob = $('#input-dob').flatpickr();
 
-            const errorSpan = document.querySelector('#error');
+            const errorSpan = document.querySelector('span#error');
             if (errorSpan) {
                 const inputField = errorSpan.closest('.form-group').querySelector('input');
                 if (inputField) {

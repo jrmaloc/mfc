@@ -6,7 +6,7 @@
     'events' => '',
     'id' => '',
     'updateRoute' => '',
-
+    'changePassRoute' => '',
 ])
 
 @extends('layout.layout')
@@ -1346,8 +1346,8 @@
                                                         <label class="form-control-label" for="current-password">
                                                             Current password<span class="text-danger">*</span>
                                                         </label>
-                                                        <input autofocus type="password" id="current-password" name="current_password"
-                                                            autocomplete="current-password"
+                                                        <input autofocus type="password" id="current-password"
+                                                            name="current_password" autocomplete="current_password"
                                                             class="form-control form-control-alternative"
                                                             placeholder="***********" autofocus>
                                                     </div>
@@ -1382,7 +1382,7 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-outline-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="button" id="save-pass" class="btn btn-primary">Save
+                                        <button type="submit" id="save-pass" class="btn btn-primary">Save
                                             changes</button>
                                     </div>
                                 </form>
@@ -1405,11 +1405,11 @@
                                     <div class="card-profile-image">
                                         <label href="#" for="upload" id="profilePicture">
                                             @isset($section->avatar)
-                                            <img src="{{ URL::asset($section->avatar) }}" id="avatar"
-                                            class="rounded-circle">
+                                                <img src="{{ URL::asset($section->avatar) }}" id="avatar"
+                                                    class="rounded-circle">
                                             @else
-                                            <img src="{{ URL::asset('assets/img/avatars/3.png') }}" id="avatar"
-                                                class="rounded-circle">
+                                                <img src="{{ URL::asset('assets/img/avatars/3.png') }}" id="avatar"
+                                                    class="rounded-circle">
                                             @endisset
                                             <input type="file" id="upload" name="avatar"
                                                 class="account-file-input" hidden accept="image/png, image/jpeg" />
@@ -1439,14 +1439,15 @@
                                             <label class="form-control-label" for="input-nickname">Nickname<span
                                                     class="text-danger">*</span></label>
                                             <input type="text" id="input-nickname" name="nickname"
-                                                autocomplete="name" value="{{ $section->nickname }}" class="form-control form-control-alternative"
-                                                placeholder="nickname">
+                                                autocomplete="name" value="{{ $section->nickname }}"
+                                                class="form-control form-control-alternative" placeholder="nickname">
                                         </div>
                                         <div class="form-group focused flex flex-col align-items-start">
                                             <label class="form-control-label" for="input-nickname">Birthday<span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" id="input-dob" value="{{ $section->birthday }}" name="birthday" placeholder="Happy Birthday..."
-                                                autocomplete="birthdate" class="form-control form-control-alternative">
+                                            <input type="text" id="input-dob" value="{{ $section->birthday }}"
+                                                name="birthday" placeholder="Happy Birthday..." autocomplete="birthdate"
+                                                class="form-control form-control-alternative">
                                         </div>
                                     </div>
                                     <div class="h3 font-weight-300">
@@ -1462,9 +1463,9 @@
                                     <label class="form-check-label" for="status">is Active</label>
                                 </div>
                                 <div class="form-check form-switch mb-2">
-                                    <input value="Active" class="form-check-input form-control mr-2" name="verifyEmail"
-                                        type="checkbox" style="width: 38px; height: 20px;" id="verifyEmail"
-                                        @if ($section->email_verified_at) checked @endif />
+                                    <input value="verify" class="form-check-input form-control mr-2"
+                                        name="email_verified_at" type="checkbox" style="width: 38px; height: 20px;"
+                                        id="verifyEmail" @if ($section->email_verified_at) checked @endif />
                                     <label class="form-check-label" for="verifyEmail">Email Verified</label>
                                 </div>
                             </div>
@@ -1487,11 +1488,16 @@
                                             <div class="form-group focused">
                                                 <label class="form-control-label" for="input-name">Full
                                                     name<span class="text-danger">*</span></label>
-                                                <input autofocus type="text" id="input-name" name="name" autocomplete="name"
-                                                    class="form-control form-control-alternative" placeholder="name"
+                                                <input autofocus type="text" id="input-name" name="name"
+                                                    autocomplete="name" class="form-control form-control-alternative"
+                                                    placeholder="name"
                                                     @if ($section->name) autofocus value="{{ $section->name }}"
                                                         @else
                                                             value="" @endif>
+                                                @error('name')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        name.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -1504,6 +1510,10 @@
                                                     @if ($section->email) value="{{ $section->email }}"
                                                         @else
                                                             value="" @endif>
+                                                @error('email')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        email.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1519,6 +1529,10 @@
                                                         @else
                                                             value="" @endif
                                                     autocomplete="username">
+                                                @error('username')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        username.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -1543,6 +1557,10 @@
                                                         <option value="" selected disabled>Select Gender</option>
                                                     @endif
                                                 </select>
+                                                @error('gender')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1556,10 +1574,13 @@
                                             <div class="form-group focused">
                                                 <label class="form-control-label" for="input-address">Full Address<span
                                                         class="text-danger">*</span></label>
-                                                <input id="input-address"
-                                                    class="form-control form-control-alternative @error('address') is-invalid @enderror"
+                                                <input id="input-address" class="form-control form-control-alternative"
                                                     placeholder="Home Address" name="address" type="text"
                                                     value="{{ $section->address ?? '' }}" autocomplete="address-level2">
+                                                @error('address')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        address.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1574,6 +1595,10 @@
                                                     @if ($section->contact_number) value="{{ $section->contact_number }}"
                                                         @else
                                                             value="" @endif>
+                                                @error('contact_number')
+                                                    <span class="text-danger text-xs" id="error">Please enter a valid
+                                                        contact number.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -1601,6 +1626,10 @@
                                                         <option value="" selected disabled>Select Area</option>
                                                     @endif
                                                 </select>
+                                                @error('area')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -1613,18 +1642,25 @@
                                                     @if ($section->chapter)
                                                         <option value="Select User" disabled>Select Chapter</option>
                                                         <option value="Chapter 1"
-                                                            {{ $section->chapter === 'Chapter 1' ? 'selected' : '' }}>Chapter 1
+                                                            {{ $section->chapter === 'Chapter 1' ? 'selected' : '' }}>
+                                                            Chapter 1
                                                         </option>
                                                         <option value="Chapter 2"
-                                                            {{ $section->chapter === 'Chapter 2' ? 'selected' : '' }}>Chapter 2
+                                                            {{ $section->chapter === 'Chapter 2' ? 'selected' : '' }}>
+                                                            Chapter 2
                                                         </option>
                                                         <option value="Chapter 3"
-                                                            {{ $section->chapter === 'Chapter 3' ? 'selected' : '' }}>Chapter 3
+                                                            {{ $section->chapter === 'Chapter 3' ? 'selected' : '' }}>
+                                                            Chapter 3
                                                         </option>
                                                     @else
                                                         <option value="" selected disabled>Select Chapter</option>
                                                     @endif
                                                 </select>
+                                                @error('chapter')
+                                                    <span class="text-danger text-xs" id="error">Please select atleast
+                                                        one.</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -1636,6 +1672,10 @@
                                     <div class="form-group focused">
                                         <textarea rows="4" name="bio" id="input-bio" class="form-control form-control-alternative"
                                             placeholder="A few words about you ..." autocomplete="on"></textarea>
+                                        @error('bio')
+                                            <span class="text-danger text-xs" id="error">Please enter a valid
+                                                description.</span>
+                                        @enderror
                                     </div>
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
@@ -1731,14 +1771,6 @@
 
             $('#input-dob').flatpickr();
 
-            const errorInputs = document.querySelectorAll('span.text-danger');
-            if (errorInputs.length > 0) {
-                const firstErrorInput = errorInputs[0].closest('.col');
-                if (firstErrorInput) {
-                    firstErrorInput.focus();
-                }
-            }
-
             $('#upload').change(function(e) {
                 var file = e.target.files[0];
 
@@ -1753,12 +1785,13 @@
 
             var id = {{ $id }};
 
-            $('#save-pass').click(function(e) {
+            $('#change-pass').submit(function(e) {
                 e.preventDefault();
-                var form = $('#change-pass').serialize();
+
+                var form = $(this).serialize();
 
                 $.ajax({
-                    url: "{{ $updateRoute }}",
+                    url: "{{ $changePassRoute }}",
                     method: "PUT",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1774,8 +1807,17 @@
                         $('#passwordModal').modal('hide');
                     },
 
-                    error: function(error, status, xhr) {
-                        console.log(error);
+                    error: function(error) {
+                        if (error.responseJSON && error.responseJSON.message) {
+                            console.log(error.responseJSON.message);
+
+                            Toast.fire({
+                            icon: "error",
+                            title: error.responseJSON.message
+                        });
+                        } else {
+                            console.log("An error occurred:", error.statusText);
+                        }
                     }
                 });
             });
@@ -1788,7 +1830,7 @@
                 // Append the file input to the FormData object
                 var fileInput = $('#upload')[0]; // Replace 'upload' with the ID of your file input
                 formData.append('file', fileInput.files[
-                0]); // 'file' should match the name of the file input field
+                    0]); // 'file' should match the name of the file input field
 
                 // Send the AJAX request
                 $.ajax({
@@ -1806,25 +1848,14 @@
                             title: data.message,
                         });
                     },
-                    error: function(e, xhr, textStatus, errorThrown) {
-                        console.log(e, xhr, textStatus, errorThrown);
-                        if (e.responseJSON && e.responseJSON.errors) {
-                            var errors = e.responseJSON.errors;
-                            for (var field in errors) {
-                                if (errors.hasOwnProperty(field)) {
-                                    $('#input-' + field).after(
-                                        '<span class="text-danger text-xs"> This field is required.</span>'
-                                    );
-                                    $('#input-' + field).focus();
-
-                                    toastr.warning(errors[field], "Warning");
-                                }
-                            }
-                        }
+                    error: function(e) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Looks like there is an error, please try again.',
+                        });
                     }
                 });
             });
         });
     </script>
 @endpush
-
