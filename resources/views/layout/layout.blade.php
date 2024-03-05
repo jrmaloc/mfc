@@ -389,6 +389,9 @@
         }
     </style>
 
+    <!-- jQuery Include -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     @yield('head')
 </head>
 
@@ -918,7 +921,6 @@
     <!-- Core JS -->
     <script src="{{ URL::asset('assets/vendor/libs/popper/popper.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ URL::asset('assets/vendor/js/bootstrap.js') }}"></script>
     <script src="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>

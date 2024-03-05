@@ -5,6 +5,13 @@
     <link href="{{ URL::asset('assets/dashboard/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ URL::asset('assets/dashboard/css/nucleo-svg.css') }}" rel="stylesheet" />
 
+    <!-- jQuery Include -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Mobiscroll JS and CSS Includes -->
+    <link href="{{ URL::asset('assets/css/mobiscroll.jquery.min.css') }}" rel="stylesheet">
+    <script src="{{ URL::asset('assets/js/mobiscroll.jquery.min.js') }}"></script>
+
     <style>
         .gy-4 {
             --bs-gutter-y: 0;
@@ -79,21 +86,6 @@
             padding-left: 0 !important;
             margin-left: 0 !important;
         }
-
-        /* @media (min-width: 768px) {
-                .col-md-6 {
-                    flex: 0 0 auto;
-                    width: 50%;
-                    margin-top: 1.50rem;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-
-                .row.row-cols-1.row-cols-md-2.row-cols-lg-4,
-                .col-lg-8.mb-4 {
-                    margin: 0 auto !important;
-                }
-            } */
     </style>
 @endsection
 
@@ -231,8 +223,38 @@
                 </div>
             </div>
 
-            {{-- Profile Dashboard --}}
+            {{-- Calendar dashboard --}}
+
             <div class="col-lg-4 col-md-4">
+                <div class="card">
+                    <div class="card-header">
+
+                    </div>
+                    <div class="card-body">
+                        <div id="eventcalendar"></div>
+
+                        <script>
+                            // This is where you put the javascript code
+                            $('#eventcalendar').mobiscroll().eventcalendar({
+                                data: [{
+                                    start: new Date(),
+                                    title: 'Today\'s event'
+                                }, {
+                                    start: new Date(2020, 11, 18, 9, 0),
+                                    end: new Date(2020, 11, 20, 13, 0),
+                                    title: 'Multi day event'
+                                }]
+                            });
+                        </script>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+
+            {{-- Profile Dashboard --}}
+            {{-- <div class="col-lg-4 col-md-4">
                 <div class="card">
                     <div class="card-header">
                         <div class="flex flex-wrap justify-center">
@@ -320,9 +342,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
-        <!--/ Sales by Countries -->
     </div>
     </div>
 @endsection
@@ -330,7 +351,6 @@
 @push('scripts')
     <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

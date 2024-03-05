@@ -1,75 +1,46 @@
-<li class="nav-item dropdown-notifications navbar-dropdown dropdown">
-    <a class="nav-link btn rounded-pill btn-icon dropdown-toggle hide-arrow" href="javascript:void(0);"
-        data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true" style="background-color: #EBEDEF;">
-        <i class="mdi mdi-bell-outline mdi-24px"></i>
-        @if ($unreadNotificationsCount)
-            <span class="notification-badge"></span>
-        @endif
-    </a>
-    {{-- Notifications --}}
-    <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
-        style="border-radius: 10px 0px 10px 0px; max-height: 500px;">
-        <li class="dropdown-menu-header border-bottom" id="markAllAsRead">
-            <div class="dropdown-header d-flex align-items-center py-3 flex justify-around">
-                <h6 class="fw-normal mb-0 me-auto">Notifications</h6>
-                @if ($unreadNotificationsCount)
-                    <a href="javascript:void(0);" id="mark-all"
-                        class="text-slate-400 hover:underline hover:text-slate-500">
-                        Mark all as read
-                    </a>
-                @endif
-            </div>
-        </li>
+<!DOCTYPE html>
+<html>
 
-        @forelse ($unreadNotifications as $notification)
-            <li id="notification">
-                <ul class="list-group list-group-flush" style="width: 500px; ">
-                    <li class="notify list-group-item list-group-item-action dropdown-notifications-item" sty>
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="{{ $notification->data['url'] }}" data-id="{{ $notification->id }}"
-                                class="d-flex admin_notification flex-column flex-grow-1 overflow-hidden w-px-250">
-                                <h6 class="mb-1 text-truncate">
-                                    @if ($notification->type === 'App\Notifications\TitheNotification')
-                                        <strong><span>₱ </span></strong>
-                                    @endif
-                                    <strong>{{ $notification->data['name'] }}</strong>
-                                    <p class="mt-2 overflow-hidden overflow-ellipsis">
-                                        {{ $notification->data['message'] }}</p>
-                                </h6>
-                                <!-- You can access other notification data similarly -->
-                                <small
-                                    class="text-truncate text-body">{{ $notification->created_at->diffForHumans() }}</small>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        @empty
-            <li class="dropdown-notifications-list scrollable-container">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item list-group-item-action dropdown-notifications-item waves-effect"
-                        style="pointer-events: none;">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class=" overflow-hidden w-px-250 flex flex-col align-items-center text-center">
-                                <i class="fa-solid fa-bell-slash fa-3x text-slate-300 my-3"></i>
-                                <span class="text-sm font-bold my-1">No new
-                                    notifications
-                                    yet.</span>
-                                <span class="text-sm font-normal">When you get new
-                                    notifications, they'll show up here</span>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="dropdown-menu-footer border-top p-3">
-                        <a href="javascript:void(0);"
-                            class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"
-                            id="refresh-btn">
-                            Refresh
-                        </a>
-                    </div>
-                </ul>
-            </li>
-        @endforelse
-    </ul>
-    {{-- /Notifications --}}
-</li>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+    <title>Mobiscroll Test</title>
+
+    <!-- jQuery Include -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Mobiscroll JS and CSS Includes -->
+    <link href="{{ URL::asset('assets/css/mobiscroll.jquery.min.css') }}" rel="stylesheet">
+    <script src="{{ URL::asset('assets/js/mobiscroll.jquery.min.js') }}"></script>
+</head>
+
+<body>
+    <p>Hello there,</p>
+    <p>
+        This is a sample file for testing. Your trial is downloaded and already included in this file.
+        <br/> Feel free to edit it as you like. Write, paste some code below - markup &amp; mobiscroll initialization - or grab a <a target="_blank" href="https://demo.mobiscroll.com">demo</a> and <a href="mailto:hello@mobiscroll.com">let us know</a> if there are any questions &#128522;
+    </p>
+    <hr>
+
+    <!-- This is where you put the HTML markup :) -->
+    <div id="eventcalendar"></div>
+
+    <script>
+        // This is where you put the javascript code
+        $('#eventcalendar').mobiscroll().eventcalendar({
+            data: [{
+                start: new Date(),
+                title: 'Today\'s event'
+            }, {
+                start: new Date(2020, 11, 18, 9, 0),
+                end: new Date(2020, 11, 20, 13, 0),
+                title: 'Multi day event'
+            }]
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -164,7 +164,7 @@ Route::match(['get', 'post', 'put', 'patch'], '/paymaya/checkout/success/{id}', 
 Route::match(['get', 'post'], '/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
 Route::match(['get', 'post'], '/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
 
-// Route::view('/test', 'errors.404');
+Route::view('/test', 'layout.test');
 Route::fallback(function () {
     return view('errors.404');
 });
