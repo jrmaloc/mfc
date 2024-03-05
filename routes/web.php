@@ -25,13 +25,11 @@ use App\Http\Controllers\ServantsController;
 use App\Http\Controllers\SinglesController;
 use App\Http\Controllers\TithesController;
 use App\Http\Controllers\UnitServantController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\YouthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -156,6 +154,8 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::post('/tithes/checkout', [CheckoutController::class, 'tithesCheckout'])->name('tithes.checkout');
     Route::post('/paymaya/customize', [CheckoutController::class, 'customizeMerchantPage'])->name('customize.checkout');
 
+    Route::view('contact_us', 'errors.contact_us')->name('contact.us');
+
 });
 
 Route::post('/webhook/paymaya', [WebhookController::class, 'handle'])->name('webhook.paymaya');
@@ -164,6 +164,9 @@ Route::match(['get', 'post', 'put', 'patch'], '/paymaya/checkout/success/{id}', 
 Route::match(['get', 'post'], '/paymaya/checkout/failure', [CheckoutController::class, 'checkoutFailure'])->name('checkout.failure');
 Route::match(['get', 'post'], '/paymaya/checkout/cancel', [CheckoutController::class, 'checkoutCancel'])->name('checkout.cancel');
 
-Route::view('/test', 'kids.show2');
+// Route::view('/test', 'errors.404');
+Route::fallback(function () {
+    return view('errors.404');
+});
 
 require __DIR__ . '/auth.php';
