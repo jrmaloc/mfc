@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
 use App\Models\Registration;
 use App\Models\Tithe;
 use App\Models\User;
-use App\Notifications\SinglesNotifications;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
@@ -35,7 +32,7 @@ class SinglesController extends Controller
                     $viewButton = '<a href="singles/' . $info->id . '" class="btn btn-outline-primary btn-sm"><i class="tf-icons mdi mdi-eye"></i></a>';
                     // Check user role before adding edit and delete buttons
                     if (Auth::user()->role_id == '2' || Auth::user()->role_id == '1') {
-                        return '<div class="dropdown flex gap-2">'. $viewButton . $editButton . $deleteButton . '</div>';
+                        return '<div class="dropdown flex gap-2">' . $viewButton . $editButton . $deleteButton . '</div>';
                     } else {
                         // Default case for users with no edit/delete permissions
                         return '<div class="dropdown">' . $viewButton . '</div>';
@@ -217,9 +214,9 @@ class SinglesController extends Controller
                 return response()->json(['message' => 'Updated Successfully', 'data' => $data], 200);
             }
 
+        } else {
+            abort(404);
         }
-
-        abort(404);
     }
 
     public function updatePassword(Request $request, string $id)
@@ -251,7 +248,7 @@ class SinglesController extends Controller
             $user->save();
 
             return response()->json([
-                'message' => 'Password Updated Successfully'
+                'message' => 'Password Updated Successfully',
             ], 200);
         }
     }
@@ -268,12 +265,12 @@ class SinglesController extends Controller
             DatabaseNotification::where('data->email', $data->email)->delete();
             return response([
                 'status' => true,
-                'message' => 'Profile deleted successfully'
+                'message' => 'Profile deleted successfully',
             ]);
         } else {
             return response([
                 'error' => true,
-                'message' => 'Failed to delete Profile'
+                'message' => 'Failed to delete Profile',
             ]);
         }
     }

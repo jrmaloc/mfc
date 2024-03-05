@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Sections;
+use App\Models\Registration;
+use App\Models\Tithe;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,24 +24,52 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
+        $id = $user->id;
+
+        $profile = User::findOrFail($id);
+
+        $dateOfBirth = $profile->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $profile->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
 
         return view('profile.show', [
-            'user' => $user,
+            'id' => $id,
+            'profile' => $profile,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
         ]);
     }
 
     public function edit(Request $request): View
     {
-        $sections = Sections::all();
-
         $user = Auth::user();
-        $role_id = $user->role_id;
-        $role = Role::findOrFail($role_id);
+        $id = $user->id;
+
+        $profile = User::findOrFail($id);
+
+        $dateOfBirth = $profile->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $profile->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
 
         return view('profile.edit', [
-            'user' => $request->user(),
-            'sections' => $sections,
+            'id' => $id,
+            'profile' => $profile,
+            'age' => $years,
             'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
         ]);
     }
 
@@ -48,92 +78,108 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request, User $user): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
-            'username' => 'required|alpha_dash:ascii',
-            'gender' => 'required',
-            'area' => 'required',
-            'chapter' => 'required',
-            'section' => 'required',
-            'contact_number' => 'required|regex:/^[0-9\s-]+$/',
-            'email' => 'required|email',
-            'current_password' => 'required|string|min:8',
-            'avatar' => 'nullable',
-        ], [
-            'contact_number.regex' => 'contact number must consist of numbers only',
-            'current_password.required' => 'please confirm your password.',
-        ]);
+        $id = $user->id;
+        if ($request->ajax()) {
+            $data = $request->validate([
+                'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'email' => 'required|email',
+                'nickname' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'username' => 'required',
+                'address' => 'required',
+                'bio' => 'required',
+                'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
+                'gender' => 'required',
+                'area' => 'required',
+                'chapter' => 'required',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'birthday' => 'required',
+                'email_verified_at' => 'nullable',
+            ], [
+                'name.required' => 'Please provide your full name',
+                'email.required' => 'Please provide your email address',
+                'nickname.required' => 'Please provide your nickname',
+                'username.required' => 'Please provide your username',
+                'address.required' => 'Please provide your home address',
+                'bio.required' => 'Tell us about yourself',
+                'contact_number.required' => 'Please provide your contact number',
+                'gender.required' => 'Please select atleast 1',
+                'area.required' => 'Please select atleast 1',
+                'chapter.required' => 'Please select atleast 1',
+                'birthday.required' => 'When is your birthday?',
+                'name.regex' => 'Input was invalid',
+                'nickname.regex' => 'Input was invalid',
+                'email.email' => 'Input was invalid',
+            ]);
 
-        if (!Hash::check($data['current_password'], $user->password)) {
-            // If the entered current password doesn't match, add an error message and redirect back
-            return back()->withErrors(['current_password' => 'Incorrect Credentials'])->withInput();
-        }
+            $data['email_verified_at'] = Carbon::now()->tz('Asia/Manila')->format('Y-m-d H:i:s');
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+            $profile = User::findOrFail($id);
+            $update = $profile->update($data);
 
-        $status = $request->has('status') ? 'Active' : 'Inactive';
-        $section = $request->section;
+            $oldAvatarPath = $profile->avatar;
 
-        $data['current_password'] = bcrypt($data['current_password']);
-        $data['status'] = $status;
+            if ($request->hasFile('avatar')) {
+                // Handle the new avatar upload as you've implemented
+                $avatar = $request->file('avatar');
+                $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
+                $avatar->move(public_path('avatars'), $filename);
 
-        $user->update($data);
-        $user->section_id = $section;
+                // Update the newMember's avatar with the new file path
+                $profile->avatar = $filename;
+                $profile->save();
 
-        $oldAvatarPath = $user->avatar; // Get the old avatar path before updating
-
-        if ($request->hasFile('avatar')) {
-            // Handle the new avatar upload as you've implemented
-            $avatar = $request->file('avatar');
-            $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('avatars'), $filename);
-
-            // Update the user's avatar with the new file path
-            $user->avatar = $filename;
-
-            // Delete the old avatar file if it exists
-            if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
-                unlink(public_path($oldAvatarPath));
+                // Delete the old avatar file if it exists
+                if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
+                    unlink(public_path($oldAvatarPath));
+                }
             }
+
+            if ($update) {
+                return response()->json(['message' => 'Updated Successfully', 'data' => $data], 200);
+            } else {
+                return response()->json(['message' => 'Update Failed'], 404);
+            }
+
+        } else {
+            abort(404);
         }
-
-        $user->save();
-
-        return Redirect::route('profile.edit')->with('status', 'Profile Updated');
     }
 
     public function updatePassword(Request $request, User $user)
     {
-        $data = $request->validate([
-            'current_pass' => 'required',
-            'new_pass' => 'required|min:8|different:current_pass',
-            'confirm_pass' => 'required|same:new_pass',
-        ], [
-            'new_pass.required' => 'New password is required',
-            'new_pass.min' => 'New password must be at least 8 characters',
-            'new_pass.different' => 'New password must be different from the current password',
-            'current_pass.required' => 'Current password is required',
-            'confirm_pass.required' => 'Confirm password is required',
-            'confirm_pass.same' => 'Passwords doesn\'t match',
-        ]);
+        $id = $user->id;
+        if ($request->ajax()) {
+            // Validate input
+            $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|min:8',
+                'confirm_password' => 'required|same:new_password',
+            ], [
+                'current_password.required' => 'Current password is required',
+                'new_password.required' => 'New password is required',
+                'new_password.min' => 'New password must be at least 8 characters',
+                'new_password.different' => 'New password and confirm password must be different',
+                'confirm_password.required' => 'Confirm password is required',
+                'confirm_password.same' => 'New password and Confirm password must be the same',
+            ]);
 
-        // Check if the entered current password matches the user's actual password
-        if (!Hash::check($request->input('current_pass'), $user->password)) {
-            Session::flash('error', 'Credentials are incorrect.');
-            return redirect()->back();
+            // Check if the entered current password matches the user's actual password
+            $profile = User::find($id);
+
+            if (!Hash::check($request->input('current_password'), $profile->password)) {
+                return response()->json(['message' => "Current Password doesn't match in our records."], 500);
+            }
+
+            // If the current password is correct, proceed to update the password
+            $profile->password = bcrypt($request->input('new_password'));
+            $profile->save();
+
+            return response()->json([
+                'message' => 'Password Updated Successfully',
+            ], 200);
+        } else {
+            abort(404);
         }
-
-        // If the current password is correct, proceed to update the password
-        $user->password = bcrypt($request->input('new_pass'));
-        $user->household_servant->password = bcrypt($request->input('new_pass'));
-
-        $user->update($data);
-        $user->household_servant->update($data);
-
-        return redirect()->back()
-            ->with('success', 'Password updated successfully!');
     }
 
     /**
