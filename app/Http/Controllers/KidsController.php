@@ -184,6 +184,21 @@ class KidsController extends Controller
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'birthday' => 'required',
                 'email_verified_at' => 'nullable',
+            ], [
+                'name.required' => 'Please provide your full name',
+                'email.required' => 'Please provide your email address',
+                'nickname.required' => 'Please provide your nickname',
+                'username.required' => 'Please provide your username',
+                'address.required' => 'Please provide your home address',
+                'bio.required' => 'Tell us about yourself',
+                'contact_number.required' => 'Please provide your contact number',
+                'gender.required' => 'Please select atleast 1',
+                'area.required' => 'Please select atleast 1',
+                'chapter.required' => 'Please select atleast 1',
+                'birthday.required' => 'When is your birthday?',
+                'name.regex' => 'Input was invalid',
+                'nickname.regex' => 'Input was invalid',
+                'email.email' => 'Input was invalid',
             ]);
 
             $data['email_verified_at'] = Carbon::now()->tz('Asia/Manila')->format('Y-m-d H:i:s');
@@ -222,7 +237,7 @@ class KidsController extends Controller
     {
         if ($request->ajax()) {
             // Validate input
-            $data = $request->validate([
+            $request->validate([
                 'current_password' => 'required',
                 'new_password' => 'required|min:8',
                 'confirm_password' => 'required|same:new_password',

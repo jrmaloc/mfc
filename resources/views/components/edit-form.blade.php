@@ -1667,9 +1667,11 @@
                                 </div>
                                 <hr class="my-4">
                                 <!-- Description -->
-                                <h6 class="heading-small text-muted mb-3">About me<span class="text-danger">*</span></h6>
+                                <h6 class="heading-small text-muted mb-4">About me</h6>
                                 <div class="pl-lg-4">
                                     <div class="form-group focused">
+                                        <label class="form-control-label" for="input-phone">Bio<span
+                                                class="text-danger">*</span></label>
                                         <textarea rows="4" name="bio" id="input-bio" class="form-control form-control-alternative"
                                             placeholder="A few words about you ..." autocomplete="on"></textarea>
                                         @error('bio')
@@ -1808,15 +1810,29 @@
                     },
 
                     error: function(error) {
-                        if (error.responseJSON && error.responseJSON.message) {
-                            console.log(error.responseJSON.message);
-
-                            Toast.fire({
-                            icon: "error",
-                            title: error.responseJSON.message
-                        });
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errors = error.responseJSON.errors;
+                            for (var field in errors) {
+                                if (errors.hasOwnProperty(field)) {
+                                    console.log(field, errors[field]);
+                                    var errorMessage = errors[field];
+                                    butterup.toast({
+                                        title: field,
+                                        message: errorMessage,
+                                        type: 'warning',
+                                        icon: true,
+                                        dismissable: true,
+                                    });
+                                }
+                            }
                         } else {
-                            console.log("An error occurred:", error.statusText);
+                            butterup.toast({
+                                title: "Error",
+                                message: 'An unexpected error occurred',
+                                type: 'error',
+                                icon: true,
+                                dismissable: true,
+                            });
                         }
                     }
                 });
@@ -1848,11 +1864,31 @@
                             title: data.message,
                         });
                     },
-                    error: function(e) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Looks like there is an error, please try again.',
-                        });
+                    error: function(error) {
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errors = error.responseJSON.errors;
+                            for (var field in errors) {
+                                if (errors.hasOwnProperty(field)) {
+                                    console.log(field, errors[field]);
+                                    var errorMessage = errors[field];
+                                    butterup.toast({
+                                        title: field,
+                                        message: errorMessage,
+                                        type: 'warning',
+                                        icon: true,
+                                        dismissable: true,
+                                    });
+                                }
+                            }
+                        } else {
+                            butterup.toast({
+                                title: "Error",
+                                message: 'An unexpected error occurred',
+                                type: 'error',
+                                icon: true,
+                                dismissable: true,
+                            });
+                        }
                     }
                 });
             });

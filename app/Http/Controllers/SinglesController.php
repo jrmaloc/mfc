@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\Registration;
+use App\Models\Tithe;
 use App\Models\User;
 use App\Notifications\SinglesNotifications;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class SinglesController extends Controller
@@ -65,32 +69,35 @@ class SinglesController extends Controller
             'gender' => 'required',
             'area' => 'required',
             'chapter' => 'required',
-            'password' => 'required',
+            'password' => 'nullable',
             'avatar' => 'nullable',
+            'address' => 'required',
+            'bio' => 'nullable|regex:/^[0-9\s\-\+\(\)]+$/',
+            'nickname' => 'nullable|regex:/^[0-9\s\-\+\(\)]+$/',
+            'birthday' => 'nullable',
         ]);
 
         $data['status'] = 'Active';
-        $data['password'] = bcrypt($request->input('password'));
-        $single = User::create(array_merge($data, ['section_id' => '3', 'role_id' => '7']))->assignRole('Member');
-        Member::create(['user_id' => $single->id]);
+        $data['password'] = bcrypt('MFCPortal123!');
+
+        $singles = User::create(array_merge($data, ['section_id' => '1', 'role_id' => '7']))->assignRole('Member');
 
         if ($request->hasFile('avatar')) {
             $filename = 'avatars/' . time() . '.' . $request->file('avatar')->getClientOriginalExtension();
-            $single->avatar = $filename;
-            $single->save();
+            $singles->avatar = $filename;
+            $singles->save();
             $request->file('avatar')->move(public_path('avatars'), $filename);
         }
 
         // Notification
+        // $target = User::whereHas('roles', function ($query) {
+        //     $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
+        // })->get();
 
-        $target = User::whereHas('roles', function ($query) {
-            $query->whereIn('id', [1, 2]); // Use whereIn for multiple IDs
-        })->get();
+        // Notification::send($target, new KidsNotification($kid, 'New Kids profile has been created!'));
 
-        Notification::send($target, new SinglesNotifications($single, 'New Singles Profile has been created!'));
-
-        return redirect()->route('singles.edit', [
-            'single' => $single->id,
+        return redirect()->route('kids.edit', [
+            'singles' => $singles->id,
         ])->with('success', 'Profile created successfully');
     }
 
@@ -99,8 +106,25 @@ class SinglesController extends Controller
      */
     public function show(string $id)
     {
-        $single = User::find($id);
-        return view('singles.show', ['single' => $single]);
+        $singles = User::find($id);
+
+        $dateOfBirth = $singles->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $singles->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('singles.show', [
+            'id' => $id,
+            'singles' => $singles,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -108,8 +132,25 @@ class SinglesController extends Controller
      */
     public function edit(string $id)
     {
-        $single = User::find($id);
-        return view('singles.edit', ['single' => $single]);
+        $singles = User::find($id);
+
+        $dateOfBirth = $singles->birthday;
+        $years = Carbon::parse($dateOfBirth)->age;
+
+        $role_id = $singles->role_id;
+        $role = Role::find($role_id);
+
+        $tithes = Tithe::where('user_id', $id)->count();
+        $events = Registration::where('user_id', $id)->count();
+
+        return view('singles.edit', [
+            'id' => $id,
+            'singles' => $singles,
+            'age' => $years,
+            'role' => $role,
+            'events' => $events,
+            'tithes' => $tithes,
+        ]);
     }
 
     /**
@@ -117,77 +158,101 @@ class SinglesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->validate([
-            'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
-            'email' => 'required',
-            'username' => 'required',
-            'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
-            'gender' => 'required',
-            'area' => 'required',
-            'chapter' => 'required',
-            'avatar' => 'nullable',
-        ]);
+        if ($request->ajax()) {
+            $data = $request->validate([
+                'name' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'email' => 'required|email',
+                'nickname' => 'required|regex:/^[A-Za-z\s\.\-]+$/',
+                'username' => 'required',
+                'address' => 'required',
+                'bio' => 'required',
+                'contact_number' => 'required|regex:/^[0-9\s\-\+\(\)]+$/',
+                'gender' => 'required',
+                'area' => 'required',
+                'chapter' => 'required',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'birthday' => 'required',
+                'email_verified_at' => 'nullable',
+            ], [
+                'name.required' => 'Please provide your full name',
+                'email.required' => 'Please provide your email address',
+                'nickname.required' => 'Please provide your nickname',
+                'username.required' => 'Please provide your username',
+                'address.required' => 'Please provide your home address',
+                'bio.required' => 'Tell us about yourself',
+                'contact_number.required' => 'Please provide your contact number',
+                'gender.required' => 'Please select atleast 1',
+                'area.required' => 'Please select atleast 1',
+                'chapter.required' => 'Please select atleast 1',
+                'birthday.required' => 'When is your birthday?',
+                'name.regex' => 'Input was invalid',
+                'nickname.regex' => 'Input was invalid',
+                'email.email' => 'Input was invalid',
+            ]);
 
-        $status = $request->has('status') ? 'Active' : 'Inactive';
-        $data['status'] = $status;
+            $data['email_verified_at'] = Carbon::now()->tz('Asia/Manila')->format('Y-m-d H:i:s');
 
-        $single = User::find($id);
-        $single->update($data);
+            $user = User::findOrFail($id);
+            $update = $user->update($data);
 
-        $oldAvatarPath = $single->avatar; // Get the old avatar path before updating
+            $oldAvatarPath = $user->avatar;
 
-        if ($request->hasFile('avatar')) {
-            // Handle the new avatar upload as you've implemented
-            $avatar = $request->file('avatar');
-            $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('avatars'), $filename);
+            if ($request->hasFile('avatar')) {
+                // Handle the new avatar upload as you've implemented
+                $avatar = $request->file('avatar');
+                $filename = 'avatars/' . time() . '.' . $avatar->getClientOriginalExtension();
+                $avatar->move(public_path('avatars'), $filename);
 
-            // Update the newMember's avatar with the new file path
-            $single->avatar = $filename;
-            $single->save();
+                // Update the newMember's avatar with the new file path
+                $user->avatar = $filename;
+                $user->save();
 
-            // Delete the old avatar file if it exists
-            if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
-                unlink(public_path($oldAvatarPath));
+                // Delete the old avatar file if it exists
+                if ($oldAvatarPath && file_exists(public_path($oldAvatarPath))) {
+                    unlink(public_path($oldAvatarPath));
+                }
             }
+
+            if ($update) {
+                return response()->json(['message' => 'Updated Successfully', 'data' => $data], 200);
+            }
+
         }
 
-        return redirect()->route('singles.edit', [
-            'single' => $single->id,
-        ])->with('success', 'Profile updated successfully');
+        abort(404);
     }
 
     public function updatePassword(Request $request, string $id)
     {
-        try {
+        if ($request->ajax()) {
             // Validate input
-            $data = $request->validate([
-                'current_pass' => 'required',
-                'new_pass' => 'required|min:8|different:current_pass',
-                'confirm_pass' => 'required|same:new_pass',
+            $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|min:8',
+                'confirm_password' => 'required|same:new_password',
+            ], [
+                'current_password.required' => 'Current password is required',
+                'new_password.required' => 'New password is required',
+                'new_password.min' => 'New password must be at least 8 characters',
+                'new_password.different' => 'New password and confirm password must be different',
+                'confirm_password.required' => 'Confirm password is required',
+                'confirm_password.same' => 'New password and Confirm password must be the same',
             ]);
 
             // Check if the entered current password matches the user's actual password
-            $single = User::find($id);
-            if (!Hash::check($request->input('current_pass'), $single->password)) {
-                return redirect()->back()->withErrors(['current_pass' => 'Credentials is incorrect.']);
+            $user = User::find($id);
+
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return response()->json(['message' => "Current Password doesn't match in our records."], 500);
             }
 
             // If the current password is correct, proceed to update the password
-            $single->password = bcrypt($request->input('new_pass'));
-            $single->user->password = bcrypt($request->input('new_pass'));
+            $user->password = bcrypt($request->input('new_password'));
+            $user->save();
 
-            $single->update($data);
-            $single->user->update($data);
-
-            return redirect()->back()
-                ->with('success', 'Password updated successfully!');
-
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // If validation fails, handle the exception here
-            session()->flash('error', 'There was an error in the form submission.');
-            return redirect()->back()->withErrors($e->validator)->withInput();
+            return response()->json([
+                'message' => 'Password Updated Successfully'
+            ], 200);
         }
     }
 

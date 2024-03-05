@@ -81,19 +81,19 @@
         }
 
         /* @media (min-width: 768px) {
-            .col-md-6 {
-                flex: 0 0 auto;
-                width: 50%;
-                margin-top: 1.50rem;
-                margin-left: auto;
-                margin-right: auto;
-            }
+                .col-md-6 {
+                    flex: 0 0 auto;
+                    width: 50%;
+                    margin-top: 1.50rem;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
 
-            .row.row-cols-1.row-cols-md-2.row-cols-lg-4,
-            .col-lg-8.mb-4 {
-                margin: 0 auto !important;
-            }
-        } */
+                .row.row-cols-1.row-cols-md-2.row-cols-lg-4,
+                .col-lg-8.mb-4 {
+                    margin: 0 auto !important;
+                }
+            } */
     </style>
 @endsection
 
@@ -216,8 +216,12 @@
                     <div class="card-body row g-2">
                         <div class="col-12 pe-0 pe-md-3">
                             <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
-                                <h5 class="m-0 me-2">Ministry Activities {{ now()->subYear()->year }}</h5>
-                                <a class="fw-medium" href="javascript:void(0);">View all</a>
+                                <h5 class="m-0 me-2">Ministry Activities
+                                    <script>
+                                        document.write(new Date().getFullYear());
+                                    </script>
+                                </h5>
+                                <a class="fw-medium" href="{{ route('activity.list') }}">View all</a>
                             </div>
                         </div>
                         <div class="chart">
@@ -427,9 +431,9 @@
 
         var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
 
-        gradientStroke1.addColorStop(1, "rgba(0,166,61,0.4)");
-        gradientStroke1.addColorStop(0, "rgba(134,240,173,0.0)");
-        gradientStroke1.addColorStop(0, "rgba(134,240,173,0)");
+        gradientStroke1.addColorStop(1, "rgba(0,166,61,0.6)");
+        gradientStroke1.addColorStop(0.2, "rgba(134,240,173,0.5)");
+        gradientStroke1.addColorStop(0, "rgba(134,240,173,0.3)");
 
         new Chart(ctx1, {
             type: "line",
@@ -450,14 +454,14 @@
                 ],
                 datasets: [{
                     label: "Active Members",
-                    tension: 0.4,
+                    tension: 0.2,
                     borderWidth: 0,
                     pointRadius: 0,
                     borderColor: "#1b8262ff",
                     backgroundColor: gradientStroke1,
                     borderWidth: 3,
                     fill: true,
-                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500, 420, 480, 500],
+                    data: [],
                     maxBarThickness: 6,
                 }, ],
             },
@@ -472,6 +476,9 @@
                 interaction: {
                     intersect: false,
                     mode: "index",
+                },
+                noData: {
+                    text: 'Loading...'
                 },
                 scales: {
                     y: {
