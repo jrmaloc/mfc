@@ -391,7 +391,7 @@
 
     <!-- jQuery Include -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @yield('head')
 </head>
