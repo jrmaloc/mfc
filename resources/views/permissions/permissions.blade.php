@@ -148,7 +148,7 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="fw-bold">Permissions List</h4>
+            <h4 class="h3 fw-bold">Permissions List</h4>
         </div>
         <div class="flex justify-end mb-4">
             <a href="#" id="addPermissionBtn" class="btn btn-primary">Add Permissions<i
