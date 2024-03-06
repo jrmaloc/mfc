@@ -108,12 +108,12 @@
                                         checked required />
                                     <label class="form-check-label" for="terms-conditions">
                                         I agree to
-                                        <a href="javascript:void(0);" class="hover:underline" style="color: #1b661b">privacy
+                                        <a href="javascript:void(0);" class="hover:underline">privacy
                                             policy & terms</a>
                                     </label>
                                 </div>
                             </div>
-                            <button class="btn btn-success d-grid w-100">Give!</button>
+                            <button class="btn btn-primary d-grid w-100">Give!</button>
                         </form>
 
                     </div>

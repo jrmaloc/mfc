@@ -3,11 +3,6 @@
 @section('head')
     <title>Attendance</title>
     <style>
-        thead {
-            background: #58D68D;
-            margin-top: 20px !important;
-        }
-
         th {
             color: #ECF0F1 !important;
             font-size: 15px !important;

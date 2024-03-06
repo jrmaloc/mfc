@@ -86,6 +86,25 @@
             padding-left: 0 !important;
             margin-left: 0 !important;
         }
+
+        .mbsc-calendar-table.mbsc-flex-col.mbsc-flex-1-1.mbsc-calendar-table-active {
+            background-color: #ffffff;
+        }
+
+        .mbsc-material-dark.mbsc-calendar-cell-text {
+            color: #47494a;
+        }
+
+        .mbsc-material-dark.mbsc-calendar-height-md .mbsc-calendar-day,
+        .mbsc-material-dark.mbsc-calendar-height-md .mbsc-calendar-day:after,
+        .mbsc-material-dark.mbsc-calendar-height-md .mbsc-calendar-week-day,
+        .mbsc-calendar-cell-text.mbsc-calendar-day-text.mbsc-windows-dark.mbsc-windows {
+            border-color: #2b2b2b00;
+        }
+
+        .mbsc-material-dark.mbsc-calendar-week-day {
+            color: #9055fd;
+        }
     </style>
 @endsection
 
@@ -227,24 +246,12 @@
 
             <div class="col-lg-4 col-md-4">
                 <div class="card">
-                    <div class="card-header">
-
-                    </div>
                     <div class="card-body">
                         <div id="eventcalendar"></div>
 
                         <script>
                             // This is where you put the javascript code
-                            $('#eventcalendar').mobiscroll().eventcalendar({
-                                data: [{
-                                    start: new Date(),
-                                    title: 'Today\'s event'
-                                }, {
-                                    start: new Date(2020, 11, 18, 9, 0),
-                                    end: new Date(2020, 11, 20, 13, 0),
-                                    title: 'Multi day event'
-                                }]
-                            });
+                            $('#eventcalendar').mobiscroll().eventcalendar({});
                         </script>
                     </div>
                     <div class="card-footer">

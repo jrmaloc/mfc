@@ -3,10 +3,6 @@
 @section('head')
     <title>Announcements</title>
     <style>
-        thead {
-            background: #58D68D;
-        }
-
         th {
             color: #ECF0F1 !important;
             font-size: 15px !important;

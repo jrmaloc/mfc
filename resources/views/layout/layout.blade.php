@@ -147,17 +147,8 @@
             color: white;
         }
 
-        .btn .btn-primary::hover {
+        .btn .btn-primary:hover {
             background: #9055fd;
-        }
-
-        .page-item.active .page-link,
-        .page-item.active .page-link:hover,
-        .page-item.active .page-link:focus,
-        .pagination li.active>a:not(.page-link),
-        .pagination li.active>a:not(.page-link):hover,
-        .pagination li.active>a:not(.page-link):focus {
-            background-color: #1b661b;
         }
 
         .btn-outline-primary:hover {
@@ -354,13 +345,12 @@
         ul.menu-inner {
             scroll-behavior: smooth;
         }
+        .btn-primary{
+            background-color: #9055fd !important;
+        }
 
         .dataTables_scrollHead {
             margin-top: 10px !important;
-        }
-
-        thead,
-        .dataTables_scrollHead {
             background-color: #9056fcff !important;
         }
 

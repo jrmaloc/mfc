@@ -13,10 +13,6 @@
         width: 100px;
     }
 
-    thead {
-        background: #58D68D;
-    }
-
     th {
         color: #ECF0F1 !important;
         font-size: 15px !important;
@@ -30,7 +26,7 @@
         <h2 id="nb" class="fw-bold py-3">Tithes and Offerings List</h2>
     </div>
     <div class="flex justify-end mb-4">
-        <a href="{{route('tithes.create')}}" class="btn btn-success">
+        <a href="{{route('tithes.create')}}" class="btn btn-primary">
             Give Tithes
             <i class="tf-icons mdi mdi-plus ml-1"></i>
         </a>

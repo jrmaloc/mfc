@@ -4,18 +4,8 @@
     <title>Permissions</title>
 
     <style>
-        .btn-primary:hover {
-            color: #fff !important;
-            background-color: #56ca00 !important;
-            border-color: #56ca00 !important;
-        }
-
         td {
             padding: 30px !important;
-        }
-
-        thead {
-            background: #58D68D;
         }
 
         th {
@@ -106,7 +96,7 @@
                         @endforeach
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Close</button>
-                            <button type="submit" class="btn btn-primary" style="background: #1b661b;">Save
+                            <button type="submit" class="btn btn-primary">Save
                                 changes</button>
                         </div>
                     </form>
@@ -161,7 +151,7 @@
             <h4 class="fw-bold">Permissions List</h4>
         </div>
         <div class="flex justify-end mb-4">
-            <a href="#" id="addPermissionBtn" class="btn btn-success">Add Permissions<i
+            <a href="#" id="addPermissionBtn" class="btn btn-primary">Add Permissions<i
                     class="tf-icons mdi mdi-plus ml-1"></i></a>
         </div>
 
