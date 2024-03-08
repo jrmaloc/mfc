@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
 use App\Models\Registration;
 use App\Models\Tithe;
 use App\Models\User;
-use App\Notifications\KidsNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class KidsController extends Controller
 {
-    // function __construct()
-    // {
-    //     $this->middleware('permission:view-member|create-member|edit-member|delete-member', ['only' => ['index', 'store', 'create', 'update', 'edit', 'destroy', 'show']]);
-    //     $this->middleware('permission:create-member', ['only' => ['create', 'store']]);
-    //     $this->middleware('permission:edit-member', ['only' => ['edit', 'update']]);
-    //     $this->middleware('permission:delete-member', ['only' => ['destroy']]);
-    // }
+    public function __construct()
+    {
+        $this->middleware('permission:view-member|create-member|edit-member|delete-member', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-member', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('permission:edit-member', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-member', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -262,7 +259,7 @@ class KidsController extends Controller
             $kid->save();
 
             return response()->json([
-                'message' => 'Password Updated Successfully'
+                'message' => 'Password Updated Successfully',
             ], 200);
         }
     }

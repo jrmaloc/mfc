@@ -15,6 +15,14 @@ use Yajra\DataTables\DataTables;
 
 class YouthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view-member|create-member|edit-member|delete-member', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-member', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('permission:edit-member', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-member', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -248,7 +256,7 @@ class YouthController extends Controller
             $youth->save();
 
             return response()->json([
-                'message' => 'Password Updated Successfully'
+                'message' => 'Password Updated Successfully',
             ], 200);
         }
     }

@@ -12,9 +12,8 @@ class PermissionsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth'); // Apply auth middleware to this controller
         $this->middleware('permission:view-permissions|create-permissions|edit-permissions|delete-permissions', ['only' => ['index', 'store']]);
-        $this->middleware('permission:create-permissions', ['only' => ['create', 'store']]);
+        $this->middleware('permission:create-permissions', ['only' => ['create', 'store', 'edit', 'update']]);
         $this->middleware('permission:edit-permissions', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete-permissions', ['only' => ['destroy']]);
     }

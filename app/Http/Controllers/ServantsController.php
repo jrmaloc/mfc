@@ -15,6 +15,13 @@ use Yajra\DataTables\DataTables;
 
 class ServantsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view-member|create-member|edit-member|delete-member', ['only' => ['index', 'show']]);
+        $this->middleware('permission:create-member', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('permission:edit-member', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-member', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */

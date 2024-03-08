@@ -115,13 +115,13 @@
         }
 
         @media (max-width: 1199px) {
+
+            body{
+                overflow-x: auto !important;
+            }
             div#calendar {
                 width: 100% !important;
                 height: 496px !important;
-            }
-
-            body {
-                overflow: auto !important;
             }
 
             div.content {
@@ -475,6 +475,7 @@
                 selectable: true,
                 events: events,
                 dayMaxEventRows: true,
+                height: '100%',
                 eventColor: "#00D057",
 
                 eventDrop: function(data) {

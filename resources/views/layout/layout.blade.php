@@ -727,11 +727,11 @@
                                     <div class="flex justify-center items-center p-3 font-medium border-t border-gray-200 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
                                         style="border-bottom: 1px groove #8080802e;">
                                         <a href="#"
-                                            class="text-xl uppercase font-bold text-gray-700 pointer-events-none">
+                                            class="text-xl uppercase font-bold text-white pointer-events-none">
                                             Notifications
                                         </a>
                                     </div>
-                                    <ul class="pt-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+                                    <ul class="pt-2 overflow-y-auto text-white dark:text-gray-200"
                                         aria-labelledby="dropdownUsersButton" id="style-15"
                                         style="padding-left: 0; max-height:450px;"
                                         @if ($unreadNotificationsCount > 0) style="max-height: 600px;" @endif>
@@ -802,8 +802,7 @@
                                     @if ($unreadNotificationsCount)
                                         <div class="flex justify-center items-center p-3 text-sm font-medium border-t border-gray-200 rounded-b-lg dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
                                             style="border-bottom: 9px solid #9359ffff; border-top: 1px groove #8080802e;">
-                                            <a href="javascript:void(0);" id="mark-all" class="hover:underline"
-                                                style="color: #374152ff;">
+                                            <a href="javascript:void(0);" id="mark-all" class="hover:text-green-100 text-white">
                                                 Mark all as read
                                             </a>
                                         </div>

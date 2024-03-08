@@ -13,6 +13,13 @@ use Yajra\DataTables\DataTables;
 
 class AnnouncementsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view-role', ['only' => ['index']]);
+        $this->middleware('permission:create-role', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('permission:edit-role', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-role', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
         $user = Auth::user();

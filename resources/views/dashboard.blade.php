@@ -102,6 +102,10 @@
             border-color: #2b2b2b00;
         }
 
+        .mbsc-calendar-cell-text.mbsc-calendar-day-text.mbsc-windows-dark.mbsc-windows {
+            color: #000000a1;
+        }
+
         .mbsc-material-dark.mbsc-calendar-week-day {
             color: #9055fd;
         }

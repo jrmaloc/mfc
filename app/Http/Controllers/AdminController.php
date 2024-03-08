@@ -11,13 +11,13 @@ use Yajra\DataTables\DataTables;
 
 class AdminController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('permission:view-dashboard|create-dashboard|edit-dashboard|delete-dashboard', ['only' => ['index']]);
-    //     $this->middleware('permission:create-admin', ['only' => ['create', 'store']]);
-    //     $this->middleware('permission:edit-dashboard', ['only' => ['edit', 'update']]);
-    //     $this->middleware('permission:delete-dashboard', ['only' => ['destroy']]);
-    // }
+    public function __construct()
+    {
+        $this->middleware('permission:view-role', ['only' => ['index']]);
+        $this->middleware('permission:create-role', ['only' => ['create', 'store', 'edit', 'update']]);
+        $this->middleware('permission:edit-role', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete-role', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
