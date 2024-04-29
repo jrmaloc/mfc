@@ -606,7 +606,7 @@
                     <div class="navbar-nav-right d-flex py-2 px-4 mt-6" id="navbar-collapse">
 
                         <!-- Search -->
-                        <div class="navbar-nav align-items-center w-100 ">
+                        <div class="navbar-nav align-items-center w-100 hidden">
                             <div class="nav-item d-flex align-items-center input-group-merge w-100">
                                 <i class="mdi mdi-magnify mdi-24px lh-0 mr-2"></i>
                                 <input type="text" class="form-control border-0 shadow-none"
@@ -722,12 +722,12 @@
 
                                 <div class="arrow-up hidden"></div>
                                 <script></script>
-                                <div id="dropdownUsers" class="z-10 hidden bg-white shadow w-40 dark:bg-gray-700"
+                                <div id="dropdownUsers" class="z-10 hidden bg-white shadow w-40"
                                     style="border: 1px solid #8080802e;">
-                                    <div class="flex justify-center items-center p-3 font-medium border-t border-gray-200 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                    <div class="flex justify-center items-center p-3 font-medium border-t border-gray-50"
                                         style="border-bottom: 1px groove #8080802e;">
                                         <a href="#"
-                                            class="text-xl uppercase font-bold text-white pointer-events-none">
+                                            class="text-xl uppercase font-bold text-slate-500 pointer-events-none">
                                             Notifications
                                         </a>
                                     </div>
@@ -787,7 +787,7 @@
                                                         </div>
                                                     </li>
 
-                                                    <div class="p-3 text-sm font-medium hover:bg-gray-100 text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500"
+                                                    <div class="p-3 text-sm font-medium text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50"
                                                         style="border-bottom: 9px solid #9055fdad;">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-primary d-flex justify-content-center waves-effect waves-divght"

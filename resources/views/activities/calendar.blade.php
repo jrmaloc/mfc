@@ -1,12 +1,11 @@
 @extends('layout.layout')
 
 @section('title')
-    <link href="{{ URL::asset('css/mobiscroll.javascript.min.css') }}" rel="stylesheet" />
-    <script src="{{ URL::asset('js/mobiscroll.javascript.min.js') }}"></script>
 @endsection
 
 @section('head')
     <title>Calendar</title>
+
     <style>
         div.swal2-container.swal2-top-right.swal2-backdrop-show {
             z-index: 9999 !important;
@@ -304,9 +303,8 @@
 
         <div class="content">
             <div id="back_btn" class="flex justify-end mb-2 mt-3"> <a href="{{ route('activity.list') }}"
-                    class="my-4 btn btn-dark">See
-                    List of Events
-                    <i class="tf-icons mdi mdi-arrow-u-left-top ml-2"></i></a>
+                    class="my-2 btn btn-dark">See
+                    List of Events</a>
             </div>
             @can('create-activity')
                 <div id="btn_container" class="d-none justify-end mt-3">
@@ -326,7 +324,7 @@
         <div style='clear:both'></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <style>
@@ -353,112 +351,112 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            @can('create-activity')
-                var startDate = $('.startDate').flatpickr({
-                    enableTime: true,
-                    altInput: true,
-                    altFormat: "F j, Y @ h:i K",
-                    dateFormat: "Y-m-d h:i K",
-                    allowInput: true,
-                    minDate: 'today',
-                    autoclose: true,
-                });
+            // @can('create-activity')
+            //     var startDate = $('.startDate').flatpickr({
+            //         enableTime: true,
+            //         altInput: true,
+            //         altFormat: "F j, Y @ h:i K",
+            //         dateFormat: "Y-m-d h:i K",
+            //         allowInput: true,
+            //         minDate: 'today',
+            //         autoclose: true,
+            //     });
 
-                var test = startDate.selectedDates[0];
+            //     var test = startDate.selectedDates[0];
 
-                var endDate = $('.endDate').flatpickr({
-                    enableTime: true,
-                    minDate: test,
-                    altInput: true,
-                    altFormat: "F j, Y @ h:i K",
-                    dateFormat: "Y-m-d h:i K",
-                    allowInput: true,
-                });
+            //     var endDate = $('.endDate').flatpickr({
+            //         enableTime: true,
+            //         minDate: test,
+            //         altInput: true,
+            //         altFormat: "F j, Y @ h:i K",
+            //         dateFormat: "Y-m-d h:i K",
+            //         allowInput: true,
+            //     });
 
-                startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
-                    endDate.set('minDate', selectedDates[0] || '');
-                });
-            @endcan
+            //     startDate.config.onChange.push(function(selectedDates, dateStr, instance) {
+            //         endDate.set('minDate', selectedDates[0] || '');
+            //     });
+            // @endcan
 
 
-            $(document).on('click', '#create_btn', function(e) {
-                $('#activityModal').modal('toggle');
+            // $(document).on('click', '#create_btn', function(e) {
+            //     $('#activityModal').modal('toggle');
 
-                $('#activityModal').on('hidden.bs.modal', function() {
-                    $(this).find(
-                        'input[type="text"], input[type="number"], input[type="datetime-local"], textarea'
-                    ).val('');
-                });
+            //     $('#activityModal').on('hidden.bs.modal', function() {
+            //         $(this).find(
+            //             'input[type="text"], input[type="number"], input[type="datetime-local"], textarea'
+            //         ).val('');
+            //     });
 
-                var start_Date = moment(start_date.start).add(8, 'hour').format('LL @ LT');
-                $('.startDate').val(start_Date);
-                var end_Date = moment(start_date.start).add(9, 'hour').format(
-                    'LL @ LT');
-                $('.endDate').val(end_Date);
+            //     var start_Date = moment(start_date.start).add(8, 'hour').format('LL @ LT');
+            //     $('.startDate').val(start_Date);
+            //     var end_Date = moment(start_date.start).add(9, 'hour').format(
+            //         'LL @ LT');
+            //     $('.endDate').val(end_Date);
 
-                $('#createBtn').off('click').on('click', function() {
-                    var title = $('#title').val();
-                    var description = $('#description').val();
-                    var location = $('#location').val();
-                    var start = $('#start_date').val();
-                    var start_date = moment(start).format('YYYY-MM-DD HH:mm:ss');
-                    var end = $('#end_date').val();
-                    var end_date = moment(end).format('YYYY-MM-DD HH:mm:ss');
-                    var reg_fee = $('#reg_fee').val();
-                    var selectedValues = $('.activity-checkbox:checked').map(function() {
-                        return $(this).val();
-                    }).get();
+            //     $('#createBtn').off('click').on('click', function() {
+            //         var title = $('#title').val();
+            //         var description = $('#description').val();
+            //         var location = $('#location').val();
+            //         var start = $('#start_date').val();
+            //         var start_date = moment(start).format('YYYY-MM-DD HH:mm:ss');
+            //         var end = $('#end_date').val();
+            //         var end_date = moment(end).format('YYYY-MM-DD HH:mm:ss');
+            //         var reg_fee = $('#reg_fee').val();
+            //         var selectedValues = $('.activity-checkbox:checked').map(function() {
+            //             return $(this).val();
+            //         }).get();
 
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                'content')
-                        },
-                        url: "{{ route('calendar.store') }}",
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            title,
-                            description,
-                            location,
-                            start_date,
-                            end_date,
-                            reg_fee,
-                            selectedValues
-                        },
+            //         $.ajax({
+            //             headers: {
+            //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+            //                     'content')
+            //             },
+            //             url: "{{ route('calendar.store') }}",
+            //             type: 'POST',
+            //             dataType: 'json',
+            //             data: {
+            //                 title,
+            //                 description,
+            //                 location,
+            //                 start_date,
+            //                 end_date,
+            //                 reg_fee,
+            //                 selectedValues
+            //             },
 
-                        success: function(response) {
-                            $('#activityModal').modal('hide');
-                            calendar.addEvent('event', {
-                                'title': response.title,
-                                'description': response.description,
-                                'location': response.location,
-                                'reg_fee': response.reg_fee,
-                                'start': response.start_date,
-                                'end': response.end_date,
-                            });
+            //             success: function(response) {
+            //                 $('#activityModal').modal('hide');
+            //                 calendar.addEvent('event', {
+            //                     'title': response.title,
+            //                     'description': response.description,
+            //                     'location': response.location,
+            //                     'reg_fee': response.reg_fee,
+            //                     'start': response.start_date,
+            //                     'end': response.end_date,
+            //                 });
 
-                            Toast.fire({
-                                icon: "success",
-                                title: "Event Created Successfully. Reloading...",
-                            });
+            //                 Toast.fire({
+            //                     icon: "success",
+            //                     title: "Event Created Successfully. Reloading...",
+            //                 });
 
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 1000);
-                        },
+            //                 setTimeout(function() {
+            //                     window.location.reload();
+            //                 }, 1000);
+            //             },
 
-                        error: function(error) {
-                            if (error.responseJSON.errors) {
-                                console.log(error.responseJSON.errors);
-                            } else {
-                                console.log("Unexpected error response:", error
-                                    .responseJSON);
-                            }
-                        },
-                    });
-                });
-            });
+            //             error: function(error) {
+            //                 if (error.responseJSON.errors) {
+            //                     console.log(error.responseJSON.errors);
+            //                 } else {
+            //                     console.log("Unexpected error response:", error
+            //                         .responseJSON);
+            //                 }
+            //             },
+            //         });
+            //     });
+            // });
 
 
             var events = @json($events);
@@ -475,7 +473,6 @@
                 selectable: true,
                 events: events,
                 dayMaxEventRows: true,
-                height: '100%',
                 eventColor: "#00D057",
 
                 eventDrop: function(data) {
@@ -616,6 +613,8 @@
                     window.location.href = url;
                 },
             });
+
+
             calendar.render();
         });
     </script>

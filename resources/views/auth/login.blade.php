@@ -82,15 +82,25 @@
 
 <body>
     <!-- Content -->
-    <!-- @if ($errors->any())
-<div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-<li>{{ $error }}</li>
-@endforeach
-        </ul>
-    </div>
-@endif -->
+    @if ($errors->any())
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-right',
+                customClass: {
+                    popup: 'colored-toast',
+                },
+                showConfirmButton: false,
+                timer: 3000,
+            })
+
+            Toast.fire({
+                icon: 'error',
+                title: "Invalid Credentials",
+            });
+        </script>
+    @endif
 
     <div class="position-relative">
         <div class="authentication-wrapper authentication-basic container-p-y" style="background: #E8F8F5;">
@@ -133,10 +143,10 @@
                                 <label for="email_or_username" class="flex ">Email or Username<span
                                         class="text-danger ml-1">*</span></label>
                                 @error('email')
-                                    <span class="text-danger">This email doesn't exist in our records.</span>
+                                    <span class="text-danger text-xs">This email doesn't exist in our records.</span>
                                 @enderror
                                 @error('username')
-                                    <span class="text-danger">This username doesn't exist in our records.</span>
+                                    <span class="text-danger text-xs">This username doesn't exist in our records.</span>
                                 @enderror
                             </div>
 
@@ -247,6 +257,10 @@
                 togglePassword.classList.add("fa-eye");
             }
         });
+
+        $('#closeButton').click(function() {
+            $('#errorMessage').addClass("hidden");
+        })
     });
 </script>
 

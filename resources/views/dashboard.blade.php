@@ -4,6 +4,7 @@
     <title>Dashboard</title>
     <link href="{{ URL::asset('assets/dashboard/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ URL::asset('assets/dashboard/css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/css/calendar_styles.css') }}">
 
     <!-- jQuery Include -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -248,7 +249,106 @@
 
             {{-- Calendar dashboard --}}
 
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-4 col-md-2 card">
+                <div class="calendar-container">
+                    <div class="calendar">
+                        <div class="year-header">
+                            <span class="left-button fa fa-chevron-left" id="prev"> </span>
+                            <span class="year" id="label">2024</span>
+                            <span class="right-button fa fa-chevron-right" id="next"> </span>
+                        </div>
+                        <table class="months-table w-100">
+                            <tbody>
+                                <tr class="months-row">
+                                    <td class="month">Jan</td>
+                                    <td class="month">Feb</td>
+                                    <td class="month">Mar</td>
+                                    <td class="month active-month">Apr</td>
+                                    <td class="month">May</td>
+                                    <td class="month">Jun</td>
+                                    <td class="month">Jul</td>
+                                    <td class="month">Aug</td>
+                                    <td class="month">Sep</td>
+                                    <td class="month">Oct</td>
+                                    <td class="month">Nov</td>
+                                    <td class="month">Dec</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="days-table w-100">
+                            <tbody>
+                                <tr>
+                                    <td class="day">Sun</td>
+                                    <td class="day">Mon</td>
+                                    <td class="day">Tue</td>
+                                    <td class="day">Wed</td>
+                                    <td class="day">Thu</td>
+                                    <td class="day">Fri</td>
+                                    <td class="day">Sat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="frame">
+                            <table class="dates-table w-100">
+                                <tbody class="tbody">
+                                    <tr class="table-row"></tr>
+                                    <tr class="table-row">
+                                        <td class="table-date nil"></td>
+                                        <td class="table-date">1</td>
+                                        <td class="table-date">2</td>
+                                        <td class="table-date">3</td>
+                                        <td class="table-date">4</td>
+                                        <td class="table-date">5</td>
+                                        <td class="table-date">6</td>
+                                    </tr>
+                                    <tr class="table-row">
+                                        <td class="table-date">7</td>
+                                        <td class="table-date">8</td>
+                                        <td class="table-date">9</td>
+                                        <td class="table-date">10</td>
+                                        <td class="table-date">11</td>
+                                        <td class="table-date">12</td>
+                                        <td class="table-date">13</td>
+                                    </tr>
+                                    <tr class="table-row">
+                                        <td class="table-date">14</td>
+                                        <td class="table-date">15</td>
+                                        <td class="table-date">16</td>
+                                        <td class="table-date">17</td>
+                                        <td class="table-date">18</td>
+                                        <td class="table-date">19</td>
+                                        <td class="table-date">20</td>
+                                    </tr>
+                                    <tr class="table-row">
+                                        <td class="table-date">21</td>
+                                        <td class="table-date">22</td>
+                                        <td class="table-date">23</td>
+                                        <td class="table-date">24</td>
+                                        <td class="table-date">25</td>
+                                        <td class="table-date">26</td>
+                                        <td class="table-date">27</td>
+                                    </tr>
+                                    <tr class="table-row">
+                                        <td class="table-date">28</td>
+                                        <td class="table-date active-date">29</td>
+                                        <td class="table-date">30</td>
+                                        <td class="table-date nil"></td>
+                                        <td class="table-date nil"></td>
+                                        <td class="table-date nil"></td>
+                                        <td class="table-date nil"></td>
+                                    </tr>
+                                    <tr class="table-row">
+                                        <td class="table-date nil"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="{{ route('calendar.list') }}" class="button" id="add-button">Add Event</a>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="col-lg-4 col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <div id="eventcalendar"></div>
@@ -262,7 +362,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             {{-- Profile Dashboard --}}
             {{-- <div class="col-lg-4 col-md-4">
@@ -362,11 +462,12 @@
 @push('scripts')
     <script src="{{ URL::asset('assets/dashboard/js/plugins/chartjs.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ URL::asset('assets/js/calendar_js.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             $(document).on('click', '.btn-link', function(e) {
-                var id = $(this).attr('id');
+                var id = ('id');
 
                 $.ajax({
                     url: '{{ route('calendar.show', [':id']) }}'.replace(':id', id),
@@ -388,74 +489,74 @@
                 });
             });
 
-            const bioContent = document.getElementById('bioContent');
-            const bioTextarea = document.getElementById('bio');
-            const editBioButton = document.getElementById('editBio');
-            const saveBioButton = document.getElementById('saveBio');
-            const cancelEditBioButton = document.getElementById('cancelEditBio');
-            const saveCancelButtons = document.getElementById('saveCancelButtons');
+            // const bioContent = document.getElementById('bioContent');
+            // const bioTextarea = document.getElementById('bio');
+            // const editBioButton = document.getElementById('editBio');
+            // const saveBioButton = document.getElementById('saveBio');
+            // const cancelEditBioButton = document.getElementById('cancelEditBio');
+            // const saveCancelButtons = document.getElementById('saveCancelButtons');
 
-            editBioButton.addEventListener('click', function() {
-                bioContent.classList.toggle('d-none');
-                bioTextarea.classList.toggle('d-none');
-                editBioButton.classList.toggle('d-none');
-                saveCancelButtons.classList.toggle('d-none');
-                if (!bioTextarea.classList.contains('d-none')) {
-                    bioTextarea.focus();
-                }
-            });
+            // editBioButton.addEventListener('click', function() {
+            //     bioContent.classList.toggle('d-none');
+            //     bioTextarea.classList.toggle('d-none');
+            //     editBioButton.classList.toggle('d-none');
+            //     saveCancelButtons.classList.toggle('d-none');
+            //     if (!bioTextarea.classList.contains('d-none')) {
+            //         bioTextarea.focus();
+            //     }
+            // });
 
-            saveBioButton.addEventListener('click', function() {
-                // Perform the save action, for example, submit the form
-                // You may use AJAX to save the data to the server
-                var id = {{ $user->id }};
-                $.ajax({
-                    url: `{{ route('dashboard.bio', ['id' => $user->id]) }}`,
-                    method: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        id: id,
-                        bio: bioTextarea.value,
-                    },
-                    success: function(response) {
-                        // // Toggle back to read-only mode
-                        bioContent.classList.toggle('d-none');
-                        bioTextarea.classList.toggle('d-none');
-                        saveCancelButtons.classList.toggle('d-none');
-                        editBioButton.classList.toggle('d-none');
-                        bioContent.innerText = response.bio;
+            // saveBioButton.addEventListener('click', function() {
+            //     // Perform the save action, for example, submit the form
+            //     // You may use AJAX to save the data to the server
+            //     var id = {{ $user->id }};
+            //     $.ajax({
+            //         url: `{{ route('dashboard.bio', ['id' => $user->id]) }}`,
+            //         method: "POST",
+            //         data: {
+            //             _token: "{{ csrf_token() }}",
+            //             id: id,
+            //             bio: bioTextarea.value,
+            //         },
+            //         success: function(response) {
+            //             // // Toggle back to read-only mode
+            //             bioContent.classList.toggle('d-none');
+            //             bioTextarea.classList.toggle('d-none');
+            //             saveCancelButtons.classList.toggle('d-none');
+            //             editBioButton.classList.toggle('d-none');
+            //             bioContent.innerText = response.bio;
 
-                        // //Fire Toast
-                        var Toast = Swal.mixin({
-                            toast: true,
-                            icon: 'success',
-                            title: 'General Title',
-                            animation: true,
-                            position: 'top-right',
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                        });
+            //             // //Fire Toast
+            //             var Toast = Swal.mixin({
+            //                 toast: true,
+            //                 icon: 'success',
+            //                 title: 'General Title',
+            //                 animation: true,
+            //                 position: 'top-right',
+            //                 showConfirmButton: false,
+            //                 timer: 3000,
+            //                 timerProgressBar: true,
+            //             });
 
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Bio Update Successfully',
-                        });
-                    },
-                    error: function(error) {
-                        // Handle the error, e.g., show an error message
-                        console.error('Error updating bio:', error);
-                    }
-                });
-            });
+            //             Toast.fire({
+            //                 icon: 'success',
+            //                 title: 'Bio Update Successfully',
+            //             });
+            //         },
+            //         error: function(error) {
+            //             // Handle the error, e.g., show an error message
+            //             console.error('Error updating bio:', error);
+            //         }
+            //     });
+            // });
 
-            cancelEditBioButton.addEventListener('click', function() {
-                // Toggle back to read-only mode without saving changes
-                bioContent.classList.toggle('d-none');
-                bioTextarea.classList.toggle('d-none');
-                editBioButton.classList.toggle('d-none');
-                saveCancelButtons.classList.toggle('d-none');
-            });
+            // cancelEditBioButton.addEventListener('click', function() {
+            //     // Toggle back to read-only mode without saving changes
+            //     bioContent.classList.toggle('d-none');
+            //     bioTextarea.classList.toggle('d-none');
+            //     editBioButton.classList.toggle('d-none');
+            //     saveCancelButtons.classList.toggle('d-none');
+            // });
         });
 
         var ctx1 = document.getElementById("chart-line").getContext("2d");
