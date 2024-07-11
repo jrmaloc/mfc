@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
-<html lang="en" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default"
-    data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -29,58 +27,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&ampdisplay=swap"
         rel="stylesheet" />
 
-    <link rel="stylesheet" href="../assets/vendor/fonts/materialdesignicons.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/fonts/materialdesignicons.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- Menu waves for no-customizer fix -->
-    <link rel="stylesheet" href="../assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../assets/css/demo.css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/css/demo.css') }}" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
     <!-- Page CSS -->
     <!-- Page -->
-    <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
+    <link rel="stylesheet" href="{{ URL::asset('assets/vendor/css/pages/page-auth.css') }}" />
 
     <!-- Helpers -->
     <script src="{{ URL::asset('assets/vendor/js/helpers.js') }}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{ URL::asset('assets/js/config.js') }}"></script>
-
-    <style>
-        .form-floating-outline .form-control:focus,
-        .form-floating-outline .form-select:focus {
-            border-color: #1b661b !important;
-        }
-
-        .form-floating>.form-control:focus~label,
-        .form-floating>.form-control:focus:not(:placeholder-shown)~label,
-        .form-floating>.form-select:focus~label,
-        .form-floating>.form-select:focus:not(:placeholder-shown)~label {
-            color: #1b661b;
-        }
-
-        .form-check-input:checked {
-            background-color: #56ca00;
-            border-color: #1b661b;
-        }
-
-        .input-group:not(.input-group-floating):focus-within .form-control,
-        .input-group:not(.input-group-floating):focus-within .input-group-text {
-            border-color: #1b661b;
-        }
-    </style>
 </head>
 
-<body>
+<body class="h-full" style="background-image: linear-gradient(to top, #dfe9f3 0%, white 100%); min-height: 100vh;">
     <!-- Content -->
     @if ($errors->any())
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -102,94 +74,67 @@
         </script>
     @endif
 
-    <div class="position-relative">
-        <div class="authentication-wrapper authentication-basic container-p-y" style="background: #E8F8F5;">
-            <div class="authentication-inner py-4">
-                <!-- Login -->
-                <div class="card p-2">
-                    <!-- Logo -->
-                    <div class="app-brand justify-content-center mt-5">
-                        <a href="/login" class="app-brand-link gap-2">
-                            <span class="app-brand-logo demo">
-                                <span style="color: #1b661b">
-                                    <img class="mr-1" src="/favicon.ico" alt="">
-                                </span>
-                            </span>
-                            <span class="app-brand-text demo text-heading fw-semibold">MFC Portal</span>
+    <div class="overflow-x-hidden h-[100vh]">
+        <div class="lg:p-[100px] p-[50px] w-full lg:flex lg:justify-center items-center mt-10 lg:mt-0">
+            <div class="lg:w-[50%] w-full relative">
+                <div class="lg:w-[500px] w-full">
+                    <h1 class="text-[#7090e6] italic lg:text-[56px] text-[36px] w-[100%] font-bold">Welcome to our community</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                </div>
+                <img src="{{ URL::asset('assets/img/backgrounds/login image.png') }}"
+                    class="lg:w-[400px] absolute lg:right-[250px] lg:top-20 w-[300px] top-[450px] -z-10 lg:z-0" alt="">
+            </div>
+            <div class="lg:mt-[200px] mt-10 lg:w-[20%]">
+                <form class="mb-3" action="{{ route('login') }}" method="post">
+                    @csrf
+                    <div class="form-floating form-floating-outline mb-3">
+                        <input type="text" class="form-control mb-1 bg-transparent" id="email_or_username" name="email_or_username"
+                            placeholder="Enter your email or username" autofocus :value="old('email_or_username')" />
+                        <label for="email_or_username" class="flex ">Email or Username<span
+                                class="text-danger ml-1">*</span></label>
+                        @error('email')
+                            <span class="text-danger text-xs">This email doesn't exist in our records.</span>
+                        @enderror
+                        @error('username')
+                            <span class="text-danger text-xs">This username doesn't exist in our records.</span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="mb-3 form-password-toggle">
+                            <div class="input-group input-group-merge">
+                                <div class="form-floating form-floating-outline">
+                                    <input type="password" id="password" class="form-control bg-transparent !border-r-0" name="password"
+                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        aria-describedby="password" />
+                                    <label for="password" class="flex bg-transparent">Password<span class="text-danger ml-1">*
+                                        </span></label>
+                                </div>
+                                <span class="input-group-text cursor-pointer eye bg-transparent">
+                                    <i class="fa-solid fa-eye"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-between">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="remember-me" />
+                            <label class="form-check-label" for="remember-me"> Remember Me </label>
+                        </div>
+                        <a href="{{ route('password.request') }}" class="float-end mb-1">
+                            <span class="text-primary">Forgot Password?</span>
                         </a>
                     </div>
-                    <!-- /Logo -->
-
-                    <div class="card-body mt-2">
-                        <h4 class="mb-2">Welcome to MFC Portal 👋</h4>
-                        <p class="mb-4">Please sign-in to your account</p>
-
-                        <div id="errorMessage" class="mt-2 mb-4">
-                            @error('email_or_username')
-                                <div class="alert alert-danger flex justify-between">
-                                    <span class="">{{ $message }}</span>
-                                    <button id="closeButton" type="button"><i
-                                            class="mdi mdi-close-circle-outline"></i></button>
-                                </div>
-                            @enderror
-                        </div>
-
-                        <form class="mb-3" action="{{ route('login') }}" method="post">
-                            @csrf
-                            <div class="form-floating form-floating-outline mb-3">
-                                <input type="text" class="form-control mb-1" id="email_or_username"
-                                    name="email_or_username" placeholder="Enter your email or username" autofocus
-                                    :value="old('email_or_username')" />
-                                <label for="email_or_username" class="flex ">Email or Username<span
-                                        class="text-danger ml-1">*</span></label>
-                                @error('email')
-                                    <span class="text-danger text-xs">This email doesn't exist in our records.</span>
-                                @enderror
-                                @error('username')
-                                    <span class="text-danger text-xs">This username doesn't exist in our records.</span>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <div class="mb-3 form-password-toggle">
-                                    <div class="input-group input-group-merge">
-                                        <div class="form-floating form-floating-outline">
-                                            <input type="password" id="password" class="form-control"
-                                                name="password"
-                                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                aria-describedby="password" />
-                                            <label for="password" class="flex">Password<span
-                                                    class="text-danger ml-1">*
-                                                </span></label>
-                                        </div>
-                                        <span class="input-group-text cursor-pointer eye">
-                                            <i class="fa-solid fa-eye"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mb-3 d-flex justify-content-between">
-                                <div class="form-check">
-                                    <input class="form-check-input color-success" type="checkbox" id="remember-me" />
-                                    <label class="form-check-label" for="remember-me"> Remember Me </label>
-                                </div>
-                                <a href="{{ route('password.request') }}" class="float-end mb-1">
-                                    <span class="text-success">Forgot Password?</span>
-                                </a>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-success d-grid w-100" type="submit">Sign in</button>
-                            </div>
-                        </form>
-
-                        <p class="text-center">
-                            <span>Doesn't have an account yet?</span>
-                            <a href="/register">
-                                <span class="text-success">Create an account</span>
-                            </a>
-                        </p>
+                    <div class="mb-3">
+                        <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
                     </div>
-                </div>
-                <!-- /Login -->
+                </form>
+
+                <p class="text-center">
+                    <span>Doesn't have an account yet?</span>
+                    <a href="/register">
+                        <span class="text-primary">Create an account</span>
+                    </a>
+                </p>
             </div>
         </div>
     </div>
@@ -266,3 +211,5 @@
 
 
 </html>
+
+
