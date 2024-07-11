@@ -421,7 +421,7 @@
                         <li class="menu-item {{ preg_match('/dashboard/', Request::path()) ? 'active' : null }}">
                             <a href="/dashboard" class="menu-link">
                                 <i class="menu-icon tf-icons mdi mdi-view-dashboard"></i>
-                                <div data-i18n="Dashboards">Dashboard</div>
+                                <div data-i18n="Dashboards">Dashboardddd</div>
                                 <div class="badge bg-danger rounded-pill" style="margin-left: 4rem;">5</div>
                             </a>
                         </li>
